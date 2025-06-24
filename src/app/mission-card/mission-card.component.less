@@ -1,0 +1,27 @@
+@card-background: gray;
+
+* {
+    color: white;
+}
+
+.mission-card {
+    box-sizing: border-box;
+    background-color: @card-background;
+    display: flex;
+    height: 30px;
+    justify-content: space-between;
+    align-items: center;
+    
+    .mission-title {
+        font-size: 15px;
+        font-weight: bold;
+    }
+
+    .is-active-indicator {
+        box-sizing: border-box;
+        background-color: @card-background * 0.6; 
+        font-size: 13px;
+        font-weight: bold;
+        padding: 2px 7px;
+    }
+}

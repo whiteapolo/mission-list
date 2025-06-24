@@ -1,0 +1,8 @@
+<div class="mission-card">
+    <span class="mission-title">{{mission.title}}</span>
+    <div class="is-active-indicator">{{mission.status ? "פעיל" : "לא פעיל"}}</div>
+</div>
+
+<div *ngFor="let mission of mission.subMissions">
+  <mission-card [mission]="mission"></mission-card>
+</div>

@@ -2,6 +2,8 @@
   הרשימה המבצעית
 </div>
 
-<div class="missions-container" *ngFor="let mission of missions">
-  <mission-card [mission]="mission"></mission-card>
+<div class="missions-container">
+  <div class="mission-group-container" *ngFor="let mission of missions">
+    <mission-card [mission]="mission"></mission-card>
+  </div>
 </div>

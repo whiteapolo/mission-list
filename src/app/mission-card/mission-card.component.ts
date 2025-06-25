@@ -10,7 +10,7 @@ export class MissionCardComponent implements OnInit {
   
   @Input() mission!: Mission;
   
-  isSubMissionsVisible: boolean = true;
+  isSubMissionsVisible: boolean = false;
   
   toggleSubMissionsVisibility = () => {
     this.isSubMissionsVisible = !this.isSubMissionsVisible;

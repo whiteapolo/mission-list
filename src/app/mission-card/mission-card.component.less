@@ -29,6 +29,14 @@
     
     .edit-button, .trash-icon {
         margin-left: 10px;
+        transition: 0.15s;
+        opacity: 0;
+    }
+    
+    &:hover {
+        .edit-button, .trash-icon {
+            opacity: 1;
+        }
     }
     
     .toggle-sub-missions-button {

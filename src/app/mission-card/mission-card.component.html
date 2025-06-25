@@ -1,10 +1,19 @@
 <div class="mission-card">
+    <div class="toggle-sub-missions-button"
+      (click)="toggleSubMissionsVisibility()"
+      [ngClass]="{
+        'arrow-up': isSubMissionsVisible,
+        'arrow-down': !isSubMissionsVisible,
+        'visibility-none': mission.subMissions.length === 0
+      }"></div>
     <span class="mission-title">{{mission.title}}</span>
     <div class="is-active-indicator">{{mission.status ? "פעיל" : "לא פעיל"}}</div>
-    <img class="edit-button" src="/assets/edit-icon.svg" width="10px" height="10px"/>
-    <img class="trash-icon" src="/assets/trash-icon.svg" width="10px" height="10px"/>
+    <img class="edit-button" src="/assets/edit-icon.svg" width="12px" height="12px"/>
+    <img class="trash-icon" src="/assets/trash-icon.svg" width="12px" height="12px"/>
 </div>
 
-<div *ngFor="let mission of mission.subMissions">
-  <mission-card [mission]="mission"></mission-card>
+<div class="sub-missions-container" [hidden]="!isSubMissionsVisible">
+  <div *ngFor="let mission of mission.subMissions">
+    <mission-card [mission]="mission"></mission-card>
+  </div>
 </div>

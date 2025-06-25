@@ -9,6 +9,12 @@ import { Mission } from '../mission';
 export class MissionCardComponent implements OnInit {
   
   @Input() mission!: Mission;
+  
+  isSubMissionsVisible: boolean = true;
+  
+  toggleSubMissionsVisibility = () => {
+    this.isSubMissionsVisible = !this.isSubMissionsVisible;
+  }
 
   constructor() { }
 

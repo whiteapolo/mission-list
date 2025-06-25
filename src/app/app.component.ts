@@ -14,7 +14,7 @@ export class AppComponent implements OnInit {
     
     constructor(private missionService: MissionService) {}
 
-    async ngOnInit() {
+    ngOnInit() {
       this.missionService.getMissions().subscribe(missions => this.missions = missions);
     }
 }

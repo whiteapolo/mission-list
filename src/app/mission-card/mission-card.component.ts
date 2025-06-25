@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Mission } from '../mission';
+import { MissionService } from '../mission.service';
 
 @Component({
   selector: 'mission-card',
@@ -16,7 +17,7 @@ export class MissionCardComponent implements OnInit {
     this.isSubMissionsVisible = !this.isSubMissionsVisible;
   }
 
-  constructor() { }
+  constructor(public missionService: MissionService) { }
 
   ngOnInit(): void {
   }

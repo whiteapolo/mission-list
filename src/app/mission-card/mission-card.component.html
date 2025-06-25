@@ -1,6 +1,8 @@
 <div class="mission-card">
     <span class="mission-title">{{mission.title}}</span>
     <div class="is-active-indicator">{{mission.status ? "פעיל" : "לא פעיל"}}</div>
+    <img class="edit-button" src="/assets/edit-icon.svg" width="10px" height="10px"/>
+    <img class="trash-icon" src="/assets/trash-icon.svg" width="10px" height="10px"/>
 </div>
 
 <div *ngFor="let mission of mission.subMissions">

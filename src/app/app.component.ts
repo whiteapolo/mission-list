@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Mission } from './mission';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { MISSIONS } from './missions';
+import { MissionService } from './mission.service';
 
 @Component({
   selector: 'app-root',
@@ -12,10 +12,9 @@ export class AppComponent implements OnInit {
 
     missions: Mission[] = [];
     
-    constructor(private http: HttpClient) {}
+    constructor(private missionService: MissionService) {}
 
     async ngOnInit() {
-      this.missions= MISSIONS;
-      console.log(this.missions);
+      this.missionService.getMissions().subscribe(missions => this.missions = missions);
     }
 }

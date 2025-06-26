@@ -22,7 +22,7 @@ export class MissionService {
   private deleteMissionNode = (missions: Mission[], id: number): Mission[] => {
     return missions.filter(node => {
       if (node.id === id) {
-        console.log(`Deleted mission with id ${id}`);
+        console.log(`Deleted mission '${node.title}' with id '${node.id}'`);
         return false;
       }
       

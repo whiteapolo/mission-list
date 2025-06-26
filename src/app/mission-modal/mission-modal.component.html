@@ -1,7 +1,7 @@
 <div class="modal-container">
     <span class="modal-title">{{data.title}}</span>
     <span>שם:</span>
-    <input class="name" placeholder="שם" />
+    <input class="name" placeholder="שם" value="{{mission?.title}}">
 
     <span>סטטוס:</span>
         
@@ -11,7 +11,8 @@
 
 
     <span>קישור למשימה:</span>
-    <input class="parent-mission" list="missions" placeholder="חיפוש..."/>
+    <input class="parent-mission" list="missions" 
+        placeholder="חיפוש..." value="{{mission?.parent?.title}}"/>
     <datalist id="missions">
         <option value="hey">hey</option>        
         <option value="bye">bye</option>        

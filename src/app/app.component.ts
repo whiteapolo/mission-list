@@ -24,7 +24,7 @@ export class AppComponent implements OnInit {
         width: "30vw",
         height: "70vh",
         hasBackdrop: true,
-        data: { title: "יצירת משימה"}
+        data: { title: "יצירת משימה", mission: this.missions[0].children[0]}
       });
       
       dialogRef.afterClosed().subscribe(result => {

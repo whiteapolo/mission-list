@@ -2,9 +2,9 @@
     <div class="toggle-sub-missions-button"
       (click)="toggleSubMissionsVisibility()"
       [ngClass]="{
-        'arrow-up': isSubMissionsVisible,
-        'arrow-down': !isSubMissionsVisible,
-        'visibility-none': mission.subMissions.length === 0
+        'arrow-up': isMissionChildrenVisible,
+        'arrow-down': !isMissionChildrenVisible,
+        'visibility-none': mission.children.length === 0
       }"></div>
     <span class="mission-title">{{mission.title}}</span>
     <div class="is-active-indicator">{{mission.status}}</div>
@@ -12,8 +12,8 @@
     <img (click)="missionService.deleteMissionById(mission.id)" class="trash-icon" src="/assets/trash-icon.svg" width="12px" height="12px"/>
 </div>
 
-<div class="sub-missions-container" [hidden]="!isSubMissionsVisible">
-  <div *ngFor="let mission of mission.subMissions">
+<div class="sub-missions-container" [hidden]="!isMissionChildrenVisible">
+  <div *ngFor="let mission of mission.children">
     <mission-card [mission]="mission"></mission-card>
   </div>
 </div>

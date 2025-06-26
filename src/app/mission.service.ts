@@ -36,7 +36,7 @@ export class MissionService {
         return false;
       }
       
-      node.subMissions = this.deleteMissionNode(node.subMissions, id);
+      node.children = this.deleteMissionNode(node.children, id);
       return true;
     });
   }

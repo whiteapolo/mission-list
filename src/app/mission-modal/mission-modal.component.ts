@@ -15,12 +15,13 @@ interface MissionModalData {
 })
 export class MissionModalComponent implements OnInit {
   
-  public missionStatusTypes = Object.values(MissionStatus);
+  missionStatusTypes = Object.values(MissionStatus);
+  mission: Mission | undefined;
 
   constructor(
     public dialogRef: MatDialogRef<MissionModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: MissionModalData) {
-        
+        this.mission = {...data.mission};
     }
 
   ngOnInit(): void {

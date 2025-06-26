@@ -9,6 +9,16 @@ export class MissionService {
   
   missions: Mission[] = [];
   missions$ = new BehaviorSubject<Mission[]>(this.missions);
+
+  constructor() {
+    
+    const data = localStorage.getItem("missions");
+    
+    if (data) {
+      this.missions = JSON.parse(data);
+      this.missions$.next(this.missions);
+    }
+  }
   
   getMissions = (): Observable<Mission[]> => {
     return this.missions$.asObservable();
@@ -29,15 +39,5 @@ export class MissionService {
       node.subMissions = this.deleteMissionNode(node.subMissions, id);
       return true;
     });
-  }
-
-  constructor() {
-    
-    const data = localStorage.getItem("missions");
-    
-    if (data) {
-      this.missions = JSON.parse(data);
-      this.missions$.next(this.missions);
-    }
   }
 }

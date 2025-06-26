@@ -1,6 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Mission } from '../mission';
+import { MissionStatus } from '../mission-status';
 
 interface MissionModalData {
   mission: Mission,
@@ -13,10 +14,14 @@ interface MissionModalData {
   styleUrls: ['./mission-modal.component.less']
 })
 export class MissionModalComponent implements OnInit {
+  
+  public missionStatusTypes = Object.values(MissionStatus);
 
   constructor(
     public dialogRef: MatDialogRef<MissionModalComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: MissionModalData) { }
+    @Inject(MAT_DIALOG_DATA) public data: MissionModalData) {
+        
+    }
 
   ngOnInit(): void {
   }

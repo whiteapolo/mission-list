@@ -7,7 +7,7 @@
         'visibility-none': mission.subMissions.length === 0
       }"></div>
     <span class="mission-title">{{mission.title}}</span>
-    <div class="is-active-indicator">{{mission.status ? "פעיל" : "לא פעיל"}}</div>
+    <div class="is-active-indicator">{{mission.status}}</div>
     <img class="edit-button" src="/assets/edit-icon.svg" width="12px" height="12px"/>
     <img (click)="missionService.deleteMissionById(mission.id)" class="trash-icon" src="/assets/trash-icon.svg" width="12px" height="12px"/>
 </div>

@@ -27,4 +27,12 @@ export class MissionModalComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  cancel() {
+     
+  }
+  
+  save() {
+     
+  }
+
 }

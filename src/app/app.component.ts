@@ -15,11 +15,11 @@ export class AppComponent implements OnInit {
     missions: Mission[] = [];
     isModalVisible: boolean = false;
 
-    toggleMissionModal = () => {
+    toggleMissionModal() {
       this.isModalVisible = !this.isModalVisible;
     }
     
-    openDialog = (): void => {
+    openDialog() {
       const dialogRef = this.dialog.open(MissionModalComponent, {
         width: "30vw",
         height: "70vh",

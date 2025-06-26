@@ -13,13 +13,13 @@ export class MissionCardComponent implements OnInit {
   
   isMissionChildrenVisible: boolean = false;
   
-  toggleSubMissionsVisibility = () => {
+  toggleMissionChildrenVisibility() {
     this.isMissionChildrenVisible = !this.isMissionChildrenVisible;
   }
 
   constructor(public missionService: MissionService) { }
 
-  ngOnInit(): void {
+  ngOnInit() {
   }
 
 }

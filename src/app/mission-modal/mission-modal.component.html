@@ -13,14 +13,22 @@
     <span>קישור למשימה:</span>
     <input class="parent-mission" list="missions" 
         placeholder="חיפוש..." value="{{mission?.parent?.title}}"/>
+
     <datalist id="missions">
-        <option value="hey">hey</option>        
-        <option value="bye">bye</option>        
-        <option value="lo">lo</option>        
+            <ng-container 
+                *ngFor="let mission of missions"
+                [ngTemplateOutlet]="missionOption" 
+                [ngTemplateOutletContext]="{mission: mission}">
+            </ng-container>
     </datalist>
+
+    <ng-template let-mission="mission" #missionOption>
+        <option value="{{mission.title}}">{{mission.title}}</option>
+        <option *ngFor="let child of mission.children" value="{{child.title}}">{{child.title}}</option>
+    </ng-template>
     
     <div class="buttons-container">
-        <div class="cancel-button">ביטול</div>
-        <div class="save-button">שמירה</div>
+        <div (click)="cancel()" class="cancel-button">ביטול</div>
+        <div (click)="save()" class="save-button">שמירה</div>
     </div>
 </div>

@@ -9,6 +9,13 @@ export class MissionService {
   
   missions: Mission[] = [];
   missions$ = new BehaviorSubject<Mission[]>(this.missions);
+  nextId: number = 1;
+  
+  calculateMaxId(missions: Mission[]): number {
+    return missions.reduce((max, curr) => {
+        return Math.max(curr.id, max, this.calculateMaxId(curr.children));
+    }, 0);
+  }
 
   constructor() {
     
@@ -17,19 +24,53 @@ export class MissionService {
     if (data) {
       this.missions = JSON.parse(data);
       this.missions$.next(this.missions);
+      this.nextId = this.calculateMaxId(this.missions) + 1;
     }
   }
   
-  getMissions = (): Observable<Mission[]> => {
+  private getMissionById(id: number, missions?: Mission[]): Mission | undefined {
+    if (!missions) {
+      return this.getMissionById(id, this.missions);
+    }
+    
+    for (const mission of missions) {
+      if (mission.id == id) return mission;
+      const ret = this.getMissionById(id, mission.children);
+      if (ret) return ret;
+    }
+
+    return undefined;
+  }
+
+  getMissions(): Observable<Mission[]> {
     return this.missions$.asObservable();
   }
   
-  deleteMissionById = (id: number) => {
+  createMission(mission: Mission, parentId: number) {
+    mission.id = this.nextId++;
+    mission.parent = parentId ? this.getMissionById(parentId) : undefined;
+    mission.parent?.children.push(mission);
+    this.missions$.next(this.missions);
+  }
+  
+  updateMission(mission: Mission, parentId: number) {
+    const newParent = this.getMissionById(parentId);
+
+    if (mission.parent) {
+      mission.parent.children = 
+          mission.parent?.children.filter(currMission => currMission.id !== mission.id);
+    }
+    
+    newParent?.children.push(mission);
+    this.missions$.next(this.missions);
+  }
+  
+  deleteMissionById(id: number) {
       this.missions = this.deleteMissionNode(this.missions, id);
       this.missions$.next(this.missions);
   }
-
-  private deleteMissionNode = (missions: Mission[], id: number): Mission[] => {
+  
+  private deleteMissionNode(missions: Mission[], id: number): Mission[] {
     return missions.filter(node => {
       if (node.id === id) {
         console.log(`Deleted mission '${node.title}' with id '${node.id}'`);

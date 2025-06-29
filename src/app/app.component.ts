@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Mission } from './mission';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { MissionService } from './mission.service';
 import { MatDialog } from '@angular/material/dialog';
 import { MissionModalComponent } from './mission-modal/mission-modal.component';
@@ -24,11 +23,11 @@ export class AppComponent implements OnInit {
         width: "30vw",
         height: "70vh",
         hasBackdrop: true,
-        data: { title: "יצירת משימה", mission: this.missions[0].children[0]}
+        data: { title: "יצירת משימה", mission: undefined}
       });
       
       dialogRef.afterClosed().subscribe(result => {
-        console.log("dialog closed: ", JSON.stringify(result));
+        console.log(`dialog closed: with: ${JSON.stringify(result)}`);
       });
     }
     

@@ -4,36 +4,37 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class MissionService {
-  
   missions: Mission[] = [];
   missions$ = new BehaviorSubject<Mission[]>(this.missions);
   nextId: number = 1;
-  
+
   calculateMaxId(missions: Mission[]): number {
     return missions.reduce((max, curr) => {
-        return Math.max(curr.id, max, this.calculateMaxId(curr.children));
+      return Math.max(curr.id, max, this.calculateMaxId(curr.children));
     }, 0);
   }
 
   constructor() {
-    
-    const data = localStorage.getItem("missions");
-    
+    const data = localStorage.getItem('missions');
+
     if (data) {
       this.missions = JSON.parse(data);
       this.missions$.next(this.missions);
       this.nextId = this.calculateMaxId(this.missions) + 1;
     }
   }
-  
-  private getMissionById(id: number, missions?: Mission[]): Mission | undefined {
+
+  private getMissionById(
+    id: number,
+    missions?: Mission[]
+  ): Mission | undefined {
     if (!missions) {
       return this.getMissionById(id, this.missions);
     }
-    
+
     for (const mission of missions) {
       if (mission.id == id) return mission;
       const ret = this.getMissionById(id, mission.children);
@@ -46,52 +47,55 @@ export class MissionService {
   getMissions(): Observable<Mission[]> {
     return this.missions$.asObservable();
   }
-  
+
   getMissionsAsFlatArray(): Observable<Mission[]> {
-    return this.missions$.asObservable().pipe(map((missions: Mission[]) => this.flatMissionsArray(missions)));
+    return this.missions$
+      .asObservable()
+      .pipe(map((missions: Mission[]) => this.flatMissionsArray(missions)));
   }
-  
+
   private flatMissionsArray(missions: Mission[]): Mission[] {
     let array: Mission[] = [...missions];
 
-    missions.forEach(mission => {
+    missions.forEach((mission) => {
       array = array.concat(this.flatMissionsArray(mission.children));
     });
 
     return array;
   }
-  
+
   createMission(mission: Mission, parentId: number) {
     mission.id = this.nextId++;
     mission.parent = parentId ? this.getMissionById(parentId) : undefined;
     mission.parent?.children.push(mission);
     this.missions$.next(this.missions);
   }
-  
+
   updateMission(mission: Mission, parentId: number) {
     const newParent = this.getMissionById(parentId);
 
     if (mission.parent) {
-      mission.parent.children = 
-          mission.parent?.children.filter(currMission => currMission.id !== mission.id);
+      mission.parent.children = mission.parent?.children.filter(
+        (currMission) => currMission.id !== mission.id
+      );
     }
-    
+
     newParent?.children.push(mission);
     this.missions$.next(this.missions);
   }
-  
+
   deleteMissionById(id: number) {
-      this.missions = this.deleteMissionNode(this.missions, id);
-      this.missions$.next(this.missions);
+    this.missions = this.deleteMissionNode(this.missions, id);
+    this.missions$.next(this.missions);
   }
-  
+
   private deleteMissionNode(missions: Mission[], id: number): Mission[] {
-    return missions.filter(node => {
+    return missions.filter((node) => {
       if (node.id === id) {
         console.log(`Deleted mission '${node.title}' with id '${node.id}'`);
         return false;
       }
-      
+
       node.children = this.deleteMissionNode(node.children, id);
       return true;
     });

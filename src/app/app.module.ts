@@ -3,23 +3,22 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
 import { MissionCardComponent } from './mission-card/mission-card.component';
-import { MAT_DIALOG_DEFAULT_OPTIONS, MatDialogModule } from '@angular/material/dialog';
+import {
+  MAT_DIALOG_DEFAULT_OPTIONS,
+  MatDialogModule,
+} from '@angular/material/dialog';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CommonModule } from '@angular/common';
 import { MissionModalComponent } from './mission-modal/mission-modal.component';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    MissionCardComponent,
-    MissionModalComponent,
-  ],
+  declarations: [AppComponent, MissionCardComponent, MissionModalComponent],
   imports: [
     BrowserModule,
     MatDialogModule,
     BrowserAnimationsModule,
     CommonModule,
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

@@ -5,17 +5,15 @@ import { MissionService } from '../mission.service';
 @Component({
   selector: 'mission-card',
   templateUrl: './mission-card.component.html',
-  styleUrls: ['./mission-card.component.less']
+  styleUrls: ['./mission-card.component.less'],
 })
 export class MissionCardComponent {
-  
+  constructor(public missionService: MissionService) {}
+
   @Input() mission!: Mission;
-  
   isMissionChildrenVisible: boolean = false;
-  
+
   toggleMissionChildrenVisibility() {
     this.isMissionChildrenVisible = !this.isMissionChildrenVisible;
   }
-
-  constructor(public missionService: MissionService) { }
 }

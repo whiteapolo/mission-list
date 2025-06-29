@@ -8,19 +8,20 @@ import { MissionModalService } from './mission-modal.service';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.less']
+  styleUrls: ['./app.component.less'],
 })
 export class AppComponent implements OnInit {
+  missions: Mission[] = [];
 
-    missions: Mission[] = [];
+  constructor(
+    private missionService: MissionService,
+    public dialog: MatDialog,
+    public missionsModalService: MissionModalService
+  ) {}
 
-    constructor(
-      private missionService: MissionService,
-      public dialog: MatDialog,
-      public missionsModalService: MissionModalService
-    ) {}
-
-    ngOnInit() {
-      this.missionService.getMissions().subscribe(missions => this.missions = missions);
-    }
+  ngOnInit() {
+    this.missionService
+      .getMissions()
+      .subscribe((missions) => (this.missions = missions));
+  }
 }

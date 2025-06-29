@@ -1,24 +1,33 @@
 <div class="modal-container">
-    <span class="modal-title">{{data.title}}</span>
-    <span>שם:</span>
-    <input class="name" placeholder="שם" value="{{mission?.title}}">
+  <span class="modal-title">{{ data.title }}</span>
+  <span>שם:</span>
+  <input class="name" placeholder="שם" value="{{ mission?.title }}" />
 
-    <span>סטטוס:</span>
-        
-    <select class="status">
-        <option *ngFor="let status of missionStatusTypes" value="status">{{status}}</option>
-    </select>
+  <span>סטטוס:</span>
 
-    <span>קישור למשימה:</span>
-    <input class="parent-mission" list="missions" 
-        placeholder="חיפוש..." value="{{mission?.parent?.title}}"/>
+  <select class="status">
+    <option *ngFor="let status of missionStatusTypes" value="status">
+      {{ status }}
+    </option>
+  </select>
 
-    <datalist id="missions">
-        <option *ngFor="let mission of flatMissionsArray" value="{{mission.title}}"></option>
-    </datalist>
+  <span>קישור למשימה:</span>
+  <input
+    class="parent-mission"
+    list="missions"
+    placeholder="חיפוש..."
+    value="{{ mission?.parent?.title }}"
+  />
 
-    <div class="buttons-container">
-        <div (click)="cancel()" class="cancel-button">ביטול</div>
-        <div (click)="save()" class="save-button">שמירה</div>
-    </div>
+  <datalist id="missions">
+    <option
+      *ngFor="let mission of flatMissionsArray"
+      value="{{ mission.title }}"
+    ></option>
+  </datalist>
+
+  <div class="buttons-container">
+    <div (click)="cancel()" class="cancel-button">ביטול</div>
+    <div (click)="save()" class="save-button">שמירה</div>
+  </div>
 </div>

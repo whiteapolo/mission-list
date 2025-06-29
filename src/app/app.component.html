@@ -1,13 +1,17 @@
-<div class="header">
-  הרשימה המבצעית
-</div>
+<div class="header">הרשימה המבצעית</div>
 
 <div class="page-content">
-    <div class="mission-container" >
-      <div *ngFor="let mission of missions">
-        <mission-card [mission]="mission"></mission-card>
-      </div>
+  <div class="mission-container">
+    <div *ngFor="let mission of missions">
+      <mission-card [mission]="mission"></mission-card>
     </div>
+  </div>
 </div>
 
-<div mat-raised-button (click)="missionsModalService.createMission()" class="new-mission-button">+</div>
+<div
+  mat-raised-button
+  (click)="missionsModalService.createMission()"
+  class="new-mission-button"
+>
+  +
+</div>

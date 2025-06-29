@@ -1,9 +1,9 @@
-import { MissionStatus } from "./mission-status";
+import { MissionStatus } from './mission-status';
 
 export interface Mission {
-    id: number;
-    title: string; // limit to 50 characters
-    status: MissionStatus;
-    parent?: Mission | undefined;
-    children: Mission[];
+  id: number;
+  title: string; // limit to 50 characters
+  status: MissionStatus;
+  parent?: Mission | undefined;
+  children: Mission[];
 }

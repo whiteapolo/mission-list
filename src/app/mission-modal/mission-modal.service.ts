@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { MissionModalComponent } from './mission-modal/mission-modal.component';
+import { MissionModalComponent } from './mission-modal.component';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 @Injectable({

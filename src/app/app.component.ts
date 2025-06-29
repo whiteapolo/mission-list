@@ -3,7 +3,7 @@ import { Mission } from './mission';
 import { MissionService } from './mission.service';
 import { MatDialog } from '@angular/material/dialog';
 import { MissionModalComponent } from './mission-modal/mission-modal.component';
-import { MissionModalService } from './mission-modal.service';
+import { MissionModalService } from './mission-modal/mission-modal.service';
 
 @Component({
   selector: 'app-root',

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Mission } from './mission';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { MISSIONS_KEY } from 'src/constants';
 
 @Injectable({
   providedIn: 'root',
@@ -18,7 +19,7 @@ export class MissionService {
   }
 
   constructor() {
-    const data = localStorage.getItem('missions');
+    const data = localStorage.getItem(MISSIONS_KEY);
 
     if (data) {
       this.missions = JSON.parse(data);
@@ -82,11 +83,17 @@ export class MissionService {
 
     newParent?.children.push(mission);
     this.missions$.next(this.missions);
+    this.writeMissionChanges();
   }
 
   deleteMissionById(id: number) {
     this.missions = this.deleteMissionNode(this.missions, id);
     this.missions$.next(this.missions);
+    this.writeMissionChanges();
+  }
+
+  private writeMissionChanges() {
+    // localStorage.setItem(MISSIONS_KEY, JSON.stringify(this.missions));
   }
 
   private deleteMissionNode(missions: Mission[], id: number): Mission[] {

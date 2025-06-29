@@ -7,6 +7,7 @@ import {
 import { Mission } from '../mission';
 import { MissionStatus } from '../mission-status';
 import { MissionService } from '../mission.service';
+import { FormBuilder, Validators } from '@angular/forms';
 
 interface MissionModalData {
   mission: Mission;
@@ -21,12 +22,17 @@ interface MissionModalData {
 export class MissionModalComponent {
   missionStatusTypes = Object.values(MissionStatus);
   flatMissionsArray: Mission[] = [];
-  mission: Mission | undefined;
+  mission: Mission;
+  missionForm = this.formBuilder.group({
+    name: ['', [Validators.required, Validators.maxLength(50)]],
+    status: [MissionStatus.ACTIVE],
+  });
 
   constructor(
     public dialogRef: MatDialogRef<MissionModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: MissionModalData,
-    private missionService: MissionService
+    private missionService: MissionService,
+    private formBuilder: FormBuilder
   ) {
     this.mission = { ...data.mission };
     missionService.getMissionsAsFlatArray().subscribe((missions) => {
@@ -40,6 +46,7 @@ export class MissionModalComponent {
   }
 
   save() {
+    this.mission = { ...this.mission, ...this.missionForm.value };
     console.log(`Dialog returns: '${JSON.stringify(this.mission)}'`);
     this.dialogRef.close(this.mission);
   }

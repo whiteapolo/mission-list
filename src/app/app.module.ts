@@ -10,6 +10,7 @@ import {
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CommonModule } from '@angular/common';
 import { MissionModalComponent } from './mission-modal/mission-modal.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [AppComponent, MissionCardComponent, MissionModalComponent],
@@ -18,6 +19,7 @@ import { MissionModalComponent } from './mission-modal/mission-modal.component';
     MatDialogModule,
     BrowserAnimationsModule,
     CommonModule,
+    ReactiveFormsModule,
   ],
   bootstrap: [AppComponent],
 })

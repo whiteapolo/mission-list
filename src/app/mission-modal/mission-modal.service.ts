@@ -7,7 +7,7 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 })
 export class MissionModalService {
   DIALOG_WIDTH = '30vw';
-  DIALOG_HEIGHT = '70vw';
+  DIALOG_HEIGHT = '70vh';
 
   constructor(public dialog: MatDialog) {}
 

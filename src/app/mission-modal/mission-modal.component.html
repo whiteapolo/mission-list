@@ -1,12 +1,16 @@
-<div class="modal-container">
+<div [formGroup]="missionForm" class="modal-container">
   <span class="modal-title">{{ data.title }}</span>
   <span>שם:</span>
-  <input class="name" placeholder="שם" value="{{ mission?.title }}" />
+  <input
+    formControlName="name"
+    class="name"
+    placeholder="שם"
+    value="{{ mission?.title }}"
+  />
 
   <span>סטטוס:</span>
-
-  <select class="status">
-    <option *ngFor="let status of missionStatusTypes" value="status">
+  <select formControlName="status" class="status">
+    <option *ngFor="let status of missionStatusTypes" value="{{ status }}">
       {{ status }}
     </option>
   </select>

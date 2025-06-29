@@ -20,6 +20,9 @@ import { MissionModalComponent } from './mission-modal/mission-modal.component';
     BrowserAnimationsModule,
     CommonModule,
   ],
+  providers: [
+    {provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {hasBackDrop: true}}
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

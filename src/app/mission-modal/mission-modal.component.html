@@ -9,24 +9,14 @@
         <option *ngFor="let status of missionStatusTypes" value="status">{{status}}</option>
     </select>
 
-
     <span>קישור למשימה:</span>
     <input class="parent-mission" list="missions" 
         placeholder="חיפוש..." value="{{mission?.parent?.title}}"/>
 
     <datalist id="missions">
-            <ng-container 
-                *ngFor="let mission of missions"
-                [ngTemplateOutlet]="missionOption" 
-                [ngTemplateOutletContext]="{mission: mission}">
-            </ng-container>
+        <option *ngFor="let mission of flatMissionsArray" value="{{mission.title}}"></option>
     </datalist>
 
-    <ng-template let-mission="mission" #missionOption>
-        <option value="{{mission.title}}">{{mission.title}}</option>
-        <option *ngFor="let child of mission.children" value="{{child.title}}">{{child.title}}</option>
-    </ng-template>
-    
     <div class="buttons-container">
         <div (click)="cancel()" class="cancel-button">ביטול</div>
         <div (click)="save()" class="save-button">שמירה</div>

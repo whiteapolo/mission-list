@@ -3,6 +3,7 @@ import { Mission } from './mission';
 import { MissionService } from './mission.service';
 import { MatDialog } from '@angular/material/dialog';
 import { MissionModalComponent } from './mission-modal/mission-modal.component';
+import { MissionModalService } from './mission-modal.service';
 
 @Component({
   selector: 'app-root',
@@ -12,28 +13,11 @@ import { MissionModalComponent } from './mission-modal/mission-modal.component';
 export class AppComponent implements OnInit {
 
     missions: Mission[] = [];
-    isModalVisible: boolean = false;
 
-    toggleMissionModal() {
-      this.isModalVisible = !this.isModalVisible;
-    }
-    
-    openDialog() {
-      const dialogRef = this.dialog.open(MissionModalComponent, {
-        width: "30vw",
-        height: "70vh",
-        hasBackdrop: true,
-        data: { title: "יצירת משימה", mission: undefined}
-      });
-      
-      dialogRef.afterClosed().subscribe(result => {
-        console.log(`dialog closed: with: ${JSON.stringify(result)}`);
-      });
-    }
-    
     constructor(
       private missionService: MissionService,
-      public dialog: MatDialog
+      public dialog: MatDialog,
+      public missionsModalService: MissionModalService
     ) {}
 
     ngOnInit() {

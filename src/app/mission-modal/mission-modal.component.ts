@@ -14,10 +14,10 @@ interface MissionModalData {
   templateUrl: './mission-modal.component.html',
   styleUrls: ['./mission-modal.component.less']
 })
-export class MissionModalComponent implements OnInit {
+export class MissionModalComponent {
   
   missionStatusTypes = Object.values(MissionStatus);
-  missions: Mission[] = [];
+  flatMissionsArray: Mission[] = [];
   mission: Mission | undefined;
 
   constructor(
@@ -26,11 +26,11 @@ export class MissionModalComponent implements OnInit {
     private missionService: MissionService
   ) {
     this.mission = { ...data.mission };
-    missionService.getMissions().subscribe(missions => this.missions = missions);
+    missionService.getMissionsAsFlatArray().subscribe(missions => {
+      this.flatMissionsArray = missions;
+    });
   }
-
-  ngOnInit(): void {
-  }
+ 
 
   cancel() {
       console.log("Dialog canceled");

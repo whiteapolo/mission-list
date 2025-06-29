@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Mission } from './mission';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -44,6 +45,20 @@ export class MissionService {
 
   getMissions(): Observable<Mission[]> {
     return this.missions$.asObservable();
+  }
+  
+  getMissionsAsFlatArray(): Observable<Mission[]> {
+    return this.missions$.asObservable().pipe(map((missions: Mission[]) => this.flatMissionsArray(missions)));
+  }
+  
+  private flatMissionsArray(missions: Mission[]): Mission[] {
+    let array: Mission[] = [...missions];
+
+    missions.forEach(mission => {
+      array = array.concat(this.flatMissionsArray(mission.children));
+    });
+
+    return array;
   }
   
   createMission(mission: Mission, parentId: number) {

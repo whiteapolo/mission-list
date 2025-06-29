@@ -7,7 +7,7 @@ import { MissionService } from '../mission.service';
   templateUrl: './mission-card.component.html',
   styleUrls: ['./mission-card.component.less']
 })
-export class MissionCardComponent implements OnInit {
+export class MissionCardComponent {
   
   @Input() mission!: Mission;
   
@@ -18,8 +18,4 @@ export class MissionCardComponent implements OnInit {
   }
 
   constructor(public missionService: MissionService) { }
-
-  ngOnInit() {
-  }
-
 }

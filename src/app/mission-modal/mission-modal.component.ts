@@ -1,4 +1,9 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import {
+  Component,
+  CUSTOM_ELEMENTS_SCHEMA,
+  Inject,
+  OnInit,
+} from '@angular/core';
 import {
   MAT_DIALOG_DATA,
   MatDialog,
@@ -7,7 +12,13 @@ import {
 import { Mission } from '../mission';
 import { MissionStatus } from '../mission-status';
 import { MissionService } from '../mission.service';
-import { FormBuilder, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
+import { MatSelectModule } from '@angular/material/select';
 
 interface MissionModalData {
   mission: Mission;
@@ -23,9 +34,12 @@ export class MissionModalComponent {
   missionStatusTypes = Object.values(MissionStatus);
   flatMissionsArray: Mission[] = [];
   mission: Mission;
+  selectedMission: Mission | undefined;
+
   missionForm = this.formBuilder.group({
-    name: ['', [Validators.required, Validators.maxLength(50)]],
+    title: ['', [Validators.required, Validators.maxLength(50)]],
     status: [MissionStatus.ACTIVE],
+    parent: [''],
   });
 
   constructor(
@@ -40,14 +54,25 @@ export class MissionModalComponent {
     });
   }
 
+  setSelectedParent(mission: Mission) {
+    this.selectedMission = mission;
+    console.log('selected: ', this.selectedMission);
+  }
+
   cancel() {
     console.log('Dialog canceled');
     this.dialogRef.close();
   }
 
   save() {
-    this.mission = { ...this.mission, ...this.missionForm.value };
-    console.log(`Dialog returns: '${JSON.stringify(this.mission)}'`);
+    this.missionService.addMission(this.missionForm.value.parent, {
+      ...this.mission,
+      ...this.missionForm.value,
+    });
     this.dialogRef.close(this.mission);
+  }
+
+  displayMissionTitle(mission: Mission) {
+    return mission.title;
   }
 }

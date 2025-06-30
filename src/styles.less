@@ -1,3 +1,7 @@
+@lightgray: lightgrey;
+@gray: gray;
+@darkgray: #282828;
+
 * {
   font-family: "Rubik", sans-serif;
   direction: rtl;
@@ -27,6 +31,7 @@ body {
 .visibility-none {
   visibility: hidden;
 }
+
 html,
 body {
   height: 100%;
@@ -34,10 +39,6 @@ body {
 body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
-}
-
-.dialog-backdrop {
-  background-color: rgba(0, 0, 0, 0.7) !important;
 }
 
 .mat-dialog-container {
@@ -56,4 +57,20 @@ body {
 
 .invalid-input {
   box-shadow: 0px 0px 2px 0.6px red;
+}
+
+.arrow-up(@color, @width, @height) {
+  width: 0;
+  height: 0;
+  border-left: @width solid transparent;
+  border-right: @width solid transparent;
+  border-bottom: @height solid @color;
+}
+
+.arrow-down(@color, @width, @height) {
+  width: 0;
+  height: 0;
+  border-left: @width solid transparent;
+  border-right: @width solid transparent;
+  border-top: @height solid @color;
 }

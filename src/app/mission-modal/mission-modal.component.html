@@ -2,33 +2,33 @@
   <span class="modal-title">{{ data.title }}</span>
   <span>שם:</span>
   <input
-    formControlName="name"
-    class="name"
+    formControlName="title"
+    class="title"
     placeholder="שם"
     value="{{ mission?.title }}"
   />
 
   <span>סטטוס:</span>
   <select formControlName="status" class="status">
-    <option *ngFor="let status of missionStatusTypes" value="{{ status }}">
+    <option *ngFor="let status of missionStatusTypes" [ngValue]="status">
       {{ status }}
     </option>
   </select>
 
   <span>קישור למשימה:</span>
   <input
+    type="mission"
     class="parent-mission"
-    list="missions"
     placeholder="חיפוש..."
-    value="{{ mission?.parent?.title }}"
+    [matAutocomplete]="auto"
+    formControlName="parent"
   />
 
-  <datalist id="missions">
-    <option
-      *ngFor="let mission of flatMissionsArray"
-      value="{{ mission.title }}"
-    ></option>
-  </datalist>
+  <mat-autocomplete #auto [displayWith]="displayMissionTitle">
+    <mat-option *ngFor="let mission of flatMissionsArray" [value]="mission">
+      {{ mission.title }}
+    </mat-option>
+  </mat-autocomplete>
 
   <div class="buttons-container">
     <div (click)="cancel()" class="cancel-button">ביטול</div>

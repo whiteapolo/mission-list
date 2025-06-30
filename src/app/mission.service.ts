@@ -65,29 +65,63 @@ export class MissionService {
     return array;
   }
 
-  createMission(mission: Mission, parentId: number) {
-    mission.id = this.nextId++;
-    mission.parent = parentId ? this.getMissionById(parentId) : undefined;
-    mission.parent?.children.push(mission);
-    this.missions$.next(this.missions);
-  }
+  addMission(parent: Mission, mission: Mission) {
+    const newMission = {
+      ...mission,
+      children: [],
+      parent: parent,
+      id: this.nextId++,
+    };
 
-  updateMission(mission: Mission, parentId: number) {
-    const newParent = this.getMissionById(parentId);
+    console.log(
+      `created mission with title: ${newMission.title} under ${newMission.parent.title}`
+    );
 
-    if (mission.parent) {
-      mission.parent.children = mission.parent?.children.filter(
-        (currMission) => currMission.id !== mission.id
-      );
-    }
-
-    newParent?.children.push(mission);
-    this.missions$.next(this.missions);
+    parent ? parent.children.push(newMission) : this.missions.push(newMission);
     this.writeMissionChanges();
   }
 
-  deleteMissionById(id: number) {
-    this.missions = this.deleteMissionNode(this.missions, id);
+  updateMission(mission: Mission, newParent: Mission) {
+    return;
+    // if (!newParent && mission.parent) {
+    // }
+
+    // if (mission.parent) {
+    //   mission.parent.children = mission.parent?.children.filter(
+    //     (currMission) => currMission.id !== mission.id
+    //   );
+    // }
+
+    // newParent?.children.push(mission);
+    // this.missions$.next(this.missions);
+    // this.writeMissionChanges();
+  }
+
+  private removeMissionFromArray(
+    missions: Mission[],
+    idToRemove: number
+  ): boolean {
+    const missionIndex = missions.findIndex((mission) => idToRemove);
+
+    if (missionIndex >= 0) {
+      missions.splice(missionIndex, 1);
+      return true;
+    }
+
+    return false;
+  }
+
+  deleteMission(missionToRemove: Mission) {
+    const isDeleted = this.removeMissionFromArray(
+      missionToRemove.parent?.children ?? this.missions,
+      missionToRemove.id
+    );
+
+    if (!isDeleted) {
+      console.log(`mission with id: ${missionToRemove} was not found`);
+      return;
+    }
+
     this.missions$.next(this.missions);
     this.writeMissionChanges();
   }

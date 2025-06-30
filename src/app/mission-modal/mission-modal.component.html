@@ -1,9 +1,10 @@
-<div [formGroup]="missionForm" class="modal-container">
+<form [formGroup]="missionForm" class="modal-container" (submit)="save()">
   <span class="modal-title">{{ data.title }}</span>
   <span>שם:</span>
   <input
     formControlName="title"
     class="title"
+    [class.is-invalid]="!isFieldValid('title')"
     placeholder="שם"
     value="{{ mission?.title }}"
   />
@@ -22,16 +23,20 @@
     placeholder="חיפוש..."
     [matAutocomplete]="auto"
     formControlName="parent"
+    [class.is-invalid]="!isFieldValid('parent')"
   />
 
-  <mat-autocomplete #auto [displayWith]="displayMissionTitle">
-    <mat-option *ngFor="let mission of flatMissionsArray" [value]="mission">
+  <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayMissionTitle">
+    <mat-option
+      *ngFor="let mission of filteredMissions | async"
+      [value]="mission"
+    >
       {{ mission.title }}
     </mat-option>
   </mat-autocomplete>
 
   <div class="buttons-container">
     <div (click)="cancel()" class="cancel-button">ביטול</div>
-    <div (click)="save()" class="save-button">שמירה</div>
+    <button type="submit" class="save-button">שמירה</button>
   </div>
-</div>
+</form>

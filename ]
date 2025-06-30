@@ -13,16 +13,12 @@ import { Mission } from '../mission';
 import { MissionStatus } from '../mission-status';
 import { MissionService } from '../mission.service';
 import {
-  AbstractControl,
   FormBuilder,
   FormControl,
   FormGroup,
-  ValidationErrors,
   Validators,
 } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
-import { map, startWith } from 'rxjs/operators';
-import { empty, Observable } from 'rxjs';
 
 interface MissionModalData {
   mission: Mission;
@@ -34,11 +30,11 @@ interface MissionModalData {
   templateUrl: './mission-modal.component.html',
   styleUrls: ['./mission-modal.component.less'],
 })
-export class MissionModalComponent implements OnInit {
+export class MissionModalComponent {
   missionStatusTypes = Object.values(MissionStatus);
   flatMissionsArray: Mission[] = [];
-  filteredMissions: Observable<Mission[]> | undefined;
   mission: Mission;
+  selectedMission: Mission | undefined;
 
   missionForm = this.formBuilder.group(
     {
@@ -47,10 +43,10 @@ export class MissionModalComponent implements OnInit {
         [Validators.required, Validators.maxLength(3), Validators.minLength(1)],
       ],
       status: [MissionStatus.ACTIVE],
-      parent: ['', this.missionParentValidator],
+      parent: [''],
     },
     {
-      // updateOn: 'submit',
+      updateOn: 'submit',
     }
   );
 
@@ -66,15 +62,9 @@ export class MissionModalComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {
-    const parent = this.missionForm.get('parent');
-
-    if (parent) {
-      this.filteredMissions = parent.valueChanges.pipe(
-        startWith(''),
-        map((title) => this._filter(title))
-      );
-    }
+  setSelectedParent(mission: Mission) {
+    this.selectedMission = mission;
+    console.log('selected: ', this.selectedMission);
   }
 
   cancel() {
@@ -102,24 +92,6 @@ export class MissionModalComponent implements OnInit {
     return (
       this.missionForm.get(field)?.valid ||
       this.missionForm.get(field)?.untouched
-    );
-  }
-
-  missionParentValidator(control: AbstractControl): ValidationErrors | null {
-    if (!control.value || typeof control.value !== 'string') {
-      return null;
-    }
-
-    return { notAMission: { value: control.value } };
-  }
-
-  compareMissions(m1: Mission, m2: Mission): boolean {
-    return m1.id === m2.id;
-  }
-
-  private _filter(title: string): Mission[] {
-    return this.flatMissionsArray.filter((mission) =>
-      mission.title.includes(title)
     );
   }
 }

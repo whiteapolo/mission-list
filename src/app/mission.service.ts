@@ -83,8 +83,11 @@ export class MissionService {
   }
 
   updateMission(mission: Mission, newValues: Mission) {
+    mission.status = newValues.status ?? mission.status;
+    mission.title = newValues.title ?? mission.title;
+
     if (
-      newValues?.id !== mission.parent?.id &&
+      newValues?.parent?.id !== mission.parent?.id &&
       mission.id !== newValues.parent?.id
     ) {
       const oldParent = mission.parent;
@@ -97,10 +100,9 @@ export class MissionService {
 
       (mission?.parent?.children ?? this.missions).push(mission);
     }
-
-    mission.status = newValues.status ?? mission.status;
-    mission.title = newValues.title ?? mission.title;
   }
+
+  // private isMissionAncestor(mission: Mission, missionToCheck: Mission) {}
 
   private removeMissionFromArray(
     missions: Mission[],

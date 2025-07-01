@@ -22,12 +22,23 @@
     >שם משימה ארוך מדי!</span
   >
 
+  <!-- <span>סטטוס:</span> -->
+  <!-- <select formControlName="status" class="status"> -->
+  <!--   <option *ngFor="let status of missionStatusTypes" [ngValue]="status"> -->
+  <!--     {{ status }} -->
+  <!--   </option> -->
+  <!-- </select> -->
+
   <span>סטטוס:</span>
-  <select formControlName="status" class="status">
-    <option *ngFor="let status of missionStatusTypes" [ngValue]="status">
+  <mat-select formControlName="status" class="status">
+    <mat-option
+      class="status-option"
+      *ngFor="let status of missionStatusTypes"
+      [value]="status"
+    >
       {{ status }}
-    </option>
-  </select>
+    </mat-option>
+  </mat-select>
 
   <span>קישור למשימה:</span>
   <input

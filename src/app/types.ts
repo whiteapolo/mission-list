@@ -2,7 +2,7 @@ export interface Mission {
   id: number;
   title: string; // limit to 50 characters
   status: MissionStatus;
-  parent?: Mission | undefined;
+  parent?: Mission;
   children: Mission[];
 }
 

@@ -18,6 +18,12 @@ export class MissionService {
       this.missionsRoot = JSON.parse(data);
       this.initMissionsParent(this.missionsRoot);
       this.missions$.next(this.missionsRoot);
+    } else {
+      this.missionsRoot = {
+        id: 1,
+        title: 'root',
+        children: [],
+      } as any;
     }
   }
 
@@ -59,7 +65,7 @@ export class MissionService {
       id: this.generateNextId(),
     };
 
-    newMission.parent = newMission.parent ?? this.missionsRoot;
+    newMission.parent = newMission.parent || this.missionsRoot;
     newMission.parent.children.push(newMission);
 
     this.writeMissionChanges();
@@ -67,16 +73,32 @@ export class MissionService {
     console.log(
       `created mission with title: ${newMission.title} under ${newMission.parent?.title}`
     );
+
+    this.missions$.next(this.missionsRoot);
+    this.writeMissionChanges();
   }
 
   updateMission(mission: Mission, newValues: Mission) {
     mission.status = newValues.status ?? mission.status;
     mission.title = newValues.title ?? mission.title;
 
-    if (
-      newValues?.parent?.id !== mission.parent?.id &&
-      mission.id !== newValues.parent?.id
-    ) {
+    if (!newValues.parent || mission.parent?.id === newValues.parent?.id) {
+      this.missions$.next(this.missionsRoot);
+      return;
+    }
+
+    console.log(this.isMissionAncestor(mission, newValues.parent!));
+
+    if (this.isMissionAncestor(mission, newValues.parent!)) {
+      const oldParent = mission.parent!;
+      this.removeMissionFromArray(oldParent.children, mission.id);
+      const newParent = newValues.parent!;
+      this.removeMissionFromArray(newParent.parent!.children, newParent?.id);
+      newParent.parent = oldParent;
+      newParent?.children.push(mission);
+      oldParent.children.push(newParent);
+      mission.parent = newParent;
+    } else {
       const oldParent = mission.parent;
       mission.parent = newValues.parent ?? mission.parent;
 
@@ -87,9 +109,30 @@ export class MissionService {
 
       (mission?.parent?.children ?? this.missionsRoot.children).push(mission);
     }
+
+    this.missions$.next(this.missionsRoot);
   }
 
-  // private isMissionAncestor(mission: Mission, missionToCheck: Mission) {}
+  private isMissionAncestor(
+    mission: Mission,
+    possibleAncestor: Mission
+  ): boolean {
+    if (mission.id === possibleAncestor.id) {
+      return true;
+    }
+
+    if (!mission.children) {
+      return false;
+    }
+
+    for (const child of mission.children) {
+      if (this.isMissionAncestor(child, possibleAncestor)) {
+        return true;
+      }
+    }
+
+    return false;
+  }
 
   private removeMissionFromArray(
     missions: Mission[],
@@ -123,8 +166,15 @@ export class MissionService {
     this.writeMissionChanges();
   }
 
+  private parentToNullReplacer(key: string, value: any) {
+    return key === 'parent' ? null : value;
+  }
+
   private writeMissionChanges() {
-    // localStorage.setItem(MISSIONS_KEY, JSON.stringify(this.missions));
+    // localStorage.setItem(
+    //   MISSIONS_KEY,
+    //   JSON.stringify(this.missionsRoot, this.parentToNullReplacer)
+    // );
   }
 
   private deleteMissionNode(missions: Mission[], id: number): Mission[] {

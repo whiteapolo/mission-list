@@ -11,6 +11,7 @@
   <span class="mission-title">{{ mission.title }}</span>
   <div class="is-active-indicator">{{ mission.status }}</div>
   <img
+    (click)="missionModelService.editMission(mission)"
     class="edit-button"
     src="/assets/edit-icon.svg"
     width="12px"

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Mission } from './mission';
+import { Mission } from './types';
 import { MissionService } from './mission.service';
 import { MatDialog } from '@angular/material/dialog';
 import { MissionModalComponent } from './mission-modal/mission-modal.component';

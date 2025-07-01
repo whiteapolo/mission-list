@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Mission } from './mission';
+import { Mission } from './types';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { MISSIONS_KEY } from 'src/constants';
+import { MISSIONS_KEY } from 'src/app/constants';
 
 @Injectable({
   providedIn: 'root',
@@ -65,43 +65,50 @@ export class MissionService {
     return array;
   }
 
-  addMission(parent: Mission, mission: Mission) {
+  addMission(mission: Mission) {
     const newMission = {
       ...mission,
       children: [],
-      parent: parent,
       id: this.nextId++,
     };
 
     console.log(
-      `created mission with title: ${newMission.title} under ${newMission.parent.title}`
+      `created mission with title: ${newMission.title} under ${newMission.parent?.title}`
     );
 
-    parent ? parent.children.push(newMission) : this.missions.push(newMission);
+    newMission.parent
+      ? newMission.parent.children.push(newMission)
+      : this.missions.push(newMission);
     this.writeMissionChanges();
   }
 
-  updateMission(mission: Mission, newParent: Mission) {
-    return;
-    // if (!newParent && mission.parent) {
-    // }
+  updateMission(mission: Mission, newValues: Mission) {
+    if (
+      newValues?.id !== mission.parent?.id &&
+      mission.id !== newValues.parent?.id
+    ) {
+      const oldParent = mission.parent;
+      mission.parent = newValues.parent ?? mission.parent;
 
-    // if (mission.parent) {
-    //   mission.parent.children = mission.parent?.children.filter(
-    //     (currMission) => currMission.id !== mission.id
-    //   );
-    // }
+      this.removeMissionFromArray(
+        oldParent?.children ?? this.missions,
+        mission.id
+      );
 
-    // newParent?.children.push(mission);
-    // this.missions$.next(this.missions);
-    // this.writeMissionChanges();
+      (mission?.parent?.children ?? this.missions).push(mission);
+    }
+
+    mission.status = newValues.status ?? mission.status;
+    mission.title = newValues.title ?? mission.title;
   }
 
   private removeMissionFromArray(
     missions: Mission[],
     idToRemove: number
   ): boolean {
-    const missionIndex = missions.findIndex((mission) => idToRemove);
+    const missionIndex = missions.findIndex(
+      (mission) => mission.id == idToRemove
+    );
 
     if (missionIndex >= 0) {
       missions.splice(missionIndex, 1);

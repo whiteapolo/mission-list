@@ -6,8 +6,21 @@
     class="title"
     [class.is-invalid]="!isFieldValid('title')"
     placeholder="שם"
-    value="{{ mission?.title }}"
+    value="{{ mission }}"
   />
+  <span
+    *ngIf="!isFieldValid('title') && missionForm.get('title')?.errors?.required"
+    class="error-text"
+    >חובה לתת שם למשימה!</span
+  >
+
+  <span
+    *ngIf="
+      !isFieldValid('title') && missionForm.get('title')?.errors?.maxlength
+    "
+    class="error-text"
+    >שם משימה ארוך מדי!</span
+  >
 
   <span>סטטוס:</span>
   <select formControlName="status" class="status">
@@ -34,6 +47,10 @@
       {{ mission.title }}
     </mat-option>
   </mat-autocomplete>
+
+  <span *ngIf="!isFieldValid('parent')" class="error-text"
+    >המשימה הכתובה היא לא בחירה תקנית!</span
+  >
 
   <div class="buttons-container">
     <div (click)="cancel()" class="cancel-button">ביטול</div>

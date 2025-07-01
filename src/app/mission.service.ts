@@ -10,22 +10,22 @@ import { EMPTY_MISSION, MISSIONS_KEY } from 'src/app/constants';
 export class MissionService {
   missionsRoot: Mission = EMPTY_MISSION;
   missions$ = new BehaviorSubject<Mission>(this.missionsRoot);
-  nextId: number = 1;
-
-  calculateMaxId(root: Mission): number {
-    return root.children.reduce((max, curr) => {
-      return Math.max(curr.id, max, this.calculateMaxId(curr));
-    }, 0);
-  }
 
   constructor() {
     const data = localStorage.getItem(MISSIONS_KEY);
 
     if (data) {
       this.missionsRoot = JSON.parse(data);
+      this.initMissionsParent(this.missionsRoot);
       this.missions$.next(this.missionsRoot);
-      this.nextId = this.calculateMaxId(this.missionsRoot) + 1;
     }
+  }
+
+  private initMissionsParent(root: Mission) {
+    root.children.forEach((child) => {
+      child.parent = root;
+      this.initMissionsParent(child);
+    });
   }
 
   getMissions(): Observable<Mission> {
@@ -56,17 +56,17 @@ export class MissionService {
     const newMission = {
       ...mission,
       children: [],
-      id: this.nextId++,
+      id: this.generateNextId(),
     };
+
+    newMission.parent = newMission.parent ?? this.missionsRoot;
+    newMission.parent.children.push(newMission);
+
+    this.writeMissionChanges();
 
     console.log(
       `created mission with title: ${newMission.title} under ${newMission.parent?.title}`
     );
-
-    newMission.parent
-      ? newMission.parent.children.push(newMission)
-      : this.missionsRoot.children.push(newMission);
-    this.writeMissionChanges();
   }
 
   updateMission(mission: Mission, newValues: Mission) {
@@ -108,12 +108,13 @@ export class MissionService {
   }
 
   deleteMission(missionToRemove: Mission) {
-    const isDeleted = this.removeMissionFromArray(
-      missionToRemove.parent?.children ?? this.missionsRoot.children,
-      missionToRemove.id
+    const parent = missionToRemove.parent!;
+    const oldLen = parent.children.length;
+    parent.children = parent.children.filter(
+      (mission) => mission.id !== missionToRemove.id
     );
 
-    if (!isDeleted) {
+    if (oldLen === parent.children.length) {
       console.log(`mission with id: ${missionToRemove} was not found`);
       return;
     }
@@ -136,5 +137,9 @@ export class MissionService {
       node.children = this.deleteMissionNode(node.children, id);
       return true;
     });
+  }
+
+  private generateNextId() {
+    return this.missionsRoot.id++;
   }
 }

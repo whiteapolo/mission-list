@@ -2,19 +2,19 @@ import { Injectable } from '@angular/core';
 import { Mission } from './types';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { MISSIONS_KEY } from 'src/app/constants';
+import { EMPTY_MISSION, MISSIONS_KEY } from 'src/app/constants';
 
 @Injectable({
   providedIn: 'root',
 })
 export class MissionService {
-  missions: Mission[] = [];
-  missions$ = new BehaviorSubject<Mission[]>(this.missions);
+  missionsRoot: Mission = EMPTY_MISSION;
+  missions$ = new BehaviorSubject<Mission>(this.missionsRoot);
   nextId: number = 1;
 
-  calculateMaxId(missions: Mission[]): number {
-    return missions.reduce((max, curr) => {
-      return Math.max(curr.id, max, this.calculateMaxId(curr.children));
+  calculateMaxId(root: Mission): number {
+    return root.children.reduce((max, curr) => {
+      return Math.max(curr.id, max, this.calculateMaxId(curr));
     }, 0);
   }
 
@@ -22,45 +22,32 @@ export class MissionService {
     const data = localStorage.getItem(MISSIONS_KEY);
 
     if (data) {
-      this.missions = JSON.parse(data);
-      this.missions$.next(this.missions);
-      this.nextId = this.calculateMaxId(this.missions) + 1;
+      this.missionsRoot = JSON.parse(data);
+      this.missions$.next(this.missionsRoot);
+      this.nextId = this.calculateMaxId(this.missionsRoot) + 1;
     }
   }
 
-  private getMissionById(
-    id: number,
-    missions?: Mission[]
-  ): Mission | undefined {
-    if (!missions) {
-      return this.getMissionById(id, this.missions);
-    }
-
-    for (const mission of missions) {
-      if (mission.id == id) return mission;
-      const ret = this.getMissionById(id, mission.children);
-      if (ret) return ret;
-    }
-
-    return undefined;
-  }
-
-  getMissions(): Observable<Mission[]> {
+  getMissions(): Observable<Mission> {
     return this.missions$.asObservable();
   }
 
   getMissionsAsFlatArray(): Observable<Mission[]> {
     return this.missions$
       .asObservable()
-      .pipe(map((missions: Mission[]) => this.flatMissionsArray(missions)));
+      .pipe(map((missions: Mission) => this.flatMissionsArray(missions)));
   }
 
-  private flatMissionsArray(missions: Mission[]): Mission[] {
-    let array: Mission[] = [...missions];
+  private flatMissionsArray(root: Mission): Mission[] {
+    if (!root) {
+      return [];
+    }
 
-    missions.forEach((mission) => {
-      array = array.concat(this.flatMissionsArray(mission.children));
-    });
+    const array = [root];
+
+    root.children.forEach((child) =>
+      array.push(...this.flatMissionsArray(child))
+    );
 
     return array;
   }
@@ -78,7 +65,7 @@ export class MissionService {
 
     newMission.parent
       ? newMission.parent.children.push(newMission)
-      : this.missions.push(newMission);
+      : this.missionsRoot.children.push(newMission);
     this.writeMissionChanges();
   }
 
@@ -94,11 +81,11 @@ export class MissionService {
       mission.parent = newValues.parent ?? mission.parent;
 
       this.removeMissionFromArray(
-        oldParent?.children ?? this.missions,
+        oldParent?.children ?? this.missionsRoot.children,
         mission.id
       );
 
-      (mission?.parent?.children ?? this.missions).push(mission);
+      (mission?.parent?.children ?? this.missionsRoot.children).push(mission);
     }
   }
 
@@ -122,7 +109,7 @@ export class MissionService {
 
   deleteMission(missionToRemove: Mission) {
     const isDeleted = this.removeMissionFromArray(
-      missionToRemove.parent?.children ?? this.missions,
+      missionToRemove.parent?.children ?? this.missionsRoot.children,
       missionToRemove.id
     );
 
@@ -131,7 +118,7 @@ export class MissionService {
       return;
     }
 
-    this.missions$.next(this.missions);
+    this.missions$.next(this.missionsRoot);
     this.writeMissionChanges();
   }
 

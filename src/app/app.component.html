@@ -2,8 +2,8 @@
 
 <div class="page-content">
   <div class="mission-container">
-    <div *ngFor="let mission of missions">
-      <mission-card [mission]="mission"></mission-card>
+    <div *ngFor="let child of missionsRoot.children">
+      <mission-card [mission]="child"></mission-card>
     </div>
   </div>
 </div>

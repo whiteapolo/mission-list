@@ -37,13 +37,11 @@
     [matAutocomplete]="auto"
     formControlName="parent"
     [class.is-invalid]="!isFieldValid('parent')"
+    [(ngModel)]="searchText"
   />
 
   <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayMissionTitle">
-    <mat-option
-      *ngFor="let mission of filteredMissions | async"
-      [value]="mission"
-    >
+    <mat-option *ngFor="let mission of getFilteredMissions()" [value]="mission">
       {{ mission.title }}
     </mat-option>
   </mat-autocomplete>

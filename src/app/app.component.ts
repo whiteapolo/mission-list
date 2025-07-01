@@ -4,6 +4,7 @@ import { MissionService } from './mission.service';
 import { MatDialog } from '@angular/material/dialog';
 import { MissionModalComponent } from './mission-modal/mission-modal.component';
 import { MissionModalService } from './mission-modal/mission-modal.service';
+import { EMPTY_MISSION } from './constants';
 
 @Component({
   selector: 'app-root',
@@ -11,7 +12,7 @@ import { MissionModalService } from './mission-modal/mission-modal.service';
   styleUrls: ['./app.component.less'],
 })
 export class AppComponent implements OnInit {
-  missions: Mission[] = [];
+  missionsRoot: Mission = EMPTY_MISSION;
 
   constructor(
     private missionService: MissionService,
@@ -22,6 +23,6 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     this.missionService
       .getMissions()
-      .subscribe((missions) => (this.missions = missions));
+      .subscribe((root) => (this.missionsRoot = root));
   }
 }

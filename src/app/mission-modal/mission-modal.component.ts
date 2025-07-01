@@ -8,8 +8,6 @@ import {
   ValidationErrors,
   Validators,
 } from '@angular/forms';
-import { map, startWith } from 'rxjs/operators';
-import { Observable } from 'rxjs';
 import { EMPTY_MISSION } from 'src/app/constants';
 
 interface MissionModalData {
@@ -25,15 +23,20 @@ interface MissionModalData {
 export class MissionModalComponent implements OnInit {
   missionStatusTypes = Object.values(MissionStatus);
   flatMissionsArray: Mission[] = [];
-  filteredMissions: Observable<Mission[]> | undefined;
   mission: Mission = EMPTY_MISSION;
   isSubmitted = false;
+  searchText = '';
 
-  missionForm = this.formBuilder.group({
-    title: ['', [Validators.required, Validators.maxLength(50)]],
-    status: [MissionStatus.ACTIVE],
-    parent: ['', this.missionParentValidator],
-  });
+  missionForm = this.formBuilder.group(
+    {
+      title: ['', [Validators.required, Validators.maxLength(50)]],
+      status: [MissionStatus.ACTIVE],
+      parent: ['', this.missionParentValidator],
+    },
+    {
+      // updateOn: 'submit',
+    }
+  );
 
   constructor(
     public dialogRef: MatDialogRef<MissionModalComponent>,
@@ -57,13 +60,6 @@ export class MissionModalComponent implements OnInit {
     this.missionForm.get('parent')?.setValue(this.mission.parent ?? '');
 
     const parent = this.missionForm.get('parent');
-
-    if (parent) {
-      this.filteredMissions = parent.valueChanges.pipe(
-        startWith(''),
-        map((title) => this.filterMissionsByTitle(title))
-      );
-    }
   }
 
   cancel() {
@@ -98,9 +94,9 @@ export class MissionModalComponent implements OnInit {
     return { notAMission: { value: control.value } };
   }
 
-  private filterMissionsByTitle(title: string): Mission[] {
+  public getFilteredMissions(): Mission[] {
     return this.flatMissionsArray.filter((mission) =>
-      mission.title.includes(title)
+      mission.title.includes(this.searchText)
     );
   }
 }

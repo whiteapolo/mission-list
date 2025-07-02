@@ -20,9 +20,13 @@ export class MissionModalService {
   editMission(mission: Mission) {
     this.openMissionDialog({ title: 'עריכת משימה', mission: mission })
       .afterClosed()
-      .subscribe((newMissionValues) =>
-        this.missionService.updateMission(mission, newMissionValues)
-      );
+      .subscribe((newMissionValues) => {
+        if (newMissionValues) {
+          this.missionService.updateMission(mission, newMissionValues);
+        } else {
+          console.log('Canceled edit mission');
+        }
+      });
   }
 
   createMission() {

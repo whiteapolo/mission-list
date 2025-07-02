@@ -6,5 +6,5 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./bigger-click-wrapper.component.less'],
 })
 export class BiggerClickWrapperComponent {
-  @Input() clickRadius = 0;
+  @Input() clickRadius: number = 0;
 }

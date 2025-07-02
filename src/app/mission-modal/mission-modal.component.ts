@@ -25,7 +25,6 @@ export class MissionModalComponent implements OnInit {
   flatMissionsArray: Mission[] = [];
   mission: Mission = EMPTY_MISSION;
   isSubmitted = false;
-  searchText = '';
 
   missionForm = this.formBuilder.group({
     title: ['', [Validators.required, Validators.maxLength(50)]],
@@ -36,26 +35,26 @@ export class MissionModalComponent implements OnInit {
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: MissionModalData,
     public dialogRef: MatDialogRef<MissionModalComponent>,
-    private missionService: MissionService,
+    public missionService: MissionService,
     private formBuilder: FormBuilder
-  ) {
-    this.mission = { ...data.mission };
-    missionService.getMissionsAsFlatArray().subscribe((missions) => {
+  ) {}
+
+  ngOnInit(): void {
+    this.mission = { ...this.data.mission };
+    this.missionService.getMissionsAsFlatArray().subscribe((missions) => {
       this.flatMissionsArray = missions.filter(
         (mission) => mission.id !== this.mission.id
       );
     });
-  }
 
-  ngOnInit(): void {
     this.missionForm.get('title')?.setValue(this.mission.title);
     this.missionForm.get('status')?.setValue(this.mission.status);
-    this.missionForm.get('parent')?.setValue(this.mission.parent ?? '');
-    console.log(this.mission.parent);
+    if (this.mission.parent?.parent) {
+      this.missionForm.get('parent')?.setValue(this.mission.parent);
+    }
   }
 
   cancel() {
-    console.log('Dialog canceled');
     this.dialogRef.close();
   }
 
@@ -79,16 +78,15 @@ export class MissionModalComponent implements OnInit {
   }
 
   missionParentValidator(control: AbstractControl): ValidationErrors | null {
-    if (!control.value || typeof control.value !== 'string') {
-      return null;
+    if (typeof control.value === 'string' && control.value.length > 0) {
+      return { notAMission: { value: control.value } };
     }
-
-    return { notAMission: { value: control.value } };
+    return null;
   }
 
   public getFilteredMissions(): Mission[] {
     return this.flatMissionsArray.filter((mission) =>
-      mission.title.includes(this.searchText)
+      mission.title.includes(this.missionForm.get('parent')?.value)
     );
   }
 }

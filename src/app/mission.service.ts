@@ -2,7 +2,11 @@ import { Injectable } from '@angular/core';
 import { Mission } from './types';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { EMPTY_MISSION, MISSIONS_KEY } from 'src/app/constants';
+import {
+  EMPTY_MISSION,
+  MISSIONS_LOCAL_STORAGE_KEY,
+  NEW_MISSION_ROOT,
+} from 'src/app/constants';
 
 @Injectable({
   providedIn: 'root',
@@ -12,21 +16,18 @@ export class MissionService {
   missions$ = new BehaviorSubject<Mission>(this.missionsRoot);
 
   constructor() {
-    const data = localStorage.getItem(MISSIONS_KEY);
+    const data = localStorage.getItem(MISSIONS_LOCAL_STORAGE_KEY);
 
-    if (data) {
+    if (!data) {
+      this.missionsRoot = NEW_MISSION_ROOT();
+    } else {
       this.missionsRoot = JSON.parse(data);
       this.initMissionsParent(this.missionsRoot);
       this.missions$.next(this.missionsRoot);
-    } else {
-      this.missionsRoot = {
-        id: 1,
-        title: 'root',
-        children: [],
-      } as any;
     }
   }
 
+  // JSON representation doesn't keep parent reference
   private initMissionsParent(root: Mission) {
     root.children.forEach((child) => {
       child.parent = root;
@@ -78,21 +79,6 @@ export class MissionService {
     this.writeMissionChanges();
   }
 
-  private update(obj: any, newValues: any) {
-    Object.keys(newValues).forEach((key) => (obj[key] = newValues[key]));
-  }
-
-  private modify(obj: any, newObj: any) {
-    Object.keys(newObj).forEach((key) => delete obj[key]);
-    Object.keys(newObj).forEach((key) => (obj[key] = newObj[key]));
-  }
-
-  private swap(obj1: any, obj2: any) {
-    const tmp = { ...obj1 };
-    this.modify(obj1, obj2);
-    this.modify(obj2, tmp);
-  }
-
   updateMission(mission: Mission, newValues: Mission) {
     mission.status = newValues.status ?? mission.status;
     mission.title = newValues.title ?? mission.title;
@@ -102,7 +88,7 @@ export class MissionService {
       return;
     }
 
-    if (this.isMissionAncestor(mission, newValues.parent!)) {
+    if (this.isMissionAncestor(newValues.parent!, mission)) {
       const oldParent = mission.parent!;
       this.removeMissionFromArray(oldParent.children, mission.id);
       let newParent = newValues.parent!;
@@ -127,24 +113,14 @@ export class MissionService {
   }
 
   private isMissionAncestor(
-    mission: Mission,
+    mission: Mission | undefined,
     possibleAncestor: Mission
   ): boolean {
-    if (mission.id === possibleAncestor.id) {
-      return true;
-    }
-
-    if (!mission.children) {
-      return false;
-    }
-
-    for (const child of mission.children) {
-      if (this.isMissionAncestor(child, possibleAncestor)) {
-        return true;
-      }
-    }
-
-    return false;
+    return (
+      !!mission &&
+      (mission.id === possibleAncestor.id ||
+        this.isMissionAncestor(mission.parent, possibleAncestor))
+    );
   }
 
   private removeMissionFromArray(
@@ -165,41 +141,41 @@ export class MissionService {
 
   deleteMission(missionToRemove: Mission) {
     const parent = missionToRemove.parent!;
-    const oldLen = parent.children.length;
+    const numOfChildren = parent.children.length;
     parent.children = parent.children.filter(
       (mission) => mission.id !== missionToRemove.id
     );
 
-    if (oldLen === parent.children.length) {
-      console.log(`mission with id: ${missionToRemove} was not found`);
+    if (numOfChildren === parent.children.length) {
+      console.log(
+        `mission(title: "${missionToRemove.title}", id: ${missionToRemove.id}) was not found`
+      );
       return;
     }
+
+    console.log(
+      `mission(title: "${missionToRemove.title}", id: ${missionToRemove.id}) deleted`
+    );
 
     this.missions$.next(this.missionsRoot);
     this.writeMissionChanges();
   }
 
-  private parentToNullReplacer(key: string, value: any) {
-    return key === 'parent' ? null : value;
-  }
-
   private writeMissionChanges() {
+    // when converting the missions tree to JSON
+    // the parent reference in the mission cause
+    // circular refrencing in JSON which is not allowed
+    // so we remove the parent reference when converting to JSON
+    const parentToNullReplacer = (key: string, value: any) => {
+      return key === 'parent' ? null : value;
+    };
     // localStorage.setItem(
     //   MISSIONS_KEY,
     //   JSON.stringify(this.missionsRoot, this.parentToNullReplacer)
     // );
-  }
-
-  private deleteMissionNode(missions: Mission[], id: number): Mission[] {
-    return missions.filter((node) => {
-      if (node.id === id) {
-        console.log(`Deleted mission '${node.title}' with id '${node.id}'`);
-        return false;
-      }
-
-      node.children = this.deleteMissionNode(node.children, id);
-      return true;
-    });
+    console.log(
+      `saved missions in local storage under key: "${MISSIONS_LOCAL_STORAGE_KEY}"`
+    );
   }
 
   private generateNextId() {

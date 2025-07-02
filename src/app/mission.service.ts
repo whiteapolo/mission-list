@@ -49,10 +49,10 @@ export class MissionService {
       return [];
     }
 
-    const array = [root];
+    const array: Mission[] = [];
 
     root.children.forEach((child) =>
-      array.push(...this.flatMissionsArray(child))
+      array.push(child, ...this.flatMissionsArray(child))
     );
 
     return array;

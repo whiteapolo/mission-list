@@ -8,7 +8,7 @@ import {
   ValidationErrors,
   Validators,
 } from '@angular/forms';
-import { EMPTY_MISSION } from 'src/app/constants';
+import { EMPTY_MISSION, MISSION_STATUS_TYPES } from 'src/app/constants';
 
 interface MissionModalData {
   mission: Mission;
@@ -21,7 +21,7 @@ interface MissionModalData {
   styleUrls: ['./mission-modal.component.less'],
 })
 export class MissionModalComponent implements OnInit {
-  missionStatusTypes = Object.values(MissionStatus);
+  missionStatusTypes = MISSION_STATUS_TYPES;
   flatMissionsArray: Mission[] = [];
   mission: Mission = EMPTY_MISSION;
   isSubmitted = false;

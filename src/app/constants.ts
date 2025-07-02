@@ -8,3 +8,5 @@ export const EMPTY_MISSION: Mission = {
   status: MissionStatus.ACTIVE,
   children: [],
 };
+
+export const MISSION_STATUS_TYPES = Object.values(MissionStatus);

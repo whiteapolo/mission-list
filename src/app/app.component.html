@@ -5,7 +5,11 @@
 
   <div class="filter-status-container">
     <span class="filter-status-header">סינון לפי: </span>
-    <mat-select [(ngModel)]="statusToFilter" class="filter-status">
+    <mat-select
+      [disableOptionCentering]="true"
+      [(ngModel)]="statusToFilter"
+      class="filter-status"
+    >
       <mat-option [value]="NO_STATUS_FILTER_STRING">{{
         NO_STATUS_FILTER_STRING
       }}</mat-option>
@@ -14,6 +18,7 @@
       </mat-option>
     </mat-select>
   </div>
+  <div class="arrow"></div>
 
   <div class="mission-container">
     <ng-container *ngFor="let child of missionsRoot.children">

@@ -27,20 +27,15 @@ export class MissionModalComponent implements OnInit {
   isSubmitted = false;
   searchText = '';
 
-  missionForm = this.formBuilder.group(
-    {
-      title: ['', [Validators.required, Validators.maxLength(50)]],
-      status: [MissionStatus.ACTIVE],
-      parent: ['', this.missionParentValidator],
-    },
-    {
-      // updateOn: 'submit',
-    }
-  );
+  missionForm = this.formBuilder.group({
+    title: ['', [Validators.required, Validators.maxLength(50)]],
+    status: [MissionStatus.ACTIVE],
+    parent: ['', this.missionParentValidator],
+  });
 
   constructor(
-    public dialogRef: MatDialogRef<MissionModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: MissionModalData,
+    public dialogRef: MatDialogRef<MissionModalComponent>,
     private missionService: MissionService,
     private formBuilder: FormBuilder
   ) {
@@ -54,12 +49,9 @@ export class MissionModalComponent implements OnInit {
 
   ngOnInit(): void {
     this.missionForm.get('title')?.setValue(this.mission.title);
-    this.missionForm
-      .get('status')
-      ?.setValue(this.mission.status ?? MissionStatus.ACTIVE);
+    this.missionForm.get('status')?.setValue(this.mission.status);
     this.missionForm.get('parent')?.setValue(this.mission.parent ?? '');
-
-    const parent = this.missionForm.get('parent');
+    console.log(this.mission.parent);
   }
 
   cancel() {

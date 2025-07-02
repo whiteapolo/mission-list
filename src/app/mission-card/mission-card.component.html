@@ -1,15 +1,21 @@
 <div class="mission-card">
-  <div
+  <bigger-click-wrapper
     class="toggle-mission-children-button"
-    (click)="toggleMissionChildrenVisibility()"
-    [ngClass]="{
-      'arrow-up': isMissionChildrenVisible,
-      'arrow-down': !isMissionChildrenVisible,
-      'visibility-none': mission.children.length === 0
-    }"
-  ></div>
+    [clickRadius]="5"
+    (click)="toggleChildrenVisibility()"
+  >
+    <div
+      [ngClass]="{
+        'arrow-up': isChildrenVisible,
+        'arrow-down': !isChildrenVisible,
+        'visibility-none': mission.children.length === 0
+      }"
+    ></div>
+  </bigger-click-wrapper>
+
   <span class="mission-title">{{ mission.title }}</span>
   <div class="is-active-indicator">{{ mission.status }}</div>
+
   <img
     (click)="missionModelService.editMission(mission)"
     class="edit-button"
@@ -17,6 +23,7 @@
     width="12px"
     height="12px"
   />
+
   <img
     (click)="missionService.deleteMission(mission)"
     class="trash-icon"
@@ -26,7 +33,7 @@
   />
 </div>
 
-<div class="sub-missions-container" [hidden]="!isMissionChildrenVisible">
+<div class="mission-children-container" [hidden]="!isChildrenVisible">
   <div *ngFor="let mission of mission.children">
     <mission-card [mission]="mission"></mission-card>
   </div>

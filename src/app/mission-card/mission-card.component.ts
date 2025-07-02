@@ -1,7 +1,8 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Mission } from '../types';
 import { MissionService } from '../mission.service';
 import { MissionModalService } from '../mission-modal/mission-modal.service';
+import { EMPTY_MISSION } from '../constants';
 
 @Component({
   selector: 'mission-card',
@@ -14,10 +15,10 @@ export class MissionCardComponent {
     public missionModelService: MissionModalService
   ) {}
 
-  @Input() mission!: Mission;
-  isMissionChildrenVisible: boolean = false;
+  @Input() mission: Mission = EMPTY_MISSION;
+  isChildrenVisible: boolean = false;
 
-  toggleMissionChildrenVisibility() {
-    this.isMissionChildrenVisible = !this.isMissionChildrenVisible;
+  toggleChildrenVisibility() {
+    this.isChildrenVisible = !this.isChildrenVisible;
   }
 }

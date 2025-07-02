@@ -15,9 +15,10 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { BiggerClickWrapperComponent } from './bigger-click-wrapper/bigger-click-wrapper.component';
 
 @NgModule({
-  declarations: [AppComponent, MissionCardComponent, MissionModalComponent],
+  declarations: [AppComponent, MissionCardComponent, MissionModalComponent, BiggerClickWrapperComponent],
   imports: [
     BrowserModule,
     MatDialogModule,

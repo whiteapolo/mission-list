@@ -78,6 +78,21 @@ export class MissionService {
     this.writeMissionChanges();
   }
 
+  private update(obj: any, newValues: any) {
+    Object.keys(newValues).forEach((key) => (obj[key] = newValues[key]));
+  }
+
+  private modify(obj: any, newObj: any) {
+    Object.keys(newObj).forEach((key) => delete obj[key]);
+    Object.keys(newObj).forEach((key) => (obj[key] = newObj[key]));
+  }
+
+  private swap(obj1: any, obj2: any) {
+    const tmp = { ...obj1 };
+    this.modify(obj1, obj2);
+    this.modify(obj2, tmp);
+  }
+
   updateMission(mission: Mission, newValues: Mission) {
     mission.status = newValues.status ?? mission.status;
     mission.title = newValues.title ?? mission.title;
@@ -87,12 +102,10 @@ export class MissionService {
       return;
     }
 
-    console.log(this.isMissionAncestor(mission, newValues.parent!));
-
     if (this.isMissionAncestor(mission, newValues.parent!)) {
       const oldParent = mission.parent!;
       this.removeMissionFromArray(oldParent.children, mission.id);
-      const newParent = newValues.parent!;
+      let newParent = newValues.parent!;
       this.removeMissionFromArray(newParent.parent!.children, newParent?.id);
       newParent.parent = oldParent;
       newParent?.children.push(mission);

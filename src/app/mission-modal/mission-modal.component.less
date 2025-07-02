@@ -7,7 +7,7 @@
   height: 100%;
   width: 100%;
   gap: 8px;
-  padding-left: 20px;
+  padding: 20px;
 
   .modal-title {
     font-size: 25px;
@@ -26,6 +26,7 @@
     border-radius: 5px;
     border: 2px solid lightgray;
     outline: none;
+    margin-left: 20px;
   }
 
   .is-invalid {
@@ -49,12 +50,11 @@
     justify-content: left;
     gap: 15px;
 
-    .save-button,
-    .cancel-button {
+    * {
       .flex-center();
       .clickable();
       width: 80px;
-      height: 25px;
+      height: 28px;
       color: white;
       font-size: 15px;
     }

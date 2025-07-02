@@ -1,5 +1,5 @@
 <div class="mission-card">
-  <bigger-click-wrapper
+  <click-wrapper
     class="toggle-mission-children-button"
     [clickRadius]="5"
     (click)="toggleChildrenVisibility()"
@@ -11,7 +11,7 @@
         'visibility-none': mission.children.length === 0
       }"
     ></div>
-  </bigger-click-wrapper>
+  </click-wrapper>
 
   <span class="mission-title">{{ mission.title }}</span>
   <div class="is-active-indicator">{{ mission.status }}</div>

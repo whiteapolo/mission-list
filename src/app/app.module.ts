@@ -9,14 +9,14 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { BiggerClickWrapperComponent } from './bigger-click-wrapper/bigger-click-wrapper.component';
+import { ClickWrapperComponent } from './click-wrapper/click-wrapper.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     MissionCardComponent,
     MissionModalComponent,
-    BiggerClickWrapperComponent,
+    ClickWrapperComponent,
   ],
   imports: [
     BrowserModule,

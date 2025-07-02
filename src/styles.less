@@ -14,6 +14,7 @@ body {
   padding: 0;
   height: 100%;
   width: 100%;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
 .app {
@@ -24,25 +25,8 @@ body {
   height: 100%;
 }
 
-.hide {
-  display: none;
-}
-
 .visibility-none {
   visibility: hidden;
-}
-
-html,
-body {
-  height: 100%;
-}
-body {
-  margin: 0;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
-}
-
-.mat-dialog-container {
-  background-color: #f0f0f0;
 }
 
 .clickable {
@@ -53,10 +37,6 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-.invalid-input {
-  box-shadow: 0px 0px 2px 0.6px red;
 }
 
 .arrow-up(@color, @width, @height) {
@@ -75,26 +55,14 @@ body {
   border-top: @height solid @color;
 }
 
-::ng-deep .mat-select-arrow {
-  // height: 5px !important;
-  // width: 5px !important;
-  // display: none;
-  // outline: 3px solid red;
-  opacity: 0;
+.mat-dialog-container {
+  background-color: #f0f0f0;
 }
-
-// .mat-select-panel {
-//   width: 100px;
-// }
-
-// .mat-option-text {
-//   font-size: 15px;
-// }
-
-// .mat-option {
-//   width: 100px;
-// }
 
 .mat-select-value-text {
   font-size: 13px;
+}
+
+.mat-dialog-container {
+  padding: 0 !important;
 }

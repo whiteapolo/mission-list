@@ -48,6 +48,7 @@
     [matAutocomplete]="auto"
     formControlName="parent"
     [class.is-invalid]="!isFieldValid('parent')"
+    [matAutocompletePosition]="'below'"
   />
 
   <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayMissionTitle">

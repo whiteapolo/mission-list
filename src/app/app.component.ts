@@ -1,8 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { Mission, MissionStatus } from './types';
 import { MissionService } from './mission.service';
 import { MatDialog } from '@angular/material/dialog';
-import { MissionModalComponent } from './mission-modal/mission-modal.component';
 import { MissionModalService } from './mission-modal/mission-modal.service';
 import { EMPTY_MISSION, MISSION_STATUS_TYPES } from './constants';
 

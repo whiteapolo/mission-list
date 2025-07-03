@@ -23,7 +23,12 @@
   >
 
   <span>סטטוס:</span>
-  <mat-select disableOptionCentering formControlName="status" class="status">
+  <mat-select
+    disableOptionCentering
+    formControlName="status"
+    class="status"
+    panelClass="filter-status"
+  >
     <mat-option
       class="status-option"
       *ngFor="let status of missionStatusTypes"

@@ -29,6 +29,10 @@ body {
   visibility: hidden;
 }
 
+.display-none {
+  display: none;
+}
+
 .clickable {
   cursor: pointer;
 }
@@ -37,6 +41,12 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.ellipsis-text {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  text-wrap: nowrap;
 }
 
 .arrow-up(@color, @width, @height) {

@@ -1,16 +1,11 @@
 <div class="mission-card">
   <click-wrapper
     class="toggle-mission-children-button"
-    [clickRadius]="5"
+    [clickRadiusPx]="6"
     (click)="toggleChildrenVisibility()"
+    [class.visibility-none]="mission.children.length === 0"
   >
-    <div
-      [ngClass]="{
-        'arrow-up': isChildrenVisible,
-        'arrow-down': !isChildrenVisible,
-        'visibility-none': mission.children.length === 0
-      }"
-    ></div>
+    <div [ngClass]="isChildrenVisible ? 'arrow-up' : 'arrow-down'"></div>
   </click-wrapper>
 
   <span class="mission-title">{{ mission.title }}</span>

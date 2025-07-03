@@ -4,6 +4,7 @@ import { MissionService } from './mission.service';
 import { MatDialog } from '@angular/material/dialog';
 import { MissionModalService } from './mission-modal/mission-modal.service';
 import { EMPTY_MISSION, MISSION_STATUS_TYPES } from './constants';
+import { MatSelect } from '@angular/material/select';
 
 @Component({
   selector: 'app-root',
@@ -15,7 +16,7 @@ export class AppComponent implements OnInit {
   missionsRoot: Mission = EMPTY_MISSION;
   searchText = '';
   NO_STATUS_FILTER_STRING = 'ללא סינון';
-  statusToFilter: MissionStatus | string = this.NO_STATUS_FILTER_STRING;
+  statusToFilter: string = this.NO_STATUS_FILTER_STRING;
 
   constructor(
     private missionService: MissionService,

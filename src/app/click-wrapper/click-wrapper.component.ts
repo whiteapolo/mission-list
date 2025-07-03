@@ -2,9 +2,12 @@ import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'click-wrapper',
-  templateUrl: './click-wrapper.component.html',
-  styleUrls: ['./click-wrapper.component.less'],
+  template: `
+    <div [style.padding.px]="clickRadiusPx" class="clickable">
+      <ng-content></ng-content>
+    </div>
+  `,
 })
 export class ClickWrapperComponent {
-  @Input() clickRadius: number = 0;
+  @Input() clickRadiusPx: number = 0;
 }

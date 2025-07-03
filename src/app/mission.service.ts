@@ -109,6 +109,7 @@ export class MissionService {
       (mission?.parent?.children ?? this.missionsRoot.children).push(mission);
     }
 
+    this.writeMissionChanges();
     this.missions$.next(this.missionsRoot);
   }
 
@@ -147,7 +148,7 @@ export class MissionService {
     );
 
     if (numOfChildren === parent.children.length) {
-      console.log(
+      console.error(
         `mission(title: "${missionToRemove.title}", id: ${missionToRemove.id}) was not found`
       );
       return;
@@ -170,8 +171,8 @@ export class MissionService {
       return key === 'parent' ? null : value;
     };
     // localStorage.setItem(
-    //   MISSIONS_KEY,
-    //   JSON.stringify(this.missionsRoot, this.parentToNullReplacer)
+    //   MISSIONS_LOCAL_STORAGE_KEY,
+    //   JSON.stringify(this.missionsRoot, parentToNullReplacer)
     // );
     console.log(
       `saved missions in local storage under key: "${MISSIONS_LOCAL_STORAGE_KEY}"`

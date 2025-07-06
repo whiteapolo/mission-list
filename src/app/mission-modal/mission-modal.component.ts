@@ -23,6 +23,7 @@ interface MissionModalData {
 export class MissionModalComponent implements OnInit {
   missionStatusTypes = MISSION_STATUS_TYPES;
   flatMissionsArray: Mission[] = [];
+  missionsRoot: Mission = EMPTY_MISSION;
   mission: Mission = EMPTY_MISSION;
   isSubmitted = false;
 
@@ -40,6 +41,10 @@ export class MissionModalComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.missionService.getMissions().subscribe((missions) => {
+      this.missionsRoot = missions;
+    });
+
     this.mission = { ...this.data.mission };
     this.missionService.getMissionsAsFlatArray().subscribe((missions) => {
       this.flatMissionsArray = missions.filter(
@@ -66,6 +71,7 @@ export class MissionModalComponent implements OnInit {
 
     this.dialogRef.close({
       ...this.missionForm.value,
+      parent: this.missionForm.value.parent || this.missionsRoot,
     });
   }
 

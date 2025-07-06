@@ -90,12 +90,13 @@ export class MissionService {
 
     if (this.isMissionAncestor(newValues.parent!, mission)) {
       const oldParent = mission.parent!;
-      this.removeMissionFromArray(oldParent.children, mission.id);
+      const index = this.removeMissionFromArray(oldParent.children, mission.id);
       let newParent = newValues.parent!;
       this.removeMissionFromArray(newParent.parent!.children, newParent?.id);
       newParent.parent = oldParent;
       newParent?.children.push(mission);
-      oldParent.children.push(newParent);
+      // oldParent.children.push(newParent);
+      oldParent.children.splice(index, 0, newParent);
       mission.parent = newParent;
       newParent.isChildrenVisible = mission.isChildrenVisible;
     } else {
@@ -128,17 +129,16 @@ export class MissionService {
   private removeMissionFromArray(
     missions: Mission[],
     idToRemove: number
-  ): boolean {
+  ): number {
     const missionIndex = missions.findIndex(
       (mission) => mission.id == idToRemove
     );
 
     if (missionIndex >= 0) {
       missions.splice(missionIndex, 1);
-      return true;
     }
 
-    return false;
+    return missionIndex;
   }
 
   deleteMission(missionToRemove: Mission) {

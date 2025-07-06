@@ -16,9 +16,8 @@ export class MissionCardComponent {
   ) {}
 
   @Input() mission: Mission = EMPTY_MISSION;
-  isChildrenVisible: boolean = false;
 
   toggleChildrenVisibility() {
-    this.isChildrenVisible = !this.isChildrenVisible;
+    this.mission.isChildrenVisible = !this.mission.isChildrenVisible;
   }
 }

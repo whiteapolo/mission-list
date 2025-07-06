@@ -97,6 +97,7 @@ export class MissionService {
       newParent?.children.push(mission);
       oldParent.children.push(newParent);
       mission.parent = newParent;
+      newParent.isChildrenVisible = mission.isChildrenVisible;
     } else {
       const oldParent = mission.parent;
       mission.parent = newValues.parent ?? mission.parent;
@@ -167,8 +168,8 @@ export class MissionService {
     // the parent reference in the mission cause
     // circular refrencing in JSON which is not allowed
     // so we remove the parent reference when converting to JSON
-    const parentToNullReplacer = (key: string, value: any) => {
-      return key === 'parent' ? null : value;
+    const replaceUnecesaryKeys = (key: string, value: any) => {
+      return key === 'parent' || key == 'isChildrenVisible' ? null : value;
     };
     // localStorage.setItem(
     //   MISSIONS_LOCAL_STORAGE_KEY,

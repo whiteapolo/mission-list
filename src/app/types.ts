@@ -4,6 +4,7 @@ export interface Mission {
   status: MissionStatus;
   parent?: Mission;
   children: Mission[];
+  isChildrenVisible?: boolean;
 }
 
 export enum MissionStatus {

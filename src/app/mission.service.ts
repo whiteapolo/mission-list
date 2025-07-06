@@ -39,26 +39,6 @@ export class MissionService {
     return this.missions$.asObservable();
   }
 
-  getMissionsAsFlatArray(): Observable<Mission[]> {
-    return this.missions$
-      .asObservable()
-      .pipe(map((missions: Mission) => this.flatMissionsArray(missions)));
-  }
-
-  private flatMissionsArray(root: Mission): Mission[] {
-    if (!root) {
-      return [];
-    }
-
-    const array: Mission[] = [];
-
-    root.children.forEach((child) =>
-      array.push(child, ...this.flatMissionsArray(child))
-    );
-
-    return array;
-  }
-
   addMission(mission: Mission) {
     const newMission = {
       ...mission,
@@ -66,52 +46,51 @@ export class MissionService {
       id: this.generateNextId(),
     };
 
-    newMission.parent = newMission.parent || this.missionsRoot;
+    newMission.parent = newMission.parent ?? this.missionsRoot;
     newMission.parent.children.push(newMission);
 
-    this.writeMissionChanges();
+    this.saveMissions();
+    this.missions$.next(this.missionsRoot);
 
     console.log(
       `created mission with title: ${newMission.title} under ${newMission.parent?.title}`
     );
+  }
 
-    this.missions$.next(this.missionsRoot);
-    this.writeMissionChanges();
+  private moveMissionToAncestor(mission: Mission, ancestor: Mission) {
+    const oldParent = mission.parent!;
+    const missionIndex = this.removeMissionFromArray(
+      oldParent.children,
+      mission.id
+    );
+    this.removeMissionFromArray(ancestor.parent!.children, ancestor?.id);
+    ancestor.parent = oldParent;
+    ancestor?.children.push(mission);
+    oldParent.children.splice(missionIndex, 0, ancestor);
+    mission.parent = ancestor;
+    ancestor.isChildrenVisible = mission.isChildrenVisible;
+  }
+
+  private updateMissionParent(mission: Mission, newParent: Mission) {
+    if (this.isMissionAncestor(newParent, mission)) {
+      this.moveMissionToAncestor(mission, newParent);
+    } else {
+      const oldParent = mission.parent;
+      mission.parent = newParent;
+      this.removeMissionFromArray(oldParent?.children!, mission.id);
+      mission?.parent?.children.push(mission);
+    }
   }
 
   updateMission(mission: Mission, newValues: Mission) {
     mission.status = newValues.status ?? mission.status;
     mission.title = newValues.title ?? mission.title;
 
-    if (!newValues.parent || mission.parent?.id === newValues.parent?.id) {
-      this.missions$.next(this.missionsRoot);
-      return;
+    if (newValues.parent && mission.parent?.id !== newValues.parent?.id) {
+      this.updateMissionParent(mission, newValues.parent);
     }
 
-    if (this.isMissionAncestor(newValues.parent!, mission)) {
-      const oldParent = mission.parent!;
-      const index = this.removeMissionFromArray(oldParent.children, mission.id);
-      let newParent = newValues.parent!;
-      this.removeMissionFromArray(newParent.parent!.children, newParent?.id);
-      newParent.parent = oldParent;
-      newParent?.children.push(mission);
-      // oldParent.children.push(newParent);
-      oldParent.children.splice(index, 0, newParent);
-      mission.parent = newParent;
-      newParent.isChildrenVisible = mission.isChildrenVisible;
-    } else {
-      const oldParent = mission.parent;
-      mission.parent = newValues.parent ?? mission.parent;
-
-      this.removeMissionFromArray(
-        oldParent?.children ?? this.missionsRoot.children,
-        mission.id
-      );
-
-      (mission?.parent?.children ?? this.missionsRoot.children).push(mission);
-    }
-
-    this.writeMissionChanges();
+    this.saveMissions();
     this.missions$.next(this.missionsRoot);
   }
 
@@ -159,11 +138,11 @@ export class MissionService {
       `mission(title: "${missionToRemove.title}", id: ${missionToRemove.id}) deleted`
     );
 
+    this.saveMissions();
     this.missions$.next(this.missionsRoot);
-    this.writeMissionChanges();
   }
 
-  private writeMissionChanges() {
+  private saveMissions() {
     // when converting the missions tree to JSON
     // the parent reference in the mission cause
     // circular refrencing in JSON which is not allowed

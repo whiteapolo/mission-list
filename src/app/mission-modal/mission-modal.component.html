@@ -51,9 +51,22 @@
   />
 
   <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayMissionTitle">
-    <mat-option *ngFor="let mission of getFilteredMissions()" [value]="mission">
-      {{ mission.title }}
-    </mat-option>
+    <ng-container
+      *ngTemplateOutlet="optionalParent; context: { $implicit: missionsRoot }"
+    >
+    </ng-container>
+    <ng-template #optionalParent let-root>
+      <ng-container *ngFor="let mission of root.children">
+        <mat-option
+          *ngIf="shouldShowMissionInParentSelect(mission)"
+          [value]="mission"
+          >{{ mission.title }}</mat-option
+        >
+        <ng-container
+          *ngTemplateOutlet="optionalParent; context: { $implicit: mission }"
+        ></ng-container>
+      </ng-container>
+    </ng-template>
   </mat-autocomplete>
 
   <span *ngIf="!isFieldValid('parent')" class="error-text"

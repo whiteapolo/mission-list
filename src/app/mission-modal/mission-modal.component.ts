@@ -22,7 +22,6 @@ interface MissionModalData {
 })
 export class MissionModalComponent implements OnInit {
   missionStatusTypes = MISSION_STATUS_TYPES;
-  flatMissionsArray: Mission[] = [];
   missionsRoot: Mission = EMPTY_MISSION;
   mission: Mission = EMPTY_MISSION;
   isSubmitted = false;
@@ -46,11 +45,6 @@ export class MissionModalComponent implements OnInit {
     });
 
     this.mission = { ...this.data.mission };
-    this.missionService.getMissionsAsFlatArray().subscribe((missions) => {
-      this.flatMissionsArray = missions.filter(
-        (mission) => mission.id !== this.mission.id
-      );
-    });
 
     this.missionForm.get('title')?.setValue(this.mission.title);
     this.missionForm.get('status')?.setValue(this.mission.status);
@@ -90,9 +84,10 @@ export class MissionModalComponent implements OnInit {
     return null;
   }
 
-  public getFilteredMissions(): Mission[] {
-    return this.flatMissionsArray.filter((mission) =>
-      mission.title.includes(this.missionForm.get('parent')?.value)
+  public shouldShowMissionInParentSelect(mission: Mission): boolean {
+    return (
+      mission.title.includes(this.missionForm.get('parent')?.value) &&
+      mission.id !== this.mission.id
     );
   }
 }

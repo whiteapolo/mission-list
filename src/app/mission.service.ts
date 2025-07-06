@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Mission } from './types';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 import {
   EMPTY_MISSION,
   MISSIONS_LOCAL_STORAGE_KEY,
@@ -143,16 +142,13 @@ export class MissionService {
   }
 
   private saveMissions() {
+    const removeKeys = (keys: string[]) => (key: string, value: any) =>
+      keys.includes(key) ? null : value;
+
     // when converting the missions tree to JSON
     // the parent reference in the mission cause
     // circular refrencing in JSON which is not allowed
     // so we remove the parent reference when converting to JSON
-    const removeKeys = (keys: string[]) => {
-      return (key: string, value: any) => {
-        return keys.includes(key) ? null : value;
-      };
-    };
-
     // localStorage.setItem(
     //   MISSIONS_LOCAL_STORAGE_KEY,
     //   JSON.stringify(

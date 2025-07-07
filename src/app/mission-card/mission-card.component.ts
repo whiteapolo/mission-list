@@ -10,12 +10,12 @@ import { EMPTY_MISSION } from '../constants';
   styleUrls: ['./mission-card.component.less'],
 })
 export class MissionCardComponent {
+  @Input() mission: Mission = EMPTY_MISSION;
+
   constructor(
     public missionService: MissionService,
     public missionModelService: MissionModalService
   ) {}
-
-  @Input() mission: Mission = EMPTY_MISSION;
 
   toggleChildrenVisibility() {
     this.mission.isChildrenVisible = !this.mission.isChildrenVisible;

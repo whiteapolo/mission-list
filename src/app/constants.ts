@@ -4,7 +4,7 @@ export const MISSIONS_LOCAL_STORAGE_KEY = 'missions';
 
 export const EMPTY_MISSION: Mission = {
   id: 0,
-  title: '',
+  name: '',
   status: MissionStatus.ACTIVE,
   children: [],
 };
@@ -12,7 +12,7 @@ export const EMPTY_MISSION: Mission = {
 export const NEW_MISSION_ROOT = (): Mission => {
   return {
     id: 1,
-    title: 'root',
+    name: 'root',
     children: [],
     status: MissionStatus.ACTIVE,
   };

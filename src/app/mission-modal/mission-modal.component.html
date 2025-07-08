@@ -1,23 +1,21 @@
 <form [formGroup]="missionForm" class="modal-container" (submit)="save()">
-  <span class="modal-title">{{ data.title }}</span>
+  <span class="modal-name">{{ data.name }}</span>
   <span>שם:</span>
   <input
-    formControlName="title"
-    class="title"
-    [class.is-invalid]="!isFieldValid('title')"
+    formControlName="name"
+    class="name"
+    [class.is-invalid]="!isFieldValid('name')"
     placeholder="שם"
     value="{{ mission }}"
   />
   <span
-    *ngIf="!isFieldValid('title') && missionForm.get('title')?.errors?.required"
+    *ngIf="!isFieldValid('name') && missionForm.get('name')?.errors?.required"
     class="error-text"
     >חובה לתת שם למשימה!</span
   >
 
   <span
-    *ngIf="
-      !isFieldValid('title') && missionForm.get('title')?.errors?.maxlength
-    "
+    *ngIf="!isFieldValid('name') && missionForm.get('name')?.errors?.maxlength"
     class="error-text"
     >שם משימה ארוך מדי!</span
   >
@@ -45,7 +43,7 @@
     [class.is-invalid]="!isFieldValid('parent')"
   />
 
-  <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayMissionTitle">
+  <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayMissionname">
     <ng-container
       *ngTemplateOutlet="optionalParent; context: { $implicit: missionsRoot }"
     >
@@ -55,7 +53,7 @@
         <mat-option
           *ngIf="shouldShowMissionInParentSelect(mission)"
           [value]="mission"
-          >{{ mission.title }}</mat-option
+          >{{ mission.name }}</mat-option
         >
         <ng-container
           *ngTemplateOutlet="optionalParent; context: { $implicit: mission }"

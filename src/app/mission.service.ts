@@ -52,7 +52,7 @@ export class MissionService {
     this.missions$.next(this.missionsRoot);
 
     console.log(
-      `created mission with title: ${newMission.title} under ${newMission.parent?.title}`
+      `created mission with name: ${newMission.name} under ${newMission.parent?.name}`
     );
   }
 
@@ -83,7 +83,7 @@ export class MissionService {
 
   updateMission(mission: Mission, newValues: Mission) {
     mission.status = newValues.status ?? mission.status;
-    mission.title = newValues.title ?? mission.title;
+    mission.name = newValues.name ?? mission.name;
 
     if (newValues.parent && mission.parent?.id !== newValues.parent?.id) {
       this.updateMissionParent(mission, newValues.parent);
@@ -128,13 +128,13 @@ export class MissionService {
 
     if (numOfChildren === parent.children.length) {
       console.error(
-        `mission(title: "${missionToRemove.title}", id: ${missionToRemove.id}) was not found`
+        `mission(name: "${missionToRemove.name}", id: ${missionToRemove.id}) was not found`
       );
       return;
     }
 
     console.log(
-      `mission(title: "${missionToRemove.title}", id: ${missionToRemove.id}) deleted`
+      `mission(name: "${missionToRemove.name}", id: ${missionToRemove.id}) deleted`
     );
 
     this.saveMissions();
@@ -149,13 +149,13 @@ export class MissionService {
     // the parent reference in the mission cause
     // circular refrencing in JSON which is not allowed
     // so we remove the parent reference when converting to JSON
-    localStorage.setItem(
-      MISSIONS_LOCAL_STORAGE_KEY,
-      JSON.stringify(
-        this.missionsRoot,
-        removeKeys(['parent', 'isChildrenVisible'])
-      )
-    );
+    // localStorage.setItem(
+    //   MISSIONS_LOCAL_STORAGE_KEY,
+    //   JSON.stringify(
+    //     this.missionsRoot,
+    //     removeKeys(['parent', 'isChildrenVisible'])
+    //   )
+    // );
     console.log(
       `saved missions in local storage under key: "${MISSIONS_LOCAL_STORAGE_KEY}"`
     );

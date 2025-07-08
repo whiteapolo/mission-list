@@ -18,7 +18,7 @@ export class MissionModalService {
   ) {}
 
   editMission(mission: Mission) {
-    this.openMissionDialog({ title: 'עריכת משימה', mission: mission })
+    this.openMissionDialog({ name: 'עריכת משימה', mission: mission })
       .afterClosed()
       .subscribe((newMissionValues) => {
         if (newMissionValues) {
@@ -30,7 +30,7 @@ export class MissionModalService {
   }
 
   createMission() {
-    this.openMissionDialog({ title: 'יצירת משימה', mission: EMPTY_MISSION })
+    this.openMissionDialog({ name: 'יצירת משימה', mission: EMPTY_MISSION })
       .afterClosed()
       .subscribe(
         (mission: Mission) => mission && this.missionService.addMission(mission)

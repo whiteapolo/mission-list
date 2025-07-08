@@ -32,7 +32,7 @@ export class AppComponent implements OnInit {
 
   public shouldShowMission(mission: Mission) {
     return (
-      mission.title.includes(this.searchText) &&
+      mission.name.includes(this.searchText) &&
       (mission.status === this.statusToFilter ||
         this.statusToFilter === this.NO_STATUS_FILTER_STRING)
     );

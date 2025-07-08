@@ -12,7 +12,7 @@ import { EMPTY_MISSION, MISSION_STATUS_TYPES } from 'src/app/constants';
 
 interface MissionModalData {
   mission: Mission;
-  title: string;
+  name: string;
 }
 
 @Component({
@@ -27,7 +27,7 @@ export class MissionModalComponent implements OnInit {
   isSubmitted = false;
 
   missionForm = this.formBuilder.group({
-    title: ['', [Validators.required, Validators.maxLength(50)]],
+    name: ['', [Validators.required, Validators.maxLength(50)]],
     status: [MissionStatus.ACTIVE],
     parent: ['', this.missionParentValidator],
   });
@@ -46,7 +46,7 @@ export class MissionModalComponent implements OnInit {
 
     this.mission = { ...this.data.mission };
 
-    this.missionForm.get('title')?.setValue(this.mission.title);
+    this.missionForm.get('name')?.setValue(this.mission.name);
     this.missionForm.get('status')?.setValue(this.mission.status);
     if (this.mission.parent?.parent) {
       this.missionForm.get('parent')?.setValue(this.mission.parent);
@@ -69,8 +69,8 @@ export class MissionModalComponent implements OnInit {
     });
   }
 
-  displayMissionTitle(mission: Mission) {
-    return mission.title;
+  displayMissionname(mission: Mission) {
+    return mission.name;
   }
 
   isFieldValid(field: string) {
@@ -86,7 +86,7 @@ export class MissionModalComponent implements OnInit {
 
   public shouldShowMissionInParentSelect(mission: Mission): boolean {
     return (
-      mission.title.includes(this.missionForm.get('parent')?.value) &&
+      mission.name.includes(this.missionForm.get('parent')?.value) &&
       mission.id !== this.mission.id
     );
   }

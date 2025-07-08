@@ -149,13 +149,13 @@ export class MissionService {
     // the parent reference in the mission cause
     // circular refrencing in JSON which is not allowed
     // so we remove the parent reference when converting to JSON
-    // localStorage.setItem(
-    //   MISSIONS_LOCAL_STORAGE_KEY,
-    //   JSON.stringify(
-    //     this.missionsRoot,
-    //     removeKeys(['parent', 'isChildrenVisible'])
-    //   )
-    // );
+    localStorage.setItem(
+      MISSIONS_LOCAL_STORAGE_KEY,
+      JSON.stringify(
+        this.missionsRoot,
+        removeKeys(['parent', 'isChildrenVisible'])
+      )
+    );
     console.log(
       `saved missions in local storage under key: "${MISSIONS_LOCAL_STORAGE_KEY}"`
     );

@@ -42,7 +42,7 @@ export class MissionModalService {
       width: this.DIALOG_WIDTH,
       height: this.DIALOG_HEIGHT,
       hasBackdrop: true,
-      data: data,
+      data,
     });
   }
 }

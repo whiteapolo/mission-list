@@ -8,7 +8,10 @@ import {
   ValidationErrors,
   Validators,
 } from '@angular/forms';
-import { EMPTY_MISSION, MISSION_STATUS_TYPES } from 'src/app/constants';
+import {
+  MISSION_STATUS_FILTERS,
+  MISSION_STATUS_TYPES,
+} from 'src/app/constants';
 
 interface MissionModalData {
   mission: Mission;
@@ -22,8 +25,8 @@ interface MissionModalData {
 })
 export class MissionModalComponent implements OnInit {
   missionStatusTypes = MISSION_STATUS_TYPES;
-  missionsRoot: Mission = EMPTY_MISSION;
-  mission: Mission = EMPTY_MISSION;
+  missions: Mission[] = [];
+  mission!: Mission;
   isSubmitted = false;
 
   missionForm = this.formBuilder.group({
@@ -41,15 +44,23 @@ export class MissionModalComponent implements OnInit {
 
   ngOnInit(): void {
     this.missionService.getMissions().subscribe((missions) => {
-      this.missionsRoot = missions;
+      this.missions = missions;
     });
 
-    this.mission = { ...this.data.mission };
+    this.mission = {
+      ...this.data.mission,
+    };
 
     this.missionForm.get('name')?.setValue(this.mission.name);
     this.missionForm.get('status')?.setValue(this.mission.status);
-    if (this.mission.parent?.parent) {
-      this.missionForm.get('parent')?.setValue(this.mission.parent);
+    if (this.mission.parentUuid) {
+      this.missionForm
+        .get('parent')
+        ?.setValue(
+          this.missions.find(
+            (mission) => mission.uuid === this.mission.parentUuid
+          )
+        );
     }
   }
 
@@ -65,7 +76,7 @@ export class MissionModalComponent implements OnInit {
 
     this.dialogRef.close({
       ...this.missionForm.value,
-      parent: this.missionForm.value.parent || this.missionsRoot,
+      parentUuid: this.missionForm.value.parent.uuid || undefined,
     });
   }
 
@@ -87,7 +98,7 @@ export class MissionModalComponent implements OnInit {
   public shouldShowMissionInParentSelect(mission: Mission): boolean {
     return (
       mission.name.includes(this.missionForm.get('parent')?.value) &&
-      mission.id !== this.mission.id
+      mission.uuid !== this.mission.uuid
     );
   }
 }

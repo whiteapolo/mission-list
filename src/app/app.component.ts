@@ -1,10 +1,9 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { Mission, MissionStatus } from './types';
+import { Mission, MissionStatus, MissionStatusFilter } from './types';
 import { MissionService } from './mission.service';
 import { MatDialog } from '@angular/material/dialog';
 import { MissionModalService } from './mission-modal/mission-modal.service';
-import { EMPTY_MISSION, MISSION_STATUS_TYPES } from './constants';
-import { MatSelect } from '@angular/material/select';
+import { MISSION_STATUS_FILTERS, MISSION_STATUS_TYPES } from './constants';
 
 @Component({
   selector: 'app-root',
@@ -13,10 +12,10 @@ import { MatSelect } from '@angular/material/select';
 })
 export class AppComponent implements OnInit {
   missionStatusTypes = MISSION_STATUS_TYPES;
-  missionsRoot: Mission = EMPTY_MISSION;
+  missionStatusFilterTypes = MISSION_STATUS_FILTERS;
+  missions: Mission[] = [];
   searchText = '';
-  NO_STATUS_FILTER_STRING = 'ללא סינון';
-  statusToFilter: string = this.NO_STATUS_FILTER_STRING;
+  statusFilter: string = MissionStatusFilter.NO_FILTER;
 
   constructor(
     private missionService: MissionService,
@@ -25,16 +24,20 @@ export class AppComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.missionService
-      .getMissions()
-      .subscribe((root) => (this.missionsRoot = root));
+    this.missionService.getMissions().subscribe((missions) => {
+      this.missions = missions;
+    });
   }
 
   public shouldShowMission(mission: Mission) {
-    return (
-      mission.name.includes(this.searchText) &&
-      (mission.status === this.statusToFilter ||
-        this.statusToFilter === this.NO_STATUS_FILTER_STRING)
-    );
+    if (!mission.name.includes(this.searchText)) {
+      return false;
+    }
+
+    if (this.statusFilter === MissionStatusFilter.NO_FILTER) {
+      return true;
+    }
+
+    return mission.status === (this.statusFilter as MissionStatus);
   }
 }

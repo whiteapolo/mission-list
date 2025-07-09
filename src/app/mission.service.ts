@@ -1,83 +1,53 @@
 import { Injectable } from '@angular/core';
 import { Mission } from './types';
 import { BehaviorSubject, Observable } from 'rxjs';
-import {
-  EMPTY_MISSION,
-  MISSIONS_LOCAL_STORAGE_KEY,
-  NEW_MISSION_ROOT,
-} from 'src/app/constants';
+import { MISSIONS_LOCAL_STORAGE_KEY } from 'src/app/constants';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable({
   providedIn: 'root',
 })
 export class MissionService {
-  missionsRoot: Mission = EMPTY_MISSION;
-  missions$ = new BehaviorSubject<Mission>(this.missionsRoot);
+  missions: Mission[] = [];
+  missions$ = new BehaviorSubject<Mission[]>(this.missions);
 
   constructor() {
     const data = localStorage.getItem(MISSIONS_LOCAL_STORAGE_KEY);
 
-    if (!data) {
-      this.missionsRoot = NEW_MISSION_ROOT();
-    } else {
-      this.missionsRoot = JSON.parse(data);
-      this.initMissionsParent(this.missionsRoot);
-      this.missions$.next(this.missionsRoot);
+    if (data) {
+      this.missions = JSON.parse(data);
+      this.missions$.next(this.missions);
     }
   }
 
-  // JSON representation doesn't keep parent reference
-  private initMissionsParent(root: Mission) {
-    root.children.forEach((child) => {
-      child.parent = root;
-      this.initMissionsParent(child);
-    });
-  }
-
-  getMissions(): Observable<Mission> {
+  getMissions(): Observable<Mission[]> {
     return this.missions$.asObservable();
   }
 
   addMission(mission: Mission) {
-    const newMission = {
-      ...mission,
-      children: [],
-      id: this.generateNextId(),
-    };
-
-    newMission.parent = newMission.parent ?? this.missionsRoot;
-    newMission.parent.children.push(newMission);
-
-    this.saveMissions();
-    this.missions$.next(this.missionsRoot);
-
-    console.log(
-      `created mission with name: ${newMission.name} under ${newMission.parent?.name}`
-    );
+    this.missions.push({ ...mission, uuid: uuidv4() });
+    this.saveMissionsToLocalStorage();
+    this.missions$.next(this.missions);
   }
 
-  private moveMissionToAncestor(mission: Mission, ancestor: Mission) {
-    const oldParent = mission.parent!;
-    const missionIndex = this.removeMissionFromArray(
-      oldParent.children,
-      mission.id
-    );
-    this.removeMissionFromArray(ancestor.parent!.children, ancestor?.id);
-    ancestor.parent = oldParent;
-    ancestor?.children.push(mission);
-    oldParent.children.splice(missionIndex, 0, ancestor);
-    mission.parent = ancestor;
-    ancestor.isChildrenVisible = mission.isChildrenVisible;
+  moveMissionToDescendat(mission: Mission, descendantUuid: string) {
+    const decendance = this.getMissionByUuid(descendantUuid);
+
+    if (!decendance) {
+      return;
+    }
+
+    const oldParentUuid = mission.parentUuid;
+    decendance.parentUuid = oldParentUuid;
+    mission.parentUuid = decendance.uuid;
+    decendance.isChildrenVisible = mission.isChildrenVisible;
   }
 
-  private updateMissionParent(mission: Mission, newParent: Mission) {
-    if (this.isMissionAncestor(newParent, mission)) {
-      this.moveMissionToAncestor(mission, newParent);
+  updateMissionParent(mission: Mission, newParentUuid: string) {
+    if (this.isMissionAncestor(mission.uuid, newParentUuid)) {
+      this.moveMissionToDescendat(mission, newParentUuid);
     } else {
-      const oldParent = mission.parent;
-      mission.parent = newParent;
-      this.removeMissionFromArray(oldParent?.children!, mission.id);
-      mission?.parent?.children.push(mission);
+      mission.parentUuid = newParentUuid;
     }
   }
 
@@ -85,83 +55,62 @@ export class MissionService {
     mission.status = newValues.status ?? mission.status;
     mission.name = newValues.name ?? mission.name;
 
-    if (newValues.parent && mission.parent?.id !== newValues.parent?.id) {
-      this.updateMissionParent(mission, newValues.parent);
+    if (newValues.parentUuid) {
+      this.updateMissionParent(mission, newValues.parentUuid);
+    } else {
+      mission.parentUuid = undefined;
     }
 
-    this.saveMissions();
-    this.missions$.next(this.missionsRoot);
+    this.saveMissionsToLocalStorage();
+    this.missions$.next(this.missions);
+  }
+
+  deleteMissionDescendants(missionUuid: string) {
+    this.missions
+      .filter((mission) => mission.parentUuid === missionUuid)
+      .forEach((mission) => this.deleteMissionDescendants(mission.uuid));
+    this.missions = this.missions.filter(
+      (mission) => mission.parentUuid !== missionUuid
+    );
+  }
+
+  deleteMission(missionUuid: string) {
+    this.deleteMissionDescendants(missionUuid);
+    this.missions = this.missions.filter(
+      (mission) => mission.uuid !== missionUuid
+    );
+    this.missions$.next(this.missions);
+    this.saveMissionsToLocalStorage();
+  }
+
+  getMissionChildren(parentUuid: string): Mission[] {
+    return this.missions.filter((mission) => mission.parentUuid === parentUuid);
+  }
+
+  getMissionByUuid(uuid: string): Mission | undefined {
+    return this.missions.find((mission) => mission.uuid === uuid);
   }
 
   private isMissionAncestor(
-    mission: Mission | undefined,
-    possibleAncestor: Mission
+    parentUuid: string,
+    posibleDecendanceUuid: string | undefined
   ): boolean {
-    return (
-      !!mission &&
-      (mission.id === possibleAncestor.id ||
-        this.isMissionAncestor(mission.parent, possibleAncestor))
-    );
-  }
-
-  private removeMissionFromArray(
-    missions: Mission[],
-    idToRemove: number
-  ): number {
-    const missionIndex = missions.findIndex(
-      (mission) => mission.id == idToRemove
-    );
-
-    if (missionIndex >= 0) {
-      missions.splice(missionIndex, 1);
+    if (!posibleDecendanceUuid) {
+      return false;
     }
 
-    return missionIndex;
-  }
-
-  deleteMission(missionToRemove: Mission) {
-    const parent = missionToRemove.parent!;
-    const numOfChildren = parent.children.length;
-    parent.children = parent.children.filter(
-      (mission) => mission.id !== missionToRemove.id
-    );
-
-    if (numOfChildren === parent.children.length) {
-      console.error(
-        `mission(name: "${missionToRemove.name}", id: ${missionToRemove.id}) was not found`
-      );
-      return;
+    if (posibleDecendanceUuid === parentUuid) {
+      return true;
     }
 
-    console.log(
-      `mission(name: "${missionToRemove.name}", id: ${missionToRemove.id}) deleted`
-    );
-
-    this.saveMissions();
-    this.missions$.next(this.missionsRoot);
+    const mission = this.getMissionByUuid(posibleDecendanceUuid);
+    return this.isMissionAncestor(parentUuid, mission?.parentUuid);
   }
 
-  private saveMissions() {
-    const removeKeys = (keys: string[]) => (key: string, value: any) =>
-      keys.includes(key) ? null : value;
-
-    // when converting the missions tree to JSON
-    // the parent reference in the mission cause
-    // circular refrencing in JSON which is not allowed
-    // so we remove the parent reference when converting to JSON
+  private saveMissionsToLocalStorage() {
     // localStorage.setItem(
     //   MISSIONS_LOCAL_STORAGE_KEY,
-    //   JSON.stringify(
-    //     this.missionsRoot,
-    //     removeKeys(['parent', 'isChildrenVisible'])
-    //   )
+    //   JSON.stringify(this.missions)
     // );
-    console.log(
-      `saved missions in local storage under key: "${MISSIONS_LOCAL_STORAGE_KEY}"`
-    );
-  }
-
-  private generateNextId() {
-    return this.missionsRoot.id++;
   }
 }

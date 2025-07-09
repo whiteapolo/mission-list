@@ -1,9 +1,8 @@
 export interface Mission {
-  id: number;
+  uuid: string;
   name: string; // limit to 50 characters
   status: MissionStatus;
-  parent?: Mission;
-  children: Mission[];
+  parentUuid?: string;
   isChildrenVisible?: boolean;
 }
 
@@ -11,3 +10,8 @@ export enum MissionStatus {
   ACTIVE = 'פעיל',
   NOT_ACTIVE = 'לא פעיל',
 }
+
+export const MissionStatusFilter = {
+  NO_FILTER: 'ללא סינון',
+  ...MissionStatus,
+};

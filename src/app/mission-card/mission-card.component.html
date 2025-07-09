@@ -3,10 +3,13 @@
     class="toggle-mission-children-button"
     [clickRadiusPx]="6"
     (click)="toggleChildrenVisibility()"
-    [class.visibility-none]="mission.children.length === 0"
   >
     <div
-      [ngClass]="mission.isChildrenVisible ? 'arrow-up' : 'arrow-down'"
+      [ngClass]="{
+        'arrow-up': mission.isChildrenVisible,
+        'arrow-down': !mission.isChildrenVisible,
+        'visibility-none': this.getMissionChildren(mission.uuid).length === 0
+      }"
     ></div>
   </click-wrapper>
 
@@ -22,7 +25,7 @@
   />
 
   <img
-    (click)="missionService.deleteMission(mission)"
+    (click)="missionService.deleteMission(mission.uuid)"
     class="trash-icon"
     src="/assets/trash-icon.svg"
     width="12px"
@@ -31,7 +34,7 @@
 </div>
 
 <div class="mission-children-container" [hidden]="!mission.isChildrenVisible">
-  <div *ngFor="let mission of mission.children">
+  <div *ngFor="let mission of this.getMissionChildren(mission.uuid)">
     <mission-card [mission]="mission"></mission-card>
   </div>
 </div>

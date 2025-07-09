@@ -7,13 +7,14 @@
     <span class="filter-status-header">סינון לפי: </span>
     <mat-select
       disableOptionCentering
-      [(ngModel)]="statusToFilter"
+      [(ngModel)]="statusFilter"
       class="filter-status"
+      [(value)]="statusFilter"
     >
-      <mat-option [value]="NO_STATUS_FILTER_STRING">{{
-        NO_STATUS_FILTER_STRING
-      }}</mat-option>
-      <mat-option *ngFor="let status of missionStatusTypes" [value]="status">
+      <mat-option
+        *ngFor="let status of missionStatusFilterTypes"
+        [value]="status"
+      >
         {{ status }}
       </mat-option>
     </mat-select>
@@ -21,10 +22,11 @@
   <div class="arrow-down"></div>
 
   <div class="mission-container">
-    <ng-container *ngFor="let child of missionsRoot.children">
+    <ng-container *ngFor="let mission of this.missions">
       <mission-card
-        [hidden]="!shouldShowMission(child)"
-        [mission]="child"
+        *ngIf="!mission.parentUuid"
+        [hidden]="!shouldShowMission(mission)"
+        [mission]="mission"
       ></mission-card>
     </ng-container>
   </div>

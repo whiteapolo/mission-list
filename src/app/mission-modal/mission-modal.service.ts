@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { MissionModalComponent } from './mission-modal.component';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { Mission } from '../types';
-import { EMPTY_MISSION } from 'src/app/constants';
+import { Mission, MissionStatus } from '../types';
 import { MissionService } from '../mission.service';
 
 @Injectable({
@@ -23,18 +22,21 @@ export class MissionModalService {
       .subscribe((newMissionValues) => {
         if (newMissionValues) {
           this.missionService.updateMission(mission, newMissionValues);
-        } else {
-          console.log('Canceled edit mission');
         }
       });
   }
 
   createMission() {
-    this.openMissionDialog({ name: 'יצירת משימה', mission: EMPTY_MISSION })
+    this.openMissionDialog({
+      name: 'יצירת משימה',
+      mission: { name: '', status: MissionStatus.ACTIVE },
+    })
       .afterClosed()
-      .subscribe(
-        (mission: Mission) => mission && this.missionService.addMission(mission)
-      );
+      .subscribe((mission: Mission) => {
+        if (mission) {
+          this.missionService.addMission(mission);
+        }
+      });
   }
 
   private openMissionDialog(data: any): MatDialogRef<MissionModalComponent> {

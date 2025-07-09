@@ -24,13 +24,13 @@ export class MissionService {
     return this.missions$.asObservable();
   }
 
-  addMission(mission: Mission) {
+  addMission(mission: Mission): void {
     this.missions.push({ ...mission, uuid: uuidv4() });
     this.saveMissionsToLocalStorage();
     this.missions$.next(this.missions);
   }
 
-  moveMissionToDescendat(mission: Mission, descendantUuid: string) {
+  moveMissionToDescendat(mission: Mission, descendantUuid: string): void {
     const decendance = this.getMissionByUuid(descendantUuid);
 
     if (!decendance) {
@@ -43,7 +43,7 @@ export class MissionService {
     decendance.isChildrenVisible = mission.isChildrenVisible;
   }
 
-  updateMissionParent(mission: Mission, newParentUuid: string) {
+  updateMissionParent(mission: Mission, newParentUuid: string): void {
     if (this.isMissionAncestor(mission.uuid, newParentUuid)) {
       this.moveMissionToDescendat(mission, newParentUuid);
     } else {
@@ -51,7 +51,7 @@ export class MissionService {
     }
   }
 
-  updateMission(mission: Mission, newValues: Mission) {
+  updateMission(mission: Mission, newValues: Mission): void {
     mission.status = newValues.status ?? mission.status;
     mission.name = newValues.name ?? mission.name;
 
@@ -65,7 +65,7 @@ export class MissionService {
     this.missions$.next(this.missions);
   }
 
-  deleteMissionDescendants(missionUuid: string) {
+  deleteMissionDescendants(missionUuid: string): void {
     this.missions
       .filter((mission) => mission.parentUuid === missionUuid)
       .forEach((mission) => this.deleteMissionDescendants(mission.uuid));
@@ -74,7 +74,7 @@ export class MissionService {
     );
   }
 
-  deleteMission(missionUuid: string) {
+  deleteMission(missionUuid: string): void {
     this.deleteMissionDescendants(missionUuid);
     this.missions = this.missions.filter(
       (mission) => mission.uuid !== missionUuid
@@ -107,7 +107,7 @@ export class MissionService {
     return this.isMissionAncestor(parentUuid, mission?.parentUuid);
   }
 
-  private saveMissionsToLocalStorage() {
+  private saveMissionsToLocalStorage(): void {
     // localStorage.setItem(
     //   MISSIONS_LOCAL_STORAGE_KEY,
     //   JSON.stringify(this.missions)

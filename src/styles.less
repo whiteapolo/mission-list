@@ -18,10 +18,8 @@ body {
 }
 
 .app {
-  display: flex;
+  .flex-center();
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
   height: 100%;
 }
 
@@ -88,6 +86,7 @@ body {
   font-size: 13px;
   box-sizing: border-box;
   min-width: min-content !important;
+  .ellipsis-text();
 }
 .mat-select-panel {
   width: 120px !important;
@@ -96,6 +95,7 @@ body {
   left: 9px;
   top: 28px;
 }
+
 .mat-select-min-line {
   margin-right: 5px;
   font-size: 13px;

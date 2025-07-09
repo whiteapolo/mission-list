@@ -8,7 +8,7 @@ import { MissionService } from '../mission.service';
   providedIn: 'root',
 })
 export class MissionModalService {
-  DIALOG_WIDTH = '30vw';
+  DIALOG_WIDTH = '300px';
   DIALOG_HEIGHT = '70vh';
 
   constructor(

@@ -53,13 +53,11 @@ export class MissionModalComponent implements OnInit {
 
     this.missionForm.get('name')?.setValue(this.mission.name);
     this.missionForm.get('status')?.setValue(this.mission.status);
-    if (this.mission.parentUuid) {
+    if (this.mission.parentId) {
       this.missionForm
         .get('parent')
         ?.setValue(
-          this.missions.find(
-            (mission) => mission.uuid === this.mission.parentUuid
-          )
+          this.missions.find((mission) => mission.id === this.mission.parentId)
         );
     }
   }
@@ -76,7 +74,7 @@ export class MissionModalComponent implements OnInit {
 
     this.dialogRef.close({
       ...this.missionForm.value,
-      parentUuid: this.missionForm.value.parent.uuid || undefined,
+      parentId: this.missionForm.value.parent.id || undefined,
     });
   }
 
@@ -98,7 +96,7 @@ export class MissionModalComponent implements OnInit {
   public shouldShowMissionInParentSelect(mission: Mission): boolean {
     return (
       mission.name.includes(this.missionForm.get('parent')?.value) &&
-      mission.uuid !== this.mission.uuid
+      mission.id !== this.mission.id
     );
   }
 }

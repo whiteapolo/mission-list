@@ -1,58 +1,58 @@
 [
   {
-    "uuid": "2e3baf5d-7f82-4b59-bf91-7b7d88c8e94e",
+    "id": "2e3baf5d-7f82-4b59-bf91-7b7d88c8e94e",
     "name": "משימת אב",
     "status": "לא פעיל"
   },
   {
-    "uuid": "b96d7fd9-2db2-4d47-bc5b-37756e1aebcb",
+    "id": "b96d7fd9-2db2-4d47-bc5b-37756e1aebcb",
     "name": "איסוף מידע",
     "status": "לא פעיל",
-    "parentUuid": "2e3baf5d-7f82-4b59-bf91-7b7d88c8e94e"
+    "parentId": "2e3baf5d-7f82-4b59-bf91-7b7d88c8e94e"
   },
   {
-    "uuid": "fc860acf-6c7e-49fa-95a4-f2d87c9ef116",
+    "id": "fc860acf-6c7e-49fa-95a4-f2d87c9ef116",
     "name": "תכנון פעולה",
     "status": "פעיל",
-    "parentUuid": "2e3baf5d-7f82-4b59-bf91-7b7d88c8e94e"
+    "parentId": "2e3baf5d-7f82-4b59-bf91-7b7d88c8e94e"
   },
   {
-    "uuid": "80c3a351-4dd7-4903-9848-482ac78b39e5",
+    "id": "80c3a351-4dd7-4903-9848-482ac78b39e5",
     "name": "חלוקת תפקידים",
     "status": "לא פעיל",
-    "parentUuid": "fc860acf-6c7e-49fa-95a4-f2d87c9ef116"
+    "parentId": "fc860acf-6c7e-49fa-95a4-f2d87c9ef116"
   },
   {
-    "uuid": "ce53ac39-e04f-44d3-943f-fdb5b3c1c1b2",
+    "id": "ce53ac39-e04f-44d3-943f-fdb5b3c1c1b2",
     "name": "הקמת צוות",
     "status": "לא פעיל"
   },
   {
-    "uuid": "b3a56726-4e98-4d28-84e0-c7a00b42c512",
+    "id": "b3a56726-4e98-4d28-84e0-c7a00b42c512",
     "name": "ריאיונות",
     "status": "לא פעיל",
-    "parentUuid": "ce53ac39-e04f-44d3-943f-fdb5b3c1c1b2"
+    "parentId": "ce53ac39-e04f-44d3-943f-fdb5b3c1c1b2"
   },
   {
-    "uuid": "34ae7688-5573-4648-8f21-85cda4d6bfc0",
+    "id": "34ae7688-5573-4648-8f21-85cda4d6bfc0",
     "name": "הערכת סיכונים",
     "status": "לא פעיל"
   },
   {
-    "uuid": "f0c4ae9a-d11c-4b5e-a1e3-5c3c3b64a142",
+    "id": "f0c4ae9a-d11c-4b5e-a1e3-5c3c3b64a142",
     "name": "ביצוע הפעולה",
     "status": "לא פעיל"
   },
   {
-    "uuid": "59e6b4e1-b38c-4b1b-85d6-14cd187888d5",
+    "id": "59e6b4e1-b38c-4b1b-85d6-14cd187888d5",
     "name": "בדיקות אחרונות",
     "status": "לא פעיל",
-    "parentUuid": "f0c4ae9a-d11c-4b5e-a1e3-5c3c3b64a142"
+    "parentId": "f0c4ae9a-d11c-4b5e-a1e3-5c3c3b64a142"
   },
   {
-    "uuid": "fcf8e96f-4a40-4b10-bf5b-9443a3a9c132",
+    "id": "fcf8e96f-4a40-4b10-bf5b-9443a3a9c132",
     "name": "אישור סופי",
     "status": "לא פעיל",
-    "parentUuid": "59e6b4e1-b38c-4b1b-85d6-14cd187888d5"
+    "parentId": "59e6b4e1-b38c-4b1b-85d6-14cd187888d5"
   }
 ]

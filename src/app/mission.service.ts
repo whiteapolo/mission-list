@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Mission } from './types';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { MISSIONS_LOCAL_STORAGE_KEY } from 'src/app/constants';
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as idv4 } from 'uuid';
 
 @Injectable({
   providedIn: 'root',
@@ -25,29 +25,29 @@ export class MissionService {
   }
 
   addMission(mission: Mission): void {
-    this.missions.push({ ...mission, uuid: uuidv4() });
+    this.missions.push({ ...mission, id: idv4() });
     this.saveMissionsToLocalStorage();
     this.missions$.next(this.missions);
   }
 
-  moveMissionToDescendat(mission: Mission, descendantUuid: string): void {
-    const decendance = this.getMissionByUuid(descendantUuid);
+  moveMissionToDescendat(mission: Mission, descendantid: string): void {
+    const decendance = this.getMissionByid(descendantid);
 
     if (!decendance) {
       return;
     }
 
-    const oldParentUuid = mission.parentUuid;
-    decendance.parentUuid = oldParentUuid;
-    mission.parentUuid = decendance.uuid;
+    const oldparentId = mission.parentId;
+    decendance.parentId = oldparentId;
+    mission.parentId = decendance.id;
     decendance.isChildrenVisible = mission.isChildrenVisible;
   }
 
-  updateMissionParent(mission: Mission, newParentUuid: string): void {
-    if (this.isMissionAncestor(mission.uuid, newParentUuid)) {
-      this.moveMissionToDescendat(mission, newParentUuid);
+  updateMissionParent(mission: Mission, newparentId: string): void {
+    if (this.isMissionAncestor(mission.id, newparentId)) {
+      this.moveMissionToDescendat(mission, newparentId);
     } else {
-      mission.parentUuid = newParentUuid;
+      mission.parentId = newparentId;
     }
   }
 
@@ -55,56 +55,54 @@ export class MissionService {
     mission.status = newValues.status ?? mission.status;
     mission.name = newValues.name ?? mission.name;
 
-    if (newValues.parentUuid) {
-      this.updateMissionParent(mission, newValues.parentUuid);
+    if (newValues.parentId) {
+      this.updateMissionParent(mission, newValues.parentId);
     } else {
-      mission.parentUuid = undefined;
+      mission.parentId = undefined;
     }
 
     this.saveMissionsToLocalStorage();
     this.missions$.next(this.missions);
   }
 
-  deleteMissionDescendants(missionUuid: string): void {
+  deleteMissionDescendants(missionid: string): void {
     this.missions
-      .filter((mission) => mission.parentUuid === missionUuid)
-      .forEach((mission) => this.deleteMissionDescendants(mission.uuid));
+      .filter((mission) => mission.parentId === missionid)
+      .forEach((mission) => this.deleteMissionDescendants(mission.id));
     this.missions = this.missions.filter(
-      (mission) => mission.parentUuid !== missionUuid
+      (mission) => mission.parentId !== missionid
     );
   }
 
-  deleteMission(missionUuid: string): void {
-    this.deleteMissionDescendants(missionUuid);
-    this.missions = this.missions.filter(
-      (mission) => mission.uuid !== missionUuid
-    );
+  deleteMission(missionid: string): void {
+    this.deleteMissionDescendants(missionid);
+    this.missions = this.missions.filter((mission) => mission.id !== missionid);
     this.missions$.next(this.missions);
     this.saveMissionsToLocalStorage();
   }
 
-  getMissionChildren(parentUuid: string): Mission[] {
-    return this.missions.filter((mission) => mission.parentUuid === parentUuid);
+  getMissionChildren(parentId: string): Mission[] {
+    return this.missions.filter((mission) => mission.parentId === parentId);
   }
 
-  getMissionByUuid(uuid: string): Mission | undefined {
-    return this.missions.find((mission) => mission.uuid === uuid);
+  getMissionByid(id: string): Mission | undefined {
+    return this.missions.find((mission) => mission.id === id);
   }
 
   private isMissionAncestor(
-    parentUuid: string,
-    posibleDecendanceUuid: string | undefined
+    parentId: string,
+    posibleDecendanceid: string | undefined
   ): boolean {
-    if (!posibleDecendanceUuid) {
+    if (!posibleDecendanceid) {
       return false;
     }
 
-    if (posibleDecendanceUuid === parentUuid) {
+    if (posibleDecendanceid === parentId) {
       return true;
     }
 
-    const mission = this.getMissionByUuid(posibleDecendanceUuid);
-    return this.isMissionAncestor(parentUuid, mission?.parentUuid);
+    const mission = this.getMissionByid(posibleDecendanceid);
+    return this.isMissionAncestor(parentId, mission?.parentId);
   }
 
   private saveMissionsToLocalStorage(): void {

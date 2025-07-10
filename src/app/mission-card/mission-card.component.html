@@ -8,7 +8,7 @@
       [ngClass]="{
         'arrow-up': mission.isChildrenVisible,
         'arrow-down': !mission.isChildrenVisible,
-        'visibility-none': this.getMissionChildren(mission.uuid).length === 0
+        'visibility-none': this.getMissionChildren(mission.id).length === 0
       }"
     ></div>
   </click-wrapper>
@@ -25,7 +25,7 @@
   />
 
   <img
-    (click)="missionService.deleteMission(mission.uuid)"
+    (click)="missionService.deleteMission(mission.id)"
     class="card-icon"
     src="/assets/trash-icon.svg"
     width="12px"
@@ -34,7 +34,7 @@
 </div>
 
 <div class="mission-children-container" [hidden]="!mission.isChildrenVisible">
-  <div *ngFor="let mission of this.getMissionChildren(mission.uuid)">
+  <div *ngFor="let mission of this.getMissionChildren(mission.id)">
     <mission-card [mission]="mission"></mission-card>
   </div>
 </div>

@@ -1,8 +1,8 @@
 export interface Mission {
-  uuid: string;
+  id: string;
   name: string; // limit to 50 characters
   status: MissionStatus;
-  parentUuid?: string;
+  parentId?: string;
   isChildrenVisible?: boolean;
 }
 

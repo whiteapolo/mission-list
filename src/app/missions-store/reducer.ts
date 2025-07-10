@@ -42,11 +42,7 @@ export const missionsReducer = createReducer(
     };
   }),
 
-  on(MissionsActions.updateMission, (state) => {
-    return state;
-  }),
-
-  on(MissionsActions.getMissionChildren, (state) => {
+  on(MissionsActions.updateMission, (state, { missionUuid, values }) => {
     return state;
   })
 );

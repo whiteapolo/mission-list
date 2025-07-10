@@ -6,5 +6,11 @@ export const deleteMission = createAction(
   '[Mission] delete',
   props<{ missionUuid: string }>()
 );
-export const updateMission = createAction('[Mission] update');
-export const getMissionChildren = createAction('[Mission] children');
+export const updateMission = createAction(
+  '[Mission] update',
+  props<{ missionUuid: string; values: Mission }>()
+);
+export const getMissionChildren = createAction(
+  '[Mission] children',
+  props<{ missionUuid: string }>()
+);

@@ -27,7 +27,7 @@ export class MissionCardComponent implements OnInit {
     this.mission.isChildrenVisible = !this.mission.isChildrenVisible;
   }
 
-  getMissionChildren(missionid: string): Mission[] {
-    return this.missionService.getMissionChildren(missionid);
+  getMissionChildren(): Mission[] {
+    return this.missionService.getMissionChildren(this.mission.id);
   }
 }

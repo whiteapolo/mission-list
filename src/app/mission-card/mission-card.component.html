@@ -8,7 +8,7 @@
       [ngClass]="{
         'arrow-up': mission.isChildrenVisible,
         'arrow-down': !mission.isChildrenVisible,
-        'visibility-none': this.getMissionChildren(mission.id).length === 0
+        'visibility-none': this.getMissionChildren().length === 0
       }"
     ></div>
   </click-wrapper>
@@ -34,7 +34,7 @@
 </div>
 
 <div class="mission-children-container" [hidden]="!mission.isChildrenVisible">
-  <div *ngFor="let mission of this.getMissionChildren(mission.id)">
-    <mission-card [mission]="mission"></mission-card>
+  <div *ngFor="let child of this.getMissionChildren()">
+    <mission-card [mission]="child"></mission-card>
   </div>
 </div>

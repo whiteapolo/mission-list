@@ -20,5 +20,6 @@ import { ClickWrapperModule } from './click-wrapper/click-wrapper.module';
     FormsModule,
   ],
   bootstrap: [AppComponent],
+  // providers: [provideStore(), provideEffects(MissionsEffects)],
 })
 export class AppModule {}

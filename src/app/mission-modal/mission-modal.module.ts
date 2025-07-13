@@ -18,5 +18,6 @@ import { ReactiveFormsModule } from '@angular/forms';
     ReactiveFormsModule,
   ],
   exports: [MissionModalComponent],
+  // providers: [provideStore(), provideEffects(MissionsEffects)],
 })
 export class MissionModalModule {}

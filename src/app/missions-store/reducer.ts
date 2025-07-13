@@ -1,7 +1,8 @@
 import { createReducer, on } from '@ngrx/store';
-import * as MissionsActions from './actions';
+import { missionActions } from './actions';
 import { Mission } from '../types';
 import { v4 as idv4 } from 'uuid';
+import { deleteMissionFromArray, updateMission } from './mission-utils';
 
 export interface MissionsState {
   missions: Mission[];
@@ -11,36 +12,28 @@ export const initialState: MissionsState = { missions: [] };
 export const missionsReducer = createReducer(
   initialState,
 
-  on(MissionsActions.addMission, (state, { ...mission }) => {
+  on(missionActions.addMission, (state, { ...mission }) => {
     return {
       ...state,
       missions: [...state.missions, { ...mission, id: idv4() }],
     };
   }),
 
-  on(MissionsActions.deleteMission, (state, { missionid }) => {
-    const missionsMap = new Map<string, Mission>();
-    state.missions.forEach((mission) => missionsMap.set(mission.id, mission));
-
-    const missionsToDelete = new Map<string, boolean>();
-    missionsToDelete.set(missionsMap.get(missionid)?.id!, true);
-
-    let childs = [missionid];
-
-    while (childs) {
-      childs.forEach((child) => missionsToDelete.set(child, true));
-      childs = state.missions
-        .filter((mission) => childs.includes(mission.parentId!))
-        .map((mission) => mission.id);
-    }
-
+  on(missionActions.deleteMission, (state, { missionid }) => {
     return {
       ...state,
-      missions: state.missions.filter((mission) => missionsMap.get(mission.id)),
+      missions: deleteMissionFromArray(state.missions, missionid),
     };
   }),
 
-  on(MissionsActions.updateMission, (state, { missionid, values }) => {
-    return state;
+  on(missionActions.updateMission, (state, { newMission }) => {
+    return { ...state, missions: updateMission(state.missions, newMission) };
+  }),
+
+  on(missionActions.loadMissionsSuccess, (state, { missions }) => {
+    return {
+      ...state,
+      missions: [...missions],
+    };
   })
 );

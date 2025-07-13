@@ -1,16 +1,27 @@
 import { createAction, props } from '@ngrx/store';
 import { Mission } from '../types';
 
-export const addMission = createAction('[Mission] add', props<Mission>());
-export const deleteMission = createAction(
+const addMission = createAction('[Mission] add', props<Mission>());
+const deleteMission = createAction(
   '[Mission] delete',
   props<{ missionid: string }>()
 );
-export const updateMission = createAction(
+const updateMission = createAction(
   '[Mission] update',
-  props<{ missionid: string; values: Mission }>()
+  props<{ newMission: Mission }>()
 );
-export const getMissionChildren = createAction(
-  '[Mission] children',
-  props<{ missionid: string }>()
+
+const loadMissions = createAction('[Mission] load');
+
+const loadMissionsSuccess = createAction(
+  '[Mission] loaded success',
+  props<{ missions: Mission[] }>()
 );
+
+export const missionActions = {
+  addMission,
+  deleteMission,
+  updateMission,
+  loadMissions,
+  loadMissionsSuccess,
+};

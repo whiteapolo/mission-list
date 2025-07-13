@@ -2,14 +2,19 @@ import { createSelector } from '@ngrx/store';
 import { MissionsState } from './reducer';
 import { Mission } from '../types';
 
-export const selectMissions = (state: MissionsState) => state.missions;
+const selectMissions = (state: MissionsState) => state.missions;
 
-export const missionChildren = (missionUuid: string) =>
+const missionChildren = (missionId: string) =>
   createSelector(selectMissions, (missions: Mission[]) =>
-    missions.filter((mission) => mission.parentId === missionUuid)
+    missions.filter((mission) => mission.parentId === missionId)
   );
 
-export const missions = createSelector(
+const missions = createSelector(
   selectMissions,
   (missions: Mission[]) => missions
 );
+
+export const selectors = {
+  missionChildren,
+  missions,
+};

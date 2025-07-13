@@ -20,6 +20,16 @@ export class MissionService {
     }
   }
 
+  loadMissions(): Observable<Mission[]> {
+    const data = localStorage.getItem(MISSIONS_LOCAL_STORAGE_KEY);
+
+    if (data) {
+      return new BehaviorSubject<Mission[]>(JSON.parse(data));
+    }
+
+    return new BehaviorSubject<Mission[]>([]);
+  }
+
   getMissions(): Observable<Mission[]> {
     return this.missions$.asObservable();
   }

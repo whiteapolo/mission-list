@@ -1,21 +1,13 @@
 import { Mission } from '../types';
 
-function getMissionByid(missions: Mission[], id: string): Mission | undefined {
-  return missions.find((mission) => mission.id === id);
-}
-
-export const getMissionChildren = (missions: Mission[], missionId: string) => {
-  return missions.filter((mission) => mission.parentId === missionId);
-};
-
-export const deleteMissionFromArray = (
+export const deleteMission = (
   missions: Mission[],
   missionId: string
 ): Mission[] => {
   return missions.filter(
     (mission) =>
       mission.id !== missionId ||
-      isMissionAncestor(missions, missionId, mission.id)
+      !isMissionAncestor(missions, missionId, mission.id)
   );
 };
 
@@ -23,24 +15,24 @@ export const updateMission = (
   missions: Mission[],
   newMission: Mission
 ): Mission[] => {
-  return missions.map((m) => {
-    if (m.id === newMission.id) {
+  return missions.map((mission) => {
+    if (mission.id === newMission.id) {
       return {
         ...newMission,
       };
     }
 
     if (
-      m.id === newMission.parentId &&
-      isMissionAncestor(missions, m.id, newMission.parentId)
+      mission.id === newMission.parentId &&
+      isMissionAncestor(missions, mission.id, newMission.parentId)
     ) {
       return {
-        ...m,
+        ...mission,
         parentId: newMission.id,
       };
     }
 
-    return m;
+    return mission;
   });
 };
 
@@ -57,6 +49,8 @@ const isMissionAncestor = (
     return true;
   }
 
-  const mission = getMissionByid(missions, posibleDecendanceid);
+  const mission = missions.find(
+    (mission) => mission.id === posibleDecendanceid
+  );
   return isMissionAncestor(missions, parentId, mission?.parentId);
 };

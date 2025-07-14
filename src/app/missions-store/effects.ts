@@ -2,18 +2,12 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { MISSIONS_LOCAL_STORAGE_KEY } from '../constants';
 import { Mission } from '../types';
-import {
-  catchError,
-  exhaustMap,
-  map,
-  tap,
-  withLatestFrom,
-} from 'rxjs/operators';
-import { missionActions } from './actions';
+import { map, switchMap, tap, withLatestFrom } from 'rxjs/operators';
 import { Observable, throwError, of } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { MissionsState } from './reducer';
-import { selectors } from './selectors';
+import { selectMissions } from './selectors';
+import * as Action from './actions';
 
 @Injectable()
 export class MissionsEffects {
@@ -22,12 +16,8 @@ export class MissionsEffects {
   saveMissionsToLocalStorage$ = createEffect(
     () => {
       return this.actions$.pipe(
-        ofType(
-          missionActions.addMission,
-          missionActions.updateMission,
-          missionActions.deleteMission
-        ),
-        withLatestFrom(this.store.select(selectors.missions)),
+        ofType(Action.addMission, Action.updateMission, Action.deleteMission),
+        withLatestFrom(this.store.select(selectMissions)),
         tap((missions) => {
           localStorage.setItem(
             MISSIONS_LOCAL_STORAGE_KEY,
@@ -36,27 +26,14 @@ export class MissionsEffects {
         })
       );
     },
-
     { dispatch: false }
   );
 
   loadMissionsFromLocalStorage$ = createEffect(() => {
-    return (
-      this.actions$.pipe(ofType('[Mission] load')),
-      exhaustMap(() =>
-        this.loadMissionsFromLocalStorage().pipe(
-          map((missions) => ({
-            type: '[Mission] loaded success',
-            missions: missions,
-          })),
-          catchError(() =>
-            of({
-              type: '[Mission] loaded success',
-              missions: [],
-            })
-          )
-        )
-      )
+    return this.actions$.pipe(
+      ofType(Action.loadMissions),
+      switchMap(() => this.loadMissionsFromLocalStorage()),
+      map((missions) => Action.setMissions({ missions }))
     );
   });
 
@@ -65,7 +42,7 @@ export class MissionsEffects {
 
     if (!data) {
       return throwError(() => {
-        return new Error("could't load missions from local storage");
+        return new Error("couldn't load missions from local storage");
       });
     }
 

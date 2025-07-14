@@ -1,8 +1,8 @@
 import { createReducer, on } from '@ngrx/store';
-import { missionActions } from './actions';
 import { Mission } from '../types';
 import { v4 as idv4 } from 'uuid';
-import { deleteMissionFromArray, updateMission } from './mission-utils';
+import { deleteMission, updateMission } from './mission-utils';
+import * as Actions from './actions';
 
 export interface MissionsState {
   missions: Mission[];
@@ -12,25 +12,25 @@ export const initialState: MissionsState = { missions: [] };
 export const missionsReducer = createReducer(
   initialState,
 
-  on(missionActions.addMission, (state, { ...mission }) => {
+  on(Actions.addMission, (state, { ...mission }) => {
     return {
       ...state,
       missions: [...state.missions, { ...mission, id: idv4() }],
     };
   }),
 
-  on(missionActions.deleteMission, (state, { missionid }) => {
+  on(Actions.deleteMission, (state, { missionId }) => {
     return {
       ...state,
-      missions: deleteMissionFromArray(state.missions, missionid),
+      missions: deleteMission(state.missions, missionId),
     };
   }),
 
-  on(missionActions.updateMission, (state, { newMission }) => {
+  on(Actions.updateMission, (state, { newMission }) => {
     return { ...state, missions: updateMission(state.missions, newMission) };
   }),
 
-  on(missionActions.loadMissionsSuccess, (state, { missions }) => {
+  on(Actions.setMissions, (state, { missions }) => {
     return {
       ...state,
       missions: [...missions],

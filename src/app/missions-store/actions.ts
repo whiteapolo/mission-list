@@ -35,3 +35,8 @@ export const toggleMissionChildrenVisibility = createAction(
   '[Mission] toggle children invisible',
   props<{ missionId: string }>()
 );
+
+export const setSearchQuery = createAction(
+  '[Mission] set search query',
+  props<{ query: string }>()
+);

@@ -7,10 +7,12 @@ import * as Actions from './actions';
 export interface MissionsState {
   missions: Mission[];
   visibleMissionChildren: Set<string>;
+  searchQuery: string;
 }
 export const initialState: MissionsState = {
   missions: [],
   visibleMissionChildren: new Set(),
+  searchQuery: '',
 };
 
 export const missionsReducer = createReducer(
@@ -58,5 +60,10 @@ export const missionsReducer = createReducer(
         ? [...state.visibleMissionChildren].filter((id) => id !== missionId)
         : [...state.visibleMissionChildren, missionId]
     ),
+  })),
+
+  on(Actions.setSearchQuery, (state, { query }) => ({
+    ...state,
+    searchQuery: query,
   }))
 );

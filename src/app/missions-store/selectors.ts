@@ -5,6 +5,10 @@ const selectMissionsProperty = (state: any) => {
   return state.app.missions;
 };
 
+const selectSearchQueryProprety = (state: any) => {
+  return state.app.query;
+};
+
 const selectMissionChildrenVisibilityProperty = (state: any) => {
   return state.app.visibleMissionChildren;
 };
@@ -27,3 +31,6 @@ export const selectMissionChildrenVisibility = (missionId: string) =>
     (visibleMissionChildren: Set<string>) =>
       visibleMissionChildren.has(missionId)
   );
+
+export const selectSearchQuery = () =>
+  createSelector(selectSearchQueryProprety, (query: string) => query);

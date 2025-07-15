@@ -6,9 +6,9 @@
   >
     <div
       [ngClass]="{
-        'arrow-up': mission.isChildrenVisible,
-        'arrow-down': !mission.isChildrenVisible,
-        'visibility-none': this.getMissionChildren().length === 0
+        'arrow-up': (isChildrenVisible$ | async) === true,
+        'arrow-down': (isChildrenVisible$ | async) === false,
+        'visibility-none': !(this.getMissionChildren() | async)?.length
       }"
     ></div>
   </click-wrapper>
@@ -17,15 +17,15 @@
   <div class="is-active-indicator">{{ mission.status }}</div>
 
   <img
-    (click)="missionModelService.editMission(mission)"
     class="card-icon"
     src="/assets/edit-icon.svg"
     width="12px"
     height="12px"
   />
 
+  <!-- (click)="missionModelService.editMission(mission)" -->
+  <!-- (click)="missionService.deleteMission(mission.id)" -->
   <img
-    (click)="missionService.deleteMission(mission.id)"
     class="card-icon"
     src="/assets/trash-icon.svg"
     width="12px"
@@ -33,8 +33,11 @@
   />
 </div>
 
-<div class="mission-children-container" [hidden]="!mission.isChildrenVisible">
-  <div *ngFor="let child of this.getMissionChildren()">
+<div
+  class="mission-children-container"
+  [hidden]="!(isChildrenVisible$ | async)"
+>
+  <div *ngFor="let child of this.getMissionChildren() | async">
     <mission-card [mission]="child"></mission-card>
   </div>
 </div>

@@ -1,7 +1,15 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Mission } from '../types';
-import { MissionService } from '../mission.service';
 import { MissionModalService } from '../mission-modal/mission-modal.service';
+import { EMPTY, Observable } from 'rxjs';
+import { MissionsState } from '../missions-store/reducer';
+import { Store } from '@ngrx/store';
+import {
+  selectMissionChildren,
+  selectMissionChildrenVisibility,
+  selectMissions,
+} from '../missions-store/selectors';
+import * as Actions from '../missions-store/actions';
 
 @Component({
   selector: 'mission-card',
@@ -10,24 +18,27 @@ import { MissionModalService } from '../mission-modal/mission-modal.service';
 })
 export class MissionCardComponent implements OnInit {
   @Input() mission!: Mission;
-  missions: Mission[] = [];
+  missions$: Observable<Mission[]> = EMPTY;
+  isChildrenVisible$: Observable<boolean> = EMPTY;
 
   constructor(
-    public missionService: MissionService,
-    public missionModelService: MissionModalService
+    public missionModelService: MissionModalService,
+    private store: Store<MissionsState>
   ) {}
-
   ngOnInit(): void {
-    this.missionService.getMissions().subscribe((missions) => {
-      this.missions = missions;
-    });
+    this.missions$ = this.store.select(selectMissions);
+    this.isChildrenVisible$ = this.store.select(
+      selectMissionChildrenVisibility(this.mission.id)
+    );
   }
 
   toggleChildrenVisibility() {
-    this.mission.isChildrenVisible = !this.mission.isChildrenVisible;
+    this.store.dispatch(
+      Actions.toggleMissionChildrenVisibility({ missionId: this.mission.id })
+    );
   }
 
-  getMissionChildren(): Mission[] {
-    return this.missionService.getMissionChildren(this.mission.id);
+  getMissionChildren(): Observable<Mission[]> {
+    return this.store.select(selectMissionChildren(this.mission.id));
   }
 }

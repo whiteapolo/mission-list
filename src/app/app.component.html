@@ -22,7 +22,7 @@
   <div class="arrow-down"></div>
 
   <div class="mission-container">
-    <ng-container *ngFor="let mission of this.missions">
+    <ng-container *ngFor="let mission of this.missions$ | async">
       <mission-card
         *ngIf="!mission.parentId"
         [hidden]="!shouldShowMission(mission)"

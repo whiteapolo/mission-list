@@ -33,7 +33,7 @@ export class MissionsEffects {
     return this.actions$.pipe(
       ofType(Action.loadMissions),
       switchMap(() => this.loadMissionsFromLocalStorage()),
-      map((missions) => Action.setMissions({ missions }))
+      map((missions) => Action.setMissions({ missions: missions }))
     );
   });
 

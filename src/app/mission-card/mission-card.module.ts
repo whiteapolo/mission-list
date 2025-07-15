@@ -24,6 +24,5 @@ import { ClickWrapperModule } from '../click-wrapper/click-wrapper.module';
     MatOptionModule,
   ],
   exports: [MissionCardComponent],
-  // providers: [provideStore(), provideEffects(MissionsEffects)],
 })
 export class MissionCardModule {}

@@ -7,6 +7,10 @@ import { MatOptionModule } from '@angular/material/core';
 import { MissionModalModule } from './mission-modal/mission-modal.module';
 import { MissionCardModule } from './mission-card/mission-card.module';
 import { ClickWrapperModule } from './click-wrapper/click-wrapper.module';
+import { MissionsEffects } from './missions-store/effects';
+import { StoreModule } from '@ngrx/store';
+import { missionsReducer } from './missions-store/reducer';
+import { EffectsModule } from '@ngrx/effects';
 
 @NgModule({
   declarations: [AppComponent],
@@ -18,8 +22,10 @@ import { ClickWrapperModule } from './click-wrapper/click-wrapper.module';
     MatSelectModule,
     MatOptionModule,
     FormsModule,
+    EffectsModule,
+    StoreModule.forRoot({ app: missionsReducer }),
+    EffectsModule.forRoot([MissionsEffects]),
   ],
   bootstrap: [AppComponent],
-  // providers: [provideStore(), provideEffects(MissionsEffects)],
 })
 export class AppModule {}

@@ -3,7 +3,6 @@ export interface Mission {
   name: string; // limit to 50 characters
   status: MissionStatus;
   parentId?: string;
-  isChildrenVisible?: boolean;
 }
 
 export enum MissionStatus {

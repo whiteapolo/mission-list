@@ -1,7 +1,6 @@
 import { Component, Inject, OnInit, ViewEncapsulation } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Mission, MissionStatus } from '../types';
-import { MissionService } from '../mission.service';
 import {
   AbstractControl,
   FormBuilder,
@@ -12,6 +11,10 @@ import {
   MISSION_STATUS_FILTERS,
   MISSION_STATUS_TYPES,
 } from 'src/app/constants';
+import { Observable } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { MissionsState } from '../missions-store/reducer';
+import { selectMissions } from '../missions-store/selectors';
 
 interface MissionModalData {
   mission: Mission;
@@ -25,7 +28,7 @@ interface MissionModalData {
 })
 export class MissionModalComponent implements OnInit {
   missionStatusTypes = MISSION_STATUS_TYPES;
-  missions: Mission[] = [];
+  missions$: Observable<Mission[]>;
   mission!: Mission;
   isSubmitted = false;
 
@@ -37,29 +40,27 @@ export class MissionModalComponent implements OnInit {
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: MissionModalData,
+    private store: Store<MissionsState>,
     public dialogRef: MatDialogRef<MissionModalComponent>,
-    public missionService: MissionService,
     private formBuilder: FormBuilder
-  ) {}
+  ) {
+    this.missions$ = this.store.select(selectMissions);
+  }
 
   ngOnInit(): void {
-    this.missionService.getMissions().subscribe((missions) => {
-      this.missions = missions;
-    });
-
     this.mission = {
       ...this.data.mission,
     };
 
     this.missionForm.get('name')?.setValue(this.mission.name);
     this.missionForm.get('status')?.setValue(this.mission.status);
-    if (this.mission.parentId) {
-      this.missionForm
-        .get('parent')
-        ?.setValue(
-          this.missions.find((mission) => mission.id === this.mission.parentId)
-        );
-    }
+    // if (this.mission.parentId) {
+    //   this.missionForm
+    //     .get('parent')
+    //     ?.setValue(
+    //       this.missions.find((mission) => mission.id === this.mission.parentId)
+    //     );
+    // }
   }
 
   cancel() {

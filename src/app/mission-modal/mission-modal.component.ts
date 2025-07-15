@@ -89,9 +89,14 @@ export class MissionModalComponent implements OnInit {
     return this.missionForm.get(field)?.valid || !this.isSubmitted;
   }
 
-  missionParentValidator(control: AbstractControl): ValidationErrors | null {
-    if (typeof control.value === 'string' && control.value.length > 0) {
-      return { notAMission: { value: control.value } };
+  missionParentValidator(
+    parentMissionControl: AbstractControl
+  ): ValidationErrors | null {
+    if (
+      typeof parentMissionControl.value === 'string' &&
+      parentMissionControl.value.length > 0
+    ) {
+      return { notAMission: { value: parentMissionControl.value } };
     }
     return null;
   }

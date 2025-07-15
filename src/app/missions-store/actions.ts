@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { Mission } from '../types';
+import { Mission, MissionStatusFilter } from '../types';
 
 export const addMission = createAction(
   '[Mission] add',
@@ -39,4 +39,9 @@ export const toggleMissionChildrenVisibility = createAction(
 export const setSearchQuery = createAction(
   '[Mission] set search query',
   props<{ query: string }>()
+);
+
+export const setStatusFilter = createAction(
+  '[Mission] set status filter',
+  props<{ statusFilter: MissionStatusFilter }>()
 );

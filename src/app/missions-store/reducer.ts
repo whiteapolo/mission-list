@@ -1,5 +1,5 @@
 import { createReducer, on } from '@ngrx/store';
-import { Mission } from '../types';
+import { Mission, MissionStatusFilter } from '../types';
 import { v4 as idv4 } from 'uuid';
 import { deleteMission, updateMission } from './mission-utils';
 import * as Actions from './actions';
@@ -8,11 +8,13 @@ export interface MissionsState {
   missions: Mission[];
   visibleMissionChildren: Set<string>;
   searchQuery: string;
+  statusFilter: MissionStatusFilter;
 }
 export const initialState: MissionsState = {
   missions: [],
   visibleMissionChildren: new Set(),
   searchQuery: '',
+  statusFilter: MissionStatusFilter.NO_FILTER,
 };
 
 export const missionsReducer = createReducer(
@@ -65,5 +67,10 @@ export const missionsReducer = createReducer(
   on(Actions.setSearchQuery, (state, { query }) => ({
     ...state,
     searchQuery: query,
+  })),
+
+  on(Actions.setStatusFilter, (state, { statusFilter }) => ({
+    ...state,
+    statusFilter,
   }))
 );

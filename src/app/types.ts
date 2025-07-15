@@ -10,7 +10,8 @@ export enum MissionStatus {
   NOT_ACTIVE = 'לא פעיל',
 }
 
-export const MissionStatusFilter = {
-  NO_FILTER: 'ללא סינון',
-  ...MissionStatus,
-};
+export enum MissionStatusFilter {
+  NO_FILTER = 'ללא סינון',
+  ACTIVE = 'פעיל',
+  NOT_ACTIVE = 'לא פעיל',
+}

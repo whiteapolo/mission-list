@@ -1,15 +1,19 @@
 <div class="header">הרשימה המבצעית</div>
 
 <div class="page-content">
-  <input [(ngModel)]="searchText" class="search-bar" placeholder="חיפוש..." />
+  <input
+    (input)="setSearchQuery($event)"
+    class="search-bar"
+    placeholder="חיפוש..."
+  />
 
   <div class="filter-status-container">
     <span class="filter-status-header">סינון לפי: </span>
     <mat-select
       disableOptionCentering
-      [(ngModel)]="statusFilter"
       class="filter-status"
-      [(value)]="statusFilter"
+      (selectionChange)="setStatusFilter($event)"
+      [value]="statusFilter$ | async"
     >
       <mat-option
         *ngFor="let status of missionStatusFilterTypes"
@@ -25,7 +29,13 @@
     <ng-container *ngFor="let mission of this.missions$ | async">
       <mission-card
         *ngIf="!mission.parentId"
-        [hidden]="!shouldShowMission(mission)"
+        [hidden]="
+          !shouldShowMission(
+            mission,
+            searchQuery$ | async,
+            statusFilter$ | async
+          )
+        "
         [mission]="mission"
       ></mission-card>
     </ng-container>

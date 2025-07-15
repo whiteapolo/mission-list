@@ -31,11 +31,12 @@ export const updateMission = (
 
     if (
       mission.id === newMission.parentId &&
-      isMissionAncestor(missions, mission.id, newMission.parentId)
+      isMissionAncestor(missions, newMission.id, newMission.parentId)
     ) {
       return {
         ...mission,
-        parentId: newMission.id,
+        parentId: missions.find((mission) => mission.id === newMission.id)
+          ?.parentId,
       };
     }
 
@@ -48,7 +49,7 @@ const isMissionAncestor = (
   parentId: string,
   posibleDecendanceid: string | undefined
 ): boolean => {
-  if (!posibleDecendanceid) {
+  if (!posibleDecendanceid || !parentId) {
     return false;
   }
 

@@ -45,4 +45,8 @@ export class MissionCardComponent implements OnInit {
   deleteMission(): void {
     this.store.dispatch(Actions.deleteMission({ missionId: this.mission.id }));
   }
+
+  editMission(): void {
+    this.missionModelService.editMission(this.mission);
+  }
 }

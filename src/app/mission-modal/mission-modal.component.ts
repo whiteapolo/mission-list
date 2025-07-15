@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Mission, MissionStatus } from '../types';
 import {
@@ -51,13 +51,16 @@ export class MissionModalComponent implements OnInit {
 
     this.missionForm.get('name')?.setValue(this.mission.name);
     this.missionForm.get('status')?.setValue(this.mission.status);
-    // if (this.mission.parentId) {
-    //   this.missionForm
-    //     .get('parent')
-    //     ?.setValue(
-    //       this.missions.find((mission) => mission.id === this.mission.parentId)
-    //     );
-    // }
+    this.missions$
+      .subscribe((missions) => {
+        this.missionForm
+          .get('parent')
+          ?.setValue(
+            missions.find((mission) => mission.id === this.mission.parentId) ||
+              ''
+          );
+      })
+      .unsubscribe();
   }
 
   cancel() {
@@ -71,14 +74,15 @@ export class MissionModalComponent implements OnInit {
     }
 
     this.dialogRef.close({
+      ...this.mission,
       name: this.missionForm.value.name,
       status: this.missionForm.value.status,
       parentId: this.missionForm.value.parent.id || undefined,
     });
   }
 
-  displayMissionname(mission: Mission) {
-    return mission.name;
+  displayMissionname(mission: Mission | undefined) {
+    return mission?.name || '';
   }
 
   isFieldValid(field: string) {

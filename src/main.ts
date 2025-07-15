@@ -14,7 +14,7 @@ function resetLocalStorage(): void {
     .catch((e) => console.log(e));
 }
 
-// resetLocalStorage();
+resetLocalStorage();
 
 if (environment.production) {
   enableProdMode();

@@ -18,11 +18,9 @@ export class MissionModalService {
   editMission(mission: Mission) {
     this.openMissionDialog({ name: 'עריכת משימה', mission: mission })
       .afterClosed()
-      .subscribe((newMissionValues) => {
-        if (newMissionValues) {
-          this.store.dispatch(
-            Actions.updateMission({ ...mission, ...newMissionValues })
-          );
+      .subscribe((newMission) => {
+        if (newMission) {
+          this.store.dispatch(Actions.updateMission({ newMission }));
         }
       });
   }

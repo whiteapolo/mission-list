@@ -35,7 +35,7 @@ export class MissionModalService {
       .afterClosed()
       .subscribe((mission: Mission) => {
         if (mission) {
-          this.store.dispatch(Actions.addMission({ ...mission }));
+          this.store.dispatch(Actions.addMission({ mission }));
         }
       });
   }

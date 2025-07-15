@@ -16,9 +16,9 @@ export const initialState: MissionsState = {
 export const missionsReducer = createReducer(
   initialState,
 
-  on(Actions.addMission, (state, { ...mission }) => ({
+  on(Actions.addMission, (state, { mission }) => ({
     ...state,
-    missions: [...state.missions, { ...mission, id: idv4() }],
+    missions: state.missions.concat({ ...mission, id: idv4() }),
   })),
 
   on(Actions.deleteMission, (state, { missionId }) => ({
@@ -31,9 +31,9 @@ export const missionsReducer = createReducer(
     missions: updateMission(state.missions, newMission),
   })),
 
-  on(Actions.setMissions, (state, { missions }) => ({
+  on(Actions.setMissions, (state, payload) => ({
     ...state,
-    missions: [...missions],
+    missions: payload.missions,
   })),
 
   on(Actions.setMissionChildrenVisible, (state, { missionId }) => ({

@@ -33,17 +33,7 @@ export class AppComponent implements OnInit {
     this.missions$ = this.store.select(selectMissions);
   }
 
-  resetLocalStorage(): void {
-    fetch('/assets/missions.json')
-      .then((res) => res.json())
-      .then((json) =>
-        localStorage.setItem(MISSIONS_LOCAL_STORAGE_KEY, JSON.stringify(json))
-      )
-      .catch((e) => console.log(e));
-  }
-
   ngOnInit(): void {
-    // this.resetLocalStorage();
     this.store.dispatch(loadMissions());
   }
 

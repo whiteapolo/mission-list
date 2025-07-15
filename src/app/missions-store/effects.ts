@@ -18,7 +18,7 @@ export class MissionsEffects {
       return this.actions$.pipe(
         ofType(Action.addMission, Action.updateMission, Action.deleteMission),
         withLatestFrom(this.store.select(selectMissions)),
-        tap((missions) => {
+        tap(([action, missions]) => {
           localStorage.setItem(
             MISSIONS_LOCAL_STORAGE_KEY,
             JSON.stringify(missions)
@@ -48,7 +48,4 @@ export class MissionsEffects {
 
     return of(JSON.parse(data));
   }
-
-  // saveMissions$ = this.saveMissionsToLocalStorage$;
-  // loadMissions$ = this.loadMissionsFromLocalStorage$;
 }

@@ -11,6 +11,7 @@ import { MissionsEffects } from './missions-store/effects';
 import { StoreModule } from '@ngrx/store';
 import { missionsReducer } from './missions-store/reducer';
 import { EffectsModule } from '@ngrx/effects';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
 @NgModule({
   declarations: [AppComponent],
@@ -23,7 +24,9 @@ import { EffectsModule } from '@ngrx/effects';
     MatOptionModule,
     FormsModule,
     EffectsModule,
+    StoreDevtoolsModule,
     StoreModule.forRoot({ app: missionsReducer }),
+    StoreDevtoolsModule.instrument({}),
     EffectsModule.forRoot([MissionsEffects]),
   ],
   bootstrap: [AppComponent],

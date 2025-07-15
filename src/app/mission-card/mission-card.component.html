@@ -3,13 +3,12 @@
     class="toggle-mission-children-button"
     [clickRadiusPx]="6"
     (click)="toggleChildrenVisibility()"
+    [ngClass]="{
+      'visibility-none': !(this.getMissionChildren() | async)?.length
+    }"
   >
     <div
-      [ngClass]="{
-        'arrow-up': (isChildrenVisible$ | async) === true,
-        'arrow-down': (isChildrenVisible$ | async) === false,
-        'visibility-none': !(this.getMissionChildren() | async)?.length
-      }"
+      [ngClass]="(isChildrenVisible$ | async) ? 'arrow-up' : 'arrow-down'"
     ></div>
   </click-wrapper>
 
@@ -24,20 +23,20 @@
   />
 
   <!-- (click)="missionModelService.editMission(mission)" -->
-  <!-- (click)="missionService.deleteMission(mission.id)" -->
   <img
     class="card-icon"
     src="/assets/trash-icon.svg"
     width="12px"
     height="12px"
+    (click)="deleteMission()"
   />
 </div>
 
-<div
-  class="mission-children-container"
-  [hidden]="!(isChildrenVisible$ | async)"
->
-  <div *ngFor="let child of this.getMissionChildren() | async">
+<ng-container *ngIf="isChildrenVisible$ | async">
+  <div
+    class="mission-children-container"
+    *ngFor="let child of this.getMissionChildren() | async"
+  >
     <mission-card [mission]="child"></mission-card>
   </div>
-</div>
+</ng-container>

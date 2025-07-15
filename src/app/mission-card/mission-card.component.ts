@@ -41,4 +41,8 @@ export class MissionCardComponent implements OnInit {
   getMissionChildren(): Observable<Mission[]> {
     return this.store.select(selectMissionChildren(this.mission.id));
   }
+
+  deleteMission(): void {
+    this.store.dispatch(Actions.deleteMission({ missionId: this.mission.id }));
+  }
 }

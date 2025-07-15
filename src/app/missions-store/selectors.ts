@@ -16,7 +16,9 @@ export const selectMissionChildren = (missionId: string) =>
 
 export const selectMissions = createSelector(
   selectMissionsProperty,
-  (missions: Mission[]) => missions
+  (missions: Mission[]) => {
+    return missions;
+  }
 );
 
 export const selectMissionChildrenVisibility = (missionId: string) =>

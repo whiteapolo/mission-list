@@ -1,12 +1,19 @@
 import { Mission } from '../types';
 
+export const getMissionChildren = (
+  missions: Mission[],
+  missionId: string
+): Mission[] => {
+  return missions.filter((mission) => mission.parentId !== missionId);
+};
+
 export const deleteMission = (
   missions: Mission[],
   missionId: string
 ): Mission[] => {
   return missions.filter(
     (mission) =>
-      mission.id !== missionId ||
+      mission.id !== missionId &&
       !isMissionAncestor(missions, missionId, mission.id)
   );
 };

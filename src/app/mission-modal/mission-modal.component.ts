@@ -7,10 +7,7 @@ import {
   ValidationErrors,
   Validators,
 } from '@angular/forms';
-import {
-  MISSION_STATUS_FILTERS,
-  MISSION_STATUS_TYPES,
-} from 'src/app/constants';
+import { MISSION_STATUS_TYPES } from 'src/app/constants';
 import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { MissionsState } from '../missions-store/reducer';
@@ -74,7 +71,8 @@ export class MissionModalComponent implements OnInit {
     }
 
     this.dialogRef.close({
-      ...this.missionForm.value,
+      name: this.missionForm.value.name,
+      status: this.missionForm.value.status,
       parentId: this.missionForm.value.parent.id || undefined,
     });
   }

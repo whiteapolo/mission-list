@@ -13,6 +13,8 @@ import { EffectsModule } from '@ngrx/effects';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { SearchBarComponent } from './search-bar/search-bar.component';
 import { StatusFilterComponent } from './status-filter/status-filter.component';
+import { IconService } from './icon.service';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [AppComponent, SearchBarComponent, StatusFilterComponent],
@@ -25,10 +27,12 @@ import { StatusFilterComponent } from './status-filter/status-filter.component';
     FormsModule,
     EffectsModule,
     StoreDevtoolsModule,
+    HttpClientModule,
     StoreModule.forRoot({ app: missionsReducer }),
     StoreDevtoolsModule.instrument({}),
     EffectsModule.forRoot([MissionsEffects]),
   ],
   bootstrap: [AppComponent],
+  providers: [IconService],
 })
 export class AppModule {}

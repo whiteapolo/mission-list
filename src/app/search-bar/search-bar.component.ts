@@ -1,7 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { MissionsState } from '../missions-store/reducer';
-import { Store } from '@ngrx/store';
-import * as Actions from '../missions-store/actions';
+import { Component, EventEmitter, Output } from '@angular/core';
 
 @Component({
   selector: 'search-bar',
@@ -10,8 +7,6 @@ import * as Actions from '../missions-store/actions';
 })
 export class SearchBarComponent {
   @Output() change = new EventEmitter<string>();
-
-  constructor() {}
 
   emitInputChange(event: Event): void {
     this.change.emit((event.target as HTMLInputElement).value);

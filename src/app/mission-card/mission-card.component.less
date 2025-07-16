@@ -24,18 +24,22 @@
     font-size: 15px;
     font-weight: bold;
     padding: 4px 12px;
-    margin-left: 30px;
+    margin-left: 25px;
   }
 
-  .card-icon {
-    .clickable();
-    margin-left: 10px;
-    transition: 0.15s;
-    opacity: 0;
+  .icon-container {
+    .flex-center();
+    margin-left: 5px;
+    .card-icon {
+      .clickable();
+      transition: 0.15s;
+      opacity: 0;
+      transform: scale(0.5);
+    }
   }
 
   &:hover {
-    .card-icon {
+    .icon-container .card-icon {
       opacity: 1;
     }
   }

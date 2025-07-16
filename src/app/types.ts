@@ -15,3 +15,8 @@ export enum MissionStatusFilter {
   ACTIVE = 'פעיל',
   NOT_ACTIVE = 'לא פעיל',
 }
+
+export interface Icon {
+  name: string;
+  src: string;
+}

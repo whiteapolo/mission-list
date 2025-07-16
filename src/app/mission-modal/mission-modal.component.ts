@@ -7,7 +7,6 @@ import {
   ValidationErrors,
   Validators,
 } from '@angular/forms';
-import { MISSION_STATUS_TYPES } from 'src/app/constants';
 import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { MissionsState } from '../missions-store/reducer';
@@ -24,7 +23,7 @@ interface MissionModalData {
   styleUrls: ['./mission-modal.component.less'],
 })
 export class MissionModalComponent implements OnInit {
-  missionStatusTypes = MISSION_STATUS_TYPES;
+  missionStatusTypes = Object.values(MissionStatus);
   missions$: Observable<Mission[]>;
   mission!: Mission;
   isSubmitted = false;

@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Mission, MissionStatusFilter } from './types';
 import { MatDialog } from '@angular/material/dialog';
 import { MissionModalService } from './mission-modal/mission-modal.service';
-import { MISSION_STATUS_FILTERS, MISSION_STATUS_TYPES } from './constants';
 import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 import {
@@ -13,7 +12,7 @@ import {
 import { MissionsState } from './missions-store/reducer';
 import { loadMissions } from './missions-store/actions';
 import * as Actions from './missions-store/actions';
-import { MatSelectChange } from '@angular/material/select';
+import { IconService } from './icon.service';
 
 @Component({
   selector: 'app-root',
@@ -29,7 +28,8 @@ export class AppComponent implements OnInit {
   constructor(
     private store: Store<MissionsState>,
     public dialog: MatDialog,
-    public missionsModalService: MissionModalService
+    public missionsModalService: MissionModalService,
+    private iconService: IconService
   ) {
     this.missions$ = this.store.select(selectMissions);
     this.searchQuery$ = this.store.select(selectSearchQuery());

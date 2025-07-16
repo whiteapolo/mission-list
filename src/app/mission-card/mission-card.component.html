@@ -14,21 +14,18 @@
   <span class="mission-name">{{ mission.name }}</span>
   <div class="is-active-indicator">{{ mission.status }}</div>
 
-  <img
-    class="card-icon"
-    src="/assets/edit-icon.svg"
-    width="12px"
-    height="12px"
-    (click)="editMission()"
-  />
-
-  <img
-    class="card-icon"
-    src="/assets/trash-icon.svg"
-    width="12px"
-    height="12px"
-    (click)="deleteMission()"
-  />
+  <div class="icon-container">
+    <mat-icon
+      (click)="editMission()"
+      class="card-icon"
+      svgIcon="edit"
+    ></mat-icon>
+    <mat-icon
+      (click)="deleteMission()"
+      class="card-icon"
+      svgIcon="delete"
+    ></mat-icon>
+  </div>
 </div>
 
 <ng-container *ngIf="isChildrenVisible$ | async">

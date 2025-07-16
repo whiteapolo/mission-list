@@ -3,8 +3,8 @@
   <mat-select
     disableOptionCentering
     class="filter-status"
-    (selectionChange)="setStatusFilter($event)"
-    [value]="statusFilter$ | async"
+    (selectionChange)="statusFilterChange($event)"
+    [value]="DEFAULT_STATUS_FILTER"
   >
     <mat-option
       *ngFor="let status of missionStatusFilterTypes"

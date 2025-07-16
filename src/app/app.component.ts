@@ -40,15 +40,27 @@ export class AppComponent implements OnInit {
     this.store.dispatch(loadMissions());
   }
 
+  setSearchQuery(query: string) {
+    this.store.dispatch(Actions.setSearchQuery({ query }));
+  }
+
+  setStatusFilter(status: MissionStatusFilter) {
+    this.store.dispatch(Actions.setStatusFilter({ statusFilter: status }));
+  }
+
   shouldShowMission(
     mission: Mission,
     searchQuery: string | null,
     statusFilter: MissionStatusFilter | null
   ): boolean {
-    return (
-      mission.name.includes(searchQuery || '') &&
-      ((mission.status as string) === statusFilter ||
-        statusFilter === MissionStatusFilter.NO_FILTER)
-    );
+    if (!mission.name.includes(searchQuery || '')) {
+      return false;
+    }
+
+    if (statusFilter === MissionStatusFilter.NO_FILTER) {
+      return true;
+    }
+
+    return (mission.status as string) === statusFilter;
   }
 }

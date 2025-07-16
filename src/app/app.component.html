@@ -1,8 +1,8 @@
 <div class="header">הרשימה המבצעית</div>
 
 <div class="page-content">
-  <search-bar></search-bar>
-  <status-filter></status-filter>
+  <search-bar (change)="setSearchQuery($event)"></search-bar>
+  <status-filter (change)="setStatusFilter($event)"></status-filter>
 
   <div class="mission-container">
     <ng-container *ngFor="let mission of this.missions$ | async">

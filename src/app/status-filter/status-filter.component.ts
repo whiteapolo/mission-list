@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { MissionsState } from '../missions-store/reducer';
 import { MatSelectChange } from '@angular/material/select';
@@ -16,17 +16,16 @@ import { Observable } from 'rxjs';
 export class StatusFilterComponent {
   missionStatusTypes = MISSION_STATUS_TYPES;
   missionStatusFilterTypes = MISSION_STATUS_FILTERS;
+  missionStatusFilterEnum = MissionStatusFilter;
   statusFilter$: Observable<MissionStatusFilter>;
+  DEFAULT_STATUS_FILTER = MissionStatusFilter.NO_FILTER;
+  @Output() change = new EventEmitter<MissionStatusFilter>();
 
   constructor(private store: Store<MissionsState>) {
     this.statusFilter$ = this.store.select(selectStatusFilter());
   }
 
-  setStatusFilter(event: MatSelectChange): void {
-    this.store.dispatch(
-      Actions.setStatusFilter({
-        statusFilter: event.value,
-      })
-    );
+  statusFilterChange(event: MatSelectChange): void {
+    this.change.emit(event.value);
   }
 }

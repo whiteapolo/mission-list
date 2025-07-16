@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, Input, OnDestroy, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Mission, MissionStatus } from '../types';
 import {
@@ -11,10 +11,13 @@ import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { MissionsState } from '../missions-store/reducer';
 import { selectMissions } from '../missions-store/selectors';
+import * as Actions from '../missions-store/actions';
+import { EMPTY_MISSION } from '../constants';
+import { map, switchMap } from 'rxjs/operators';
 
 interface MissionModalData {
   mission: Mission;
-  name: string;
+  isEditMission: boolean;
 }
 
 @Component({
@@ -22,11 +25,12 @@ interface MissionModalData {
   templateUrl: './mission-modal.component.html',
   styleUrls: ['./mission-modal.component.less'],
 })
-export class MissionModalComponent implements OnInit {
+export class MissionModalComponent implements OnInit, OnDestroy {
   missionStatusTypes = Object.values(MissionStatus);
   missions$: Observable<Mission[]>;
-  mission!: Mission;
+  mission: Mission = EMPTY_MISSION;
   isSubmitted = false;
+  sub: any;
 
   missionForm = this.formBuilder.group({
     name: ['', [Validators.required, Validators.maxLength(50)]],
@@ -45,21 +49,25 @@ export class MissionModalComponent implements OnInit {
 
   ngOnInit(): void {
     this.mission = {
-      ...this.data.mission,
+      ...this.data?.mission,
     };
 
-    this.missionForm.get('name')?.setValue(this.mission.name);
-    this.missionForm.get('status')?.setValue(this.mission.status);
-    this.missions$
-      .subscribe((missions) => {
-        this.missionForm
-          .get('parent')
-          ?.setValue(
-            missions.find((mission) => mission.id === this.mission.parentId) ||
-              ''
-          );
-      })
-      .unsubscribe();
+    this.missionForm.get('name')?.setValue(this.mission.name || '');
+    this.missionForm
+      .get('status')
+      ?.setValue(this.mission.status || MissionStatus.ACTIVE);
+
+    this.sub = this.missions$.subscribe((missions) => {
+      this.missionForm
+        .get('parent')
+        ?.setValue(
+          missions.find((mission) => mission.id === this.mission.parentId) || ''
+        );
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.sub.unsubscribe();
   }
 
   cancel() {
@@ -72,15 +80,26 @@ export class MissionModalComponent implements OnInit {
       return;
     }
 
-    this.dialogRef.close({
+    const mission = {
       ...this.mission,
       name: this.missionForm.value.name,
       status: this.missionForm.value.status,
       parentId: this.missionForm.value.parent.id || undefined,
-    });
+    };
+
+    if (this.data.isEditMission) {
+      this.store.dispatch(Actions.updateMission({ newMission: mission }));
+    } else {
+      this.store.dispatch(Actions.addMission({ mission }));
+    }
+
+    this.dialogRef.close();
   }
 
-  displayMissionname(mission: Mission | undefined) {
+  displayMissionName(mission: Mission | string | undefined) {
+    if (typeof mission === 'string') {
+      return mission;
+    }
     return mission?.name || '';
   }
 
@@ -100,7 +119,7 @@ export class MissionModalComponent implements OnInit {
     return null;
   }
 
-  public shouldShowMissionInParentSelect(mission: Mission): boolean {
+  shouldShowMissionInParentSelect(mission: Mission): boolean {
     return (
       mission.name.includes(this.missionForm.get('parent')?.value) &&
       mission.id !== this.mission.id

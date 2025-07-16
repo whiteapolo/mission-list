@@ -1,6 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Mission } from '../types';
-import { MissionModalService } from '../mission-modal/mission-modal.service';
 import { EMPTY, Observable } from 'rxjs';
 import { MissionsState } from '../missions-store/reducer';
 import { Store } from '@ngrx/store';
@@ -10,6 +9,8 @@ import {
   selectMissions,
 } from '../missions-store/selectors';
 import * as Actions from '../missions-store/actions';
+import { MissionModalComponent } from '../mission-modal/mission-modal.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'mission-card',
@@ -21,10 +22,7 @@ export class MissionCardComponent implements OnInit {
   missions$: Observable<Mission[]> = EMPTY;
   isChildrenVisible$: Observable<boolean> = EMPTY;
 
-  constructor(
-    public missionModelService: MissionModalService,
-    private store: Store<MissionsState>
-  ) {}
+  constructor(private store: Store<MissionsState>, public dialog: MatDialog) {}
   ngOnInit(): void {
     this.missions$ = this.store.select(selectMissions);
     this.isChildrenVisible$ = this.store.select(
@@ -47,6 +45,11 @@ export class MissionCardComponent implements OnInit {
   }
 
   editMission(): void {
-    this.missionModelService.editMission(this.mission);
+    this.dialog.open(MissionModalComponent, {
+      width: '300px',
+      height: '70vh',
+      hasBackdrop: true,
+      data: { isEditMission: true, mission: this.mission },
+    });
   }
 }

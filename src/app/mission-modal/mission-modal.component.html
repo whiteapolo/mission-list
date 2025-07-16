@@ -1,5 +1,7 @@
 <form [formGroup]="missionForm" class="modal-container" (submit)="save()">
-  <span class="modal-name">{{ data.name }}</span>
+  <span class="modal-name">{{
+    this.data?.isEditMission ? "עריכת משימה" : "יצירת משימה"
+  }}</span>
   <span>שם:</span>
   <input
     formControlName="name"
@@ -43,7 +45,7 @@
     [class.is-invalid]="!isFieldValid('parent')"
   />
 
-  <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayMissionname">
+  <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayMissionName">
     <ng-container *ngFor="let mission of missions$ | async">
       <mat-option
         *ngIf="shouldShowMissionInParentSelect(mission)"

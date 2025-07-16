@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Mission, MissionStatusFilter } from './types';
 import { MatDialog } from '@angular/material/dialog';
-import { MissionModalService } from './mission-modal/mission-modal.service';
 import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 import {
@@ -13,6 +12,7 @@ import { MissionsState } from './missions-store/reducer';
 import { loadMissions } from './missions-store/actions';
 import * as Actions from './missions-store/actions';
 import { IconService } from './icon.service';
+import { MissionModalComponent } from './mission-modal/mission-modal.component';
 
 @Component({
   selector: 'app-root',
@@ -28,7 +28,6 @@ export class AppComponent implements OnInit {
   constructor(
     private store: Store<MissionsState>,
     public dialog: MatDialog,
-    public missionsModalService: MissionModalService,
     private iconService: IconService
   ) {
     this.missions$ = this.store.select(selectMissions);
@@ -46,6 +45,14 @@ export class AppComponent implements OnInit {
 
   setStatusFilter(status: MissionStatusFilter) {
     this.store.dispatch(Actions.setStatusFilter({ statusFilter: status }));
+  }
+
+  createMission() {
+    this.dialog.open(MissionModalComponent, {
+      width: '300px',
+      height: '70vh',
+      hasBackdrop: true,
+    });
   }
 
   shouldShowMission(

@@ -21,8 +21,6 @@ import { MatSelectChange } from '@angular/material/select';
   styleUrls: ['./app.component.less'],
 })
 export class AppComponent implements OnInit {
-  missionStatusTypes = MISSION_STATUS_TYPES;
-  missionStatusFilterTypes = MISSION_STATUS_FILTERS;
   MissionStatusFilterEnum = MissionStatusFilter;
   missions$: Observable<Mission[]>;
   searchQuery$: Observable<string>;
@@ -40,22 +38,6 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.store.dispatch(loadMissions());
-  }
-
-  setSearchQuery(event: Event): void {
-    this.store.dispatch(
-      Actions.setSearchQuery({
-        query: (event.target as HTMLInputElement).value,
-      })
-    );
-  }
-
-  setStatusFilter(event: MatSelectChange): void {
-    this.store.dispatch(
-      Actions.setStatusFilter({
-        statusFilter: event.value,
-      })
-    );
   }
 
   shouldShowMission(

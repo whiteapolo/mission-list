@@ -1,0 +1,30 @@
+@import "/src/styles.less";
+
+.filter-status-container {
+  .flex-center();
+  gap: 10px;
+  margin-top: 15px;
+
+  .filter-status-header {
+    font-size: 15px;
+  }
+
+  .filter-status {
+    .flex-center();
+    box-sizing: border-box;
+    flex-direction: column;
+    padding: 7px;
+    width: 120px;
+    background-color: white;
+    border: none;
+    height: 30px;
+  }
+}
+
+.arrow-down {
+  .arrow-down(black, 6px, 10px);
+  position: relative;
+  bottom: 18px;
+  right: 165px;
+  pointer-events: none;
+}

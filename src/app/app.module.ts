@@ -11,9 +11,11 @@ import { StoreModule } from '@ngrx/store';
 import { missionsReducer } from './missions-store/reducer';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { SearchBarComponent } from './search-bar/search-bar.component';
+import { StatusFilterComponent } from './status-filter/status-filter.component';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, SearchBarComponent, StatusFilterComponent],
   imports: [
     MissionCardModule,
     MissionModalModule,

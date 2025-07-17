@@ -115,7 +115,7 @@ export class MissionModalComponent implements OnInit {
     return null;
   }
 
-  shouldShowMissionInParentSelect(mission: Mission): boolean {
+  filterParentSelect(mission: Mission): boolean {
     return (
       mission.name.includes(this.missionForm.get('parent')?.value) &&
       mission.id !== this.mission.id

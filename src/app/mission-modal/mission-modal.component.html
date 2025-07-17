@@ -47,9 +47,7 @@
 
   <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayMissionName">
     <ng-container *ngFor="let mission of missions$ | async">
-      <mat-option
-        *ngIf="shouldShowMissionInParentSelect(mission)"
-        [value]="mission"
+      <mat-option *ngIf="filterParentSelect(mission)" [value]="mission"
         >{{ mission.name }}
       </mat-option>
     </ng-container>

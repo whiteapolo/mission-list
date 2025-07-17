@@ -11,7 +11,7 @@ function resetLocalStorage(): void {
     .then((json) =>
       localStorage.setItem(MISSIONS_LOCAL_STORAGE_KEY, JSON.stringify(json))
     )
-    .catch((e) => console.log(e));
+    .catch(console.log);
 }
 
 // resetLocalStorage();

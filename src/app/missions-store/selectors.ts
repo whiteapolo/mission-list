@@ -48,6 +48,5 @@ export const selectStatusFilter = () =>
 export const selectMissionParent = (missionId: string) =>
   createSelector(selectMissionsProperty, (missions: Mission[]) => {
     const mission = missions.find((mission) => mission.id === missionId);
-    if (!mission) return undefined;
-    return missions.find((parent) => parent.id === mission.parentId);
+    return mission && missions.find((parent) => parent.id === mission.parentId);
   });

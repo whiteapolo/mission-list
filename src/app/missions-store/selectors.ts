@@ -44,3 +44,10 @@ export const selectStatusFilter = () =>
     selectStatusFilterProprety,
     (statusFilter: MissionStatusFilter) => statusFilter
   );
+
+export const selectMissionParent = (missionId: string) =>
+  createSelector(selectMissionsProperty, (missions: Mission[]) => {
+    const mission = missions.find((mission) => mission.id === missionId);
+    if (!mission) return undefined;
+    return missions.find((parent) => parent.id === mission.parentId);
+  });

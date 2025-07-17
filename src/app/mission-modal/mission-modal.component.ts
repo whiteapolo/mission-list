@@ -7,10 +7,13 @@ import {
   ValidationErrors,
   Validators,
 } from '@angular/forms';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { MissionsState } from '../missions-store/reducer';
-import { selectMissions } from '../missions-store/selectors';
+import {
+  selectMissionParent,
+  selectMissions,
+} from '../missions-store/selectors';
 import * as Actions from '../missions-store/actions';
 import { EMPTY_MISSION } from '../constants';
 
@@ -24,12 +27,11 @@ interface MissionModalData {
   templateUrl: './mission-modal.component.html',
   styleUrls: ['./mission-modal.component.less'],
 })
-export class MissionModalComponent implements OnInit, OnDestroy {
+export class MissionModalComponent implements OnInit {
   missionStatusTypes = Object.values(MissionStatus);
   missions$: Observable<Mission[]>;
   mission: Mission = EMPTY_MISSION;
   isSubmitted = false;
-  sub: any;
 
   missionForm = this.formBuilder.group({
     name: ['', [Validators.required, Validators.maxLength(50)]],
@@ -56,17 +58,12 @@ export class MissionModalComponent implements OnInit, OnDestroy {
       .get('status')
       ?.setValue(this.mission.status || MissionStatus.ACTIVE);
 
-    this.sub = this.missions$.subscribe((missions) => {
-      this.missionForm
-        .get('parent')
-        ?.setValue(
-          missions.find((mission) => mission.id === this.mission.parentId) || ''
-        );
-    });
-  }
-
-  ngOnDestroy(): void {
-    this.sub.unsubscribe();
+    this.store
+      .select(selectMissionParent(this.mission.id))
+      .subscribe((parent) => {
+        this.missionForm.get('parent')?.setValue(parent ?? '');
+      })
+      .unsubscribe();
   }
 
   cancel() {

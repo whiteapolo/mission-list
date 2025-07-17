@@ -13,6 +13,7 @@ import { IconService } from './icon.service';
 import { StatusFilterModule } from './status-filter/status-filter.module';
 import { SearchBarModule } from './search-bar/search-bar.module';
 import { MissionPoolModule } from './mission-pool/mission-pool.module';
+import { OptionSelectModule } from './option-select/option-select.module';
 
 @NgModule({
   declarations: [AppComponent],

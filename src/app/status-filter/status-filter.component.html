@@ -1,17 +1,8 @@
 <div class="filter-status-container">
   <span class="filter-status-header">סינון לפי: </span>
-  <mat-select
-    disableOptionCentering
+  <option-select
     class="filter-status"
-    (selectionChange)="statusFilterChange($event)"
-    [value]="DEFAULT_STATUS_FILTER"
-  >
-    <mat-option
-      *ngFor="let status of missionStatusFilterTypes"
-      [value]="status"
-    >
-      {{ status }}
-    </mat-option>
-  </mat-select>
+    [options]="missionStatusFilterTypes"
+    [control]="control"
+  ></option-select>
 </div>
-<div class="arrow-down"></div>

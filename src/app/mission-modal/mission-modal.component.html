@@ -23,17 +23,11 @@
   >
 
   <span>סטטוס:</span>
-  <mat-select disableOptionCentering formControlName="status" class="status">
-    <mat-option
-      class="status-option"
-      *ngFor="let status of missionStatusTypes"
-      [value]="status"
-    >
-      {{ status }}
-    </mat-option>
-  </mat-select>
-
-  <div class="arrow"></div>
+  <!-- <option-select -->
+  <!--   class="status" -->
+  <!--   [options]="missionStatusTypes" -->
+  <!--   [startOption]="missionStatusTypes[0]" -->
+  <!-- ></option-select> -->
 
   <span>קישור למשימה:</span>
   <input

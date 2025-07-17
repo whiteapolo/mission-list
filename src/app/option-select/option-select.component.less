@@ -1,0 +1,24 @@
+@import "/src/styles.less";
+
+.select-container {
+  width: 100%;
+  .flex-center();
+  .select {
+    height: 100%;
+    width: 100%;
+    line-height: 100%;
+  }
+
+  .arrow-down {
+    .arrow-down(black, 6px, 10px);
+    margin-left: 5px;
+  }
+}
+
+::ng-deep.mat-select-panel.select-panel {
+  width: 122px !important;
+  min-width: min-content !important;
+  position: relative;
+  top: 28px;
+  right: 8px;
+}

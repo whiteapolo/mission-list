@@ -1,0 +1,13 @@
+<div class="select-container">
+  <select
+    disableOptionCentering
+    class="select"
+    panelClass="select-panel"
+    [formControl]="control"
+  >
+    <option *ngFor="let option of options" [value]="option">
+      {{ option }}
+    </option>
+  </select>
+  <div class="arrow-down"></div>
+</div>

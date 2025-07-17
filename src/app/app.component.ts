@@ -13,6 +13,7 @@ import { loadMissions } from './missions-store/actions';
 import * as Actions from './missions-store/actions';
 import { IconService } from './icon.service';
 import { MissionModalComponent } from './mission-modal/mission-modal.component';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-root',
@@ -22,8 +23,8 @@ import { MissionModalComponent } from './mission-modal/mission-modal.component';
 export class AppComponent implements OnInit {
   MissionStatusFilterEnum = MissionStatusFilter;
   missions$: Observable<Mission[]>;
-  searchQuery$: Observable<string>;
-  statusFilter$: Observable<MissionStatusFilter>;
+  statusFilterControl = new FormControl(MissionStatusFilter.NO_FILTER);
+  searchQueryControl = new FormControl('');
 
   constructor(
     private store: Store<MissionsState>,
@@ -31,8 +32,6 @@ export class AppComponent implements OnInit {
     private iconService: IconService
   ) {
     this.missions$ = this.store.select(selectMissions);
-    this.searchQuery$ = this.store.select(selectSearchQuery());
-    this.statusFilter$ = this.store.select(selectStatusFilter());
   }
 
   ngOnInit(): void {
@@ -55,20 +54,15 @@ export class AppComponent implements OnInit {
     });
   }
 
-  shouldShowMission(
-    searchQuery: string,
-    statusFilter: MissionStatusFilter
-  ): (mission: Mission) => boolean {
-    return (mission: Mission) => {
-      if (!mission.name.includes(searchQuery || '')) {
-        return false;
-      }
+  shouldShowMission(mission: Mission): boolean {
+    if (!mission.name.includes(this.searchQueryControl.value || '')) {
+      return false;
+    }
 
-      if (statusFilter === MissionStatusFilter.NO_FILTER) {
-        return true;
-      }
+    if (this.statusFilterControl.value === MissionStatusFilter.NO_FILTER) {
+      return true;
+    }
 
-      return (mission.status as string) === statusFilter;
-    };
+    return (mission.status as string) === this.statusFilterControl.value;
   }
 }

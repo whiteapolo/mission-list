@@ -1,6 +1,6 @@
-import { Component, EventEmitter, Output } from '@angular/core';
-import { MatSelectChange } from '@angular/material/select';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MissionStatusFilter } from '../types';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'status-filter',
@@ -9,10 +9,5 @@ import { MissionStatusFilter } from '../types';
 })
 export class StatusFilterComponent {
   missionStatusFilterTypes = Object.values(MissionStatusFilter);
-  DEFAULT_STATUS_FILTER = MissionStatusFilter.NO_FILTER;
-  @Output() change = new EventEmitter<MissionStatusFilter>();
-
-  statusFilterChange(event: MatSelectChange): void {
-    this.change.emit(event.value);
-  }
+  @Input() control!: FormControl;
 }

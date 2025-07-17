@@ -1,4 +1,5 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'search-bar',
@@ -6,9 +7,5 @@ import { Component, EventEmitter, Output } from '@angular/core';
   styleUrls: ['./search-bar.component.less'],
 })
 export class SearchBarComponent {
-  @Output() change = new EventEmitter<string>();
-
-  emitInputChange(event: Event): void {
-    this.change.emit((event.target as HTMLInputElement).value);
-  }
+  @Input() control!: FormControl;
 }

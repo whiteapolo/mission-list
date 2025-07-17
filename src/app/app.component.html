@@ -1,17 +1,12 @@
 <div class="header">הרשימה המבצעית</div>
 
 <div class="page-content">
-  <search-bar class="search-bar" (change)="setSearchQuery($event)"></search-bar>
-  <status-filter (change)="setStatusFilter($event)"></status-filter>
+  <search-bar class="search-bar" [control]="searchQueryControl"></search-bar>
+  <status-filter [control]="statusFilterControl"></status-filter>
   <div class="mission-pool-container">
     <mission-pool
       [missions]="(missions$ | async) ?? []"
-      [shouldShowMission]="
-        shouldShowMission(
-          (searchQuery$ | async) ?? '',
-          (statusFilter$ | async) ?? MissionStatusFilterEnum.NO_FILTER
-        )
-      "
+      [shouldShowMission]="shouldShowMission"
     ></mission-pool>
   </div>
 </div>

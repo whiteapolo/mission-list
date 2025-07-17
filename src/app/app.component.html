@@ -3,21 +3,12 @@
 <div class="page-content">
   <search-bar class="search-bar" (change)="setSearchQuery($event)"></search-bar>
   <status-filter (change)="setStatusFilter($event)"></status-filter>
-
   <div class="mission-container">
-    <ng-container *ngFor="let mission of this.missions$ | async">
-      <mission-card
-        *ngIf="!mission.parentId"
-        [hidden]="
-          !shouldShowMission(
-            mission,
-            searchQuery$ | async,
-            statusFilter$ | async
-          )
-        "
-        [mission]="mission"
-      ></mission-card>
-    </ng-container>
+    <mission-pool
+      [shouldShowMission]="
+        shouldShowMission(searchQuery$ | async, statusFilter$ | async)
+      "
+    ></mission-pool>
   </div>
 </div>
 

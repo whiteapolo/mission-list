@@ -56,18 +56,19 @@ export class AppComponent implements OnInit {
   }
 
   shouldShowMission(
-    mission: Mission,
     searchQuery: string | null,
     statusFilter: MissionStatusFilter | null
-  ): boolean {
-    if (!mission.name.includes(searchQuery || '')) {
-      return false;
-    }
+  ): (mission: Mission) => boolean {
+    return (mission: Mission) => {
+      if (!mission.name.includes(searchQuery || '')) {
+        return false;
+      }
 
-    if (statusFilter === MissionStatusFilter.NO_FILTER) {
-      return true;
-    }
+      if (statusFilter === MissionStatusFilter.NO_FILTER) {
+        return true;
+      }
 
-    return (mission.status as string) === statusFilter;
+      return (mission.status as string) === statusFilter;
+    };
   }
 }

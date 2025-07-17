@@ -12,14 +12,16 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { IconService } from './icon.service';
 import { StatusFilterModule } from './status-filter/status-filter.module';
 import { SearchBarModule } from './search-bar/search-bar.module';
+import { MissionPoolComponent } from './mission-pool/mission-pool.component';
+import { MissionPoolModule } from './mission-pool/mission-pool.module';
 
 @NgModule({
   declarations: [AppComponent],
   imports: [
-    MissionCardModule,
     MissionModalModule,
     StatusFilterModule,
     SearchBarModule,
+    MissionPoolModule,
     BrowserAnimationsModule,
     FormsModule,
     StoreModule.forRoot({ app: missionsReducer }),

@@ -1,4 +1,4 @@
-import { Component, Inject, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Mission, MissionStatus } from '../types';
 import {
@@ -13,7 +13,6 @@ import { MissionsState } from '../missions-store/reducer';
 import { selectMissions } from '../missions-store/selectors';
 import * as Actions from '../missions-store/actions';
 import { EMPTY_MISSION } from '../constants';
-import { map, switchMap } from 'rxjs/operators';
 
 interface MissionModalData {
   mission: Mission;

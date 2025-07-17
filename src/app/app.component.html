@@ -3,10 +3,14 @@
 <div class="page-content">
   <search-bar class="search-bar" (change)="setSearchQuery($event)"></search-bar>
   <status-filter (change)="setStatusFilter($event)"></status-filter>
-  <div class="mission-container">
+  <div class="mission-pool-container">
     <mission-pool
+      [missions]="(missions$ | async) ?? []"
       [shouldShowMission]="
-        shouldShowMission(searchQuery$ | async, statusFilter$ | async)
+        shouldShowMission(
+          (searchQuery$ | async) ?? '',
+          (statusFilter$ | async) ?? MissionStatusFilterEnum.NO_FILTER
+        )
       "
     ></mission-pool>
   </div>

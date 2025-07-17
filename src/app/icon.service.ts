@@ -12,7 +12,6 @@ export class IconService {
     private matIconRegistry: MatIconRegistry,
     sanitizer: DomSanitizer
   ) {
-    console.log('itay');
     Object.values(Icons).forEach((icon: Icon) => {
       this.matIconRegistry.addSvgIconLiteral(
         icon.name,

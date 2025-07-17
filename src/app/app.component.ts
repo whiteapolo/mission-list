@@ -56,8 +56,8 @@ export class AppComponent implements OnInit {
   }
 
   shouldShowMission(
-    searchQuery: string | null,
-    statusFilter: MissionStatusFilter | null
+    searchQuery: string,
+    statusFilter: MissionStatusFilter
   ): (mission: Mission) => boolean {
     return (mission: Mission) => {
       if (!mission.name.includes(searchQuery || '')) {

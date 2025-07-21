@@ -6,7 +6,8 @@
   <div class="mission-pool-container">
     <mission-pool
       [missions]="(missions$ | async) ?? []"
-      [shouldShowMission]="shouldShowMission"
+      [searchQuery]="searchQueryControl.value"
+      [statusFilter]="statusFilterControl.value"
     ></mission-pool>
   </div>
 </div>

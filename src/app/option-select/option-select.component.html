@@ -1,13 +1,14 @@
 <div class="select-container">
-  <select
-    disableOptionCentering
+  <ng-select
+    [clearable]="false"
     class="select"
-    panelClass="select-panel"
     [formControl]="control"
+    [searchable]="false"
   >
-    <option *ngFor="let option of options" [value]="option">
-      {{ option }}
-    </option>
-  </select>
-  <div class="arrow-down"></div>
+    <ng-container *ngFor="let option of options">
+      <ng-option [value]="option">
+        {{ option }}
+      </ng-option>
+    </ng-container>
+  </ng-select>
 </div>

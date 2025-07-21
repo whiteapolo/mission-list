@@ -14,10 +14,8 @@ import { OptionSelectModule } from '../option-select/option-select.module';
     CommonModule,
     MatAutocompleteModule,
     MatDialogModule,
-    OptionSelectModule,
-    MatSelectModule,
-    MatOptionModule,
     ReactiveFormsModule,
+    OptionSelectModule,
   ],
   exports: [MissionModalComponent],
 })

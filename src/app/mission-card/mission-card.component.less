@@ -51,11 +51,14 @@
   }
 
   .arrow-up {
+    transition: 0.3s;
     .arrow-up(white, 7px, 12px);
   }
 
   .arrow-down {
-    .arrow-down(white, 7px, 12px);
+    transition: 0.3s;
+    .arrow-up(white, 7px, 12px);
+    transform: rotate(-180deg);
   }
 }
 

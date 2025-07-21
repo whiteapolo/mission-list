@@ -4,6 +4,8 @@ import { Mission, MissionStatus } from '../types';
 import {
   AbstractControl,
   FormBuilder,
+  FormControl,
+  FormGroup,
   ValidationErrors,
   Validators,
 } from '@angular/forms';
@@ -31,19 +33,25 @@ export class MissionModalComponent implements OnInit {
   missionStatusTypes = Object.values(MissionStatus);
   missions$: Observable<Mission[]>;
   mission: Mission = EMPTY_MISSION;
+
   isSubmitted = false;
 
-  missionForm = this.formBuilder.group({
-    name: ['', [Validators.required, Validators.maxLength(50)]],
-    status: [MissionStatus.ACTIVE],
-    parent: ['', this.missionParentValidator],
+  missionForm = new FormGroup({
+    name: new FormControl('', [Validators.required, Validators.maxLength(50)]),
+    status: new FormControl(MissionStatus.ACTIVE),
+    parent: new FormControl('', this.missionParentValidator),
   });
+
+  // missionForm = this.formBuilder.group({
+  //   name: ['', [Validators.required, Validators.maxLength(50)]],
+  //   status: [MissionStatus.ACTIVE],
+  //   parent: ['', this.missionParentValidator],
+  // });
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: MissionModalData,
     private store: Store<MissionsState>,
-    public dialogRef: MatDialogRef<MissionModalComponent>,
-    private formBuilder: FormBuilder
+    public dialogRef: MatDialogRef<MissionModalComponent>
   ) {
     this.missions$ = this.store.select(selectMissions);
   }
@@ -120,5 +128,9 @@ export class MissionModalComponent implements OnInit {
       mission.name.includes(this.missionForm.get('parent')?.value) &&
       mission.id !== this.mission.id
     );
+  }
+
+  abstractControlToformControl(control: AbstractControl): FormControl {
+    return control as FormControl;
   }
 }

@@ -19,8 +19,6 @@ import { MatIconModule } from '@angular/material/icon';
     FormsModule,
     MatAutocompleteModule,
     MatDialogModule,
-    MatSelectModule,
-    MatOptionModule,
     MatIconModule,
   ],
   exports: [MissionCardComponent],

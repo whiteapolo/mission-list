@@ -62,15 +62,5 @@ export const missionsReducer = createReducer(
         ? [...state.visibleMissionChildren].filter((id) => id !== missionId)
         : [...state.visibleMissionChildren, missionId]
     ),
-  })),
-
-  on(Actions.setSearchQuery, (state, { query }) => ({
-    ...state,
-    searchQuery: query,
-  })),
-
-  on(Actions.setStatusFilter, (state, { statusFilter }) => ({
-    ...state,
-    statusFilter,
   }))
 );

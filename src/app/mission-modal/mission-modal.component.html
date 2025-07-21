@@ -23,11 +23,11 @@
   >
 
   <span>סטטוס:</span>
-  <!-- <option-select -->
-  <!--   class="status" -->
-  <!--   [options]="missionStatusTypes" -->
-  <!--   [startOption]="missionStatusTypes[0]" -->
-  <!-- ></option-select> -->
+  <option-select
+    class="status"
+    [options]="missionStatusTypes"
+    [control]="abstractControlToformControl(this.missionForm.get('status')!)"
+  ></option-select>
 
   <span>קישור למשימה:</span>
   <input

@@ -1,15 +1,14 @@
-import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Mission, MissionStatus } from '../types';
 import {
   AbstractControl,
-  FormBuilder,
   FormControl,
   FormGroup,
   ValidationErrors,
   Validators,
 } from '@angular/forms';
-import { Observable, Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { MissionsState } from '../missions-store/reducer';
 import {
@@ -41,12 +40,6 @@ export class MissionModalComponent implements OnInit {
     status: new FormControl(MissionStatus.ACTIVE),
     parent: new FormControl('', this.missionParentValidator),
   });
-
-  // missionForm = this.formBuilder.group({
-  //   name: ['', [Validators.required, Validators.maxLength(50)]],
-  //   status: [MissionStatus.ACTIVE],
-  //   parent: ['', this.missionParentValidator],
-  // });
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: MissionModalData,

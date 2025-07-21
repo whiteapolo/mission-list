@@ -30,7 +30,7 @@ export class MissionCardComponent implements OnInit {
     );
   }
 
-  toggleChildrenVisibility() {
+  toggleChildrenVisibility(): void {
     this.store.dispatch(
       Actions.toggleMissionChildrenVisibility({ missionId: this.mission.id })
     );
@@ -46,8 +46,6 @@ export class MissionCardComponent implements OnInit {
 
   editMission(): void {
     this.dialog.open(MissionModalComponent, {
-      width: '300px',
-      height: '70vh',
       hasBackdrop: true,
       data: { isEditMission: true, mission: this.mission },
     });

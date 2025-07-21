@@ -1,10 +1,4 @@
-import {
-  Component,
-  getModuleFactory,
-  OnChanges,
-  OnInit,
-  SimpleChanges,
-} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Mission, MissionStatusFilter } from './types';
 import { MatDialog } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
@@ -12,7 +6,6 @@ import { Store } from '@ngrx/store';
 import { selectMissions } from './missions-store/selectors';
 import { MissionsState } from './missions-store/reducer';
 import { loadMissions } from './missions-store/actions';
-import * as Actions from './missions-store/actions';
 import { IconService } from './icon.service';
 import { MissionModalComponent } from './mission-modal/mission-modal.component';
 import { FormControl } from '@angular/forms';
@@ -42,8 +35,6 @@ export class AppComponent implements OnInit {
 
   createMission() {
     this.dialog.open(MissionModalComponent, {
-      width: '300px',
-      height: '70vh',
       hasBackdrop: true,
     });
   }

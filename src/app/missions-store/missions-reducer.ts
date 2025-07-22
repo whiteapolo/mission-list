@@ -5,13 +5,13 @@ import * as Actions from './missions-actions';
 
 export interface MissionsState {
   missions: Mission[];
-  visibleMissionChildren: Set<string>;
+  visibleMissionChildren: Map<string, boolean>;
   searchQuery: string;
   statusFilter: MissionStatusFilter;
 }
 export const initialState: MissionsState = {
   missions: [],
-  visibleMissionChildren: new Set(),
+  visibleMissionChildren: new Map(),
   searchQuery: '',
   statusFilter: MissionStatusFilter.NO_FILTER,
 };
@@ -43,31 +43,13 @@ export const missionsReducer = createReducer(
     missions: missions,
   })),
 
-  on(Actions.setMissionChildrenVisible, (state, { missionId }) => ({
-    ...state,
-    visibleMissionChildren: new Set([
-      ...state.visibleMissionChildren,
-      missionId,
-    ]),
-  })),
-
-  on(Actions.setMissionChildrenInvisible, (state, { missionId }) => ({
-    ...state,
-    visibleMissionChildren: new Set(
-      [...state.visibleMissionChildren].filter((id) => id !== missionId)
-    ),
-  })),
-
   on(Actions.toggleMissionChildrenVisibility, (state, { missionId }) => {
-    const newVisibleMissionChildren = new Set(
-      state.visibleMissionChildren.has(missionId)
-        ? [...state.visibleMissionChildren].filter((id) => id !== missionId)
-        : [...state.visibleMissionChildren, missionId]
-    );
-
     return {
       ...state,
-      visibleMissionChildren: newVisibleMissionChildren,
+      visibleMissionChildren: new Map(state.visibleMissionChildren).set(
+        missionId,
+        !state.visibleMissionChildren.get(missionId)
+      ),
     };
   })
 );

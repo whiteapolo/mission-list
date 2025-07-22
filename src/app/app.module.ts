@@ -1,9 +1,6 @@
 import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
-import { MissionModalModule } from './mission-modal/mission-modal.module';
-import { MissionCardModule } from './mission-card/mission-card.module';
 import { MissionsEffects } from './missions-store/missions-effects';
 import { StoreModule } from '@ngrx/store';
 import { missionsReducer } from './missions-store/missions-reducer';
@@ -22,7 +19,6 @@ import { IconsModule } from './icons/icons.module';
     SearchBarModule,
     MissionPoolModule,
     CreateMissionModule,
-    BrowserAnimationsModule,
     FormsModule,
     IconsModule,
     StoreModule.forRoot({ app: missionsReducer }),

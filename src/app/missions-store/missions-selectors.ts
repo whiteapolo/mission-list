@@ -32,8 +32,8 @@ export const selectMissions = createSelector(
 export const selectMissionChildrenVisibility = (missionId: string) =>
   createSelector(
     selectMissionChildrenVisibilityProperty,
-    (visibleMissionChildren: Set<string>) =>
-      visibleMissionChildren.has(missionId)
+    (visibleMissionChildren: Map<string, boolean>) =>
+      !!visibleMissionChildren.get(missionId)
   );
 
 export const selectSearchQuery = () =>

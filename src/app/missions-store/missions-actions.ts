@@ -21,15 +21,15 @@ export const setMissions = createAction(
   props<{ missions: Mission[] }>()
 );
 
-export const setMissionChildrenVisible = createAction(
-  '[Mission] set children visible',
-  props<{ missionId: string }>()
-);
+// export const setMissionChildrenVisible = createAction(
+//   '[Mission] set children visible',
+//   props<{ missionId: string }>()
+// );
 
-export const setMissionChildrenInvisible = createAction(
-  '[Mission] set children invisible',
-  props<{ missionId: string }>()
-);
+// export const setMissionChildrenInvisible = createAction(
+//   '[Mission] set children invisible',
+//   props<{ missionId: string }>()
+// );
 
 export const toggleMissionChildrenVisibility = createAction(
   '[Mission] toggle children invisible',

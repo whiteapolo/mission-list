@@ -4,7 +4,7 @@ import { EMPTY, Observable } from 'rxjs';
 import { MissionsState } from '../missions-store/missions.reducer';
 import { Store } from '@ngrx/store';
 import {
-  selectIsMissionChildrenDisplayed,
+  selectAreMissionChildrenDisplayed,
   selectMissionChildren,
 } from '../missions-store/missions.selectors';
 import * as Actions from '../missions-store/missions.actions';
@@ -26,7 +26,7 @@ export class MissionCardComponent implements OnInit {
   ngOnInit(): void {
     this.children$ = this.store.select(selectMissionChildren(this.mission.id));
     this.isChildrenVisible$ = this.store.select(
-      selectIsMissionChildrenDisplayed(this.mission.id)
+      selectAreMissionChildrenDisplayed(this.mission.id)
     );
   }
 

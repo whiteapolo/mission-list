@@ -5,13 +5,13 @@ import * as Actions from './missions.actions';
 
 export interface MissionsState {
   missions: Mission[];
-  isMissionChildrenDisplayed: Map<string, boolean>;
+  areMissionChildrenDisplayed: Map<string, boolean>;
   searchQuery: string;
   statusFilter: MissionStatusFilter;
 }
 export const initialState: MissionsState = {
   missions: [],
-  isMissionChildrenDisplayed: new Map(),
+  areMissionChildrenDisplayed: new Map(),
   searchQuery: '',
   statusFilter: MissionStatusFilter.NO_FILTER,
 };
@@ -34,18 +34,20 @@ export const missionsReducer = createReducer(
   })),
 
   on(Actions.updateMission, (state, { newMission }) => {
-    const newVisibleMissionChildren = new Map(state.isMissionChildrenDisplayed);
+    const newVisibleMissionChildren = new Map(
+      state.areMissionChildrenDisplayed
+    );
 
     if (newMission.parentId) {
       newVisibleMissionChildren.set(
         newMission.parentId,
-        !!state.isMissionChildrenDisplayed.get(newMission.id)
+        !!state.areMissionChildrenDisplayed.get(newMission.id)
       );
     }
     return {
       ...state,
       missions: updateMission(state.missions, newMission),
-      isMissionChildrenDisplayed: newVisibleMissionChildren,
+      areMissionChildrenDisplayed: newVisibleMissionChildren,
     };
   }),
 
@@ -55,16 +57,18 @@ export const missionsReducer = createReducer(
   })),
 
   on(Actions.toggleIsMissionChildrenDisplayed, (state, { missionId }) => {
-    const newVisibleMissionChildren = new Map(state.isMissionChildrenDisplayed);
+    const newVisibleMissionChildren = new Map(
+      state.areMissionChildrenDisplayed
+    );
 
     newVisibleMissionChildren.set(
       missionId,
-      !state.isMissionChildrenDisplayed.get(missionId)
+      !state.areMissionChildrenDisplayed.get(missionId)
     );
 
     return {
       ...state,
-      isMissionChildrenDisplayed: newVisibleMissionChildren,
+      areMissionChildrenDisplayed: newVisibleMissionChildren,
     };
   })
 );

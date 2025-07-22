@@ -13,8 +13,8 @@ const selectStatusFilterProprety = (state: any) => {
   return state.app.statusFilter;
 };
 
-const selectIsMissionChildrenDisplayedProperty = (state: any) => {
-  return state.app.isMissionChildrenDisplayed;
+const selectAreMissionChildrenDisplayedProperty = (state: any) => {
+  return state.app.areMissionChildrenDisplayed;
 };
 
 export const selectMissionChildren = (missionId: string) =>
@@ -29,11 +29,11 @@ export const selectMissions = createSelector(
   }
 );
 
-export const selectIsMissionChildrenDisplayed = (missionId: string) =>
+export const selectAreMissionChildrenDisplayed = (missionId: string) =>
   createSelector(
-    selectIsMissionChildrenDisplayedProperty,
-    (isMissionChildrenDisplayed: Map<string, boolean>) =>
-      !!isMissionChildrenDisplayed.get(missionId)
+    selectAreMissionChildrenDisplayedProperty,
+    (areMissionChildrenDisplayed: Map<string, boolean>) =>
+      !!areMissionChildrenDisplayed.get(missionId)
   );
 
 export const selectSearchQuery = () =>

@@ -5,7 +5,6 @@
   <status-filter [control]="statusFilterControl"></status-filter>
   <div class="mission-pool-container">
     <mission-pool
-      [missions]="(missions$ | async) ?? []"
       [searchQuery]="searchQueryControl.value"
       [statusFilter]="statusFilterControl.value"
     ></mission-pool>

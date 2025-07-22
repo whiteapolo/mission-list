@@ -15,7 +15,6 @@ import { FormControl } from '@angular/forms';
 })
 export class AppComponent implements OnInit {
   MissionStatusFilterEnum = MissionStatusFilter;
-  missions$: Observable<Mission[]> = EMPTY;
   searchQueryControl = new FormControl('');
   statusFilterControl = new FormControl(MissionStatusFilter.NO_FILTER);
 
@@ -26,6 +25,5 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.store.dispatch(loadMissions());
-    this.missions$ = this.store.select(selectMissions);
   }
 }

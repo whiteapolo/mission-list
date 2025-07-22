@@ -1,15 +1,25 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Mission, MissionStatusFilter } from '../types';
+import { EMPTY, Observable } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { MissionsState } from '../missions-store/missions-reducer';
+import { selectMissions } from '../missions-store/missions-selectors';
 
 @Component({
   selector: 'mission-pool',
   templateUrl: './mission-pool.component.html',
   styleUrls: ['./mission-pool.component.less'],
 })
-export class MissionPoolComponent {
+export class MissionPoolComponent implements OnInit {
   @Input() statusFilter: MissionStatusFilter = MissionStatusFilter.NO_FILTER;
   @Input() searchQuery: string = '';
-  @Input() missions: Mission[] = [];
+  missions$: Observable<Mission[]> = EMPTY;
+
+  constructor(private store: Store<MissionsState>) {}
+
+  ngOnInit(): void {
+    this.missions$ = this.store.select(selectMissions);
+  }
 
   shouldShowMission(mission: Mission) {
     if (mission.parentId) {

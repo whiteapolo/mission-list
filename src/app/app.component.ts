@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { MissionStatusFilter } from './types';
 import { Store } from '@ngrx/store';
-import { MissionsState } from './missions-store/missions-reducer';
-import { loadMissions } from './missions-store/missions-actions';
+import { MissionsState } from './missions-store/missions.reducer';
+import { loadMissions } from './missions-store/missions.actions';
 import { FormControl } from '@angular/forms';
 
 @Component({

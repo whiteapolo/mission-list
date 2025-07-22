@@ -1,14 +1,13 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Mission } from '../types';
 import { EMPTY, Observable } from 'rxjs';
-import { MissionsState } from '../missions-store/missions-reducer';
+import { MissionsState } from '../missions-store/missions.reducer';
 import { Store } from '@ngrx/store';
 import {
+  selectIsMissionChildrenDisplayed,
   selectMissionChildren,
-  selectMissionChildrenVisibility,
-  selectMissions,
-} from '../missions-store/missions-selectors';
-import * as Actions from '../missions-store/missions-actions';
+} from '../missions-store/missions.selectors';
+import * as Actions from '../missions-store/missions.actions';
 import { MissionModalComponent } from '../mission-modal/mission-modal.component';
 import { MatDialog } from '@angular/material/dialog';
 
@@ -27,13 +26,13 @@ export class MissionCardComponent implements OnInit {
   ngOnInit(): void {
     this.children$ = this.store.select(selectMissionChildren(this.mission.id));
     this.isChildrenVisible$ = this.store.select(
-      selectMissionChildrenVisibility(this.mission.id)
+      selectIsMissionChildrenDisplayed(this.mission.id)
     );
   }
 
   toggleChildrenVisibility(): void {
     this.store.dispatch(
-      Actions.toggleMissionChildrenVisibility({ missionId: this.mission.id })
+      Actions.toggleIsMissionChildrenDisplayed({ missionId: this.mission.id })
     );
   }
 

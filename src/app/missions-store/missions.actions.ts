@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { Mission, MissionStatusFilter } from '../types';
+import { Mission } from '../types';
 
 export const addMission = createAction(
   '[Mission] add',
@@ -21,17 +21,7 @@ export const setMissions = createAction(
   props<{ missions: Mission[] }>()
 );
 
-// export const setMissionChildrenVisible = createAction(
-//   '[Mission] set children visible',
-//   props<{ missionId: string }>()
-// );
-
-// export const setMissionChildrenInvisible = createAction(
-//   '[Mission] set children invisible',
-//   props<{ missionId: string }>()
-// );
-
-export const toggleMissionChildrenVisibility = createAction(
+export const toggleIsMissionChildrenDisplayed = createAction(
   '[Mission] toggle children invisible',
   props<{ missionId: string }>()
 );

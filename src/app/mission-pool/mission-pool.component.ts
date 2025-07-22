@@ -2,8 +2,8 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Mission, MissionStatusFilter } from '../types';
 import { EMPTY, Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { MissionsState } from '../missions-store/missions-reducer';
-import { selectMissions } from '../missions-store/missions-selectors';
+import { MissionsState } from '../missions-store/missions.reducer';
+import { selectMissions } from '../missions-store/missions.selectors';
 
 @Component({
   selector: 'mission-pool',

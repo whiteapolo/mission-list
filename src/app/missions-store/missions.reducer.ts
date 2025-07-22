@@ -1,17 +1,17 @@
 import { createReducer, on } from '@ngrx/store';
 import { Mission, MissionStatusFilter } from '../types';
 import { v4 as idv4 } from 'uuid';
-import * as Actions from './missions-actions';
+import * as Actions from './missions.actions';
 
 export interface MissionsState {
   missions: Mission[];
-  visibleMissionChildren: Map<string, boolean>;
+  isMissionChildrenDisplayed: Map<string, boolean>;
   searchQuery: string;
   statusFilter: MissionStatusFilter;
 }
 export const initialState: MissionsState = {
   missions: [],
-  visibleMissionChildren: new Map(),
+  isMissionChildrenDisplayed: new Map(),
   searchQuery: '',
   statusFilter: MissionStatusFilter.NO_FILTER,
 };
@@ -33,23 +33,38 @@ export const missionsReducer = createReducer(
     ),
   })),
 
-  on(Actions.updateMission, (state, { newMission }) => ({
-    ...state,
-    missions: updateMission(state.missions, newMission),
-  })),
+  on(Actions.updateMission, (state, { newMission }) => {
+    const newVisibleMissionChildren = new Map(state.isMissionChildrenDisplayed);
+
+    if (newMission.parentId) {
+      newVisibleMissionChildren.set(
+        newMission.parentId,
+        !!state.isMissionChildrenDisplayed.get(newMission.id)
+      );
+    }
+    return {
+      ...state,
+      missions: updateMission(state.missions, newMission),
+      isMissionChildrenDisplayed: newVisibleMissionChildren,
+    };
+  }),
 
   on(Actions.setMissions, (state, { missions }) => ({
     ...state,
     missions: missions,
   })),
 
-  on(Actions.toggleMissionChildrenVisibility, (state, { missionId }) => {
+  on(Actions.toggleIsMissionChildrenDisplayed, (state, { missionId }) => {
+    const newVisibleMissionChildren = new Map(state.isMissionChildrenDisplayed);
+
+    newVisibleMissionChildren.set(
+      missionId,
+      !state.isMissionChildrenDisplayed.get(missionId)
+    );
+
     return {
       ...state,
-      visibleMissionChildren: new Map(state.visibleMissionChildren).set(
-        missionId,
-        !state.visibleMissionChildren.get(missionId)
-      ),
+      isMissionChildrenDisplayed: newVisibleMissionChildren,
     };
   })
 );

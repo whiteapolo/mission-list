@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { FormsModule } from '@angular/forms';
-import { MissionsEffects } from './missions-store/missions-effects';
+import { MissionsEffects } from './missions-store/missions.effects';
 import { StoreModule } from '@ngrx/store';
-import { missionsReducer } from './missions-store/missions-reducer';
+import { missionsReducer } from './missions-store/missions.reducer';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { StatusFilterModule } from './status-filter/status-filter.module';

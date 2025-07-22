@@ -10,12 +10,12 @@ import {
 } from '@angular/forms';
 import { EMPTY, Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { MissionsState } from '../missions-store/missions-reducer';
+import { MissionsState } from '../missions-store/missions.reducer';
 import {
   selectMissionParent,
   selectMissions,
-} from '../missions-store/missions-selectors';
-import * as Actions from '../missions-store/missions-actions';
+} from '../missions-store/missions.selectors';
+import * as Actions from '../missions-store/missions.actions';
 import { EMPTY_MISSION } from '../constants';
 
 interface MissionModalData {

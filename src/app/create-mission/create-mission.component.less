@@ -1,0 +1,19 @@
+@import "/src/styles.less";
+
+.new-mission-button {
+  .flex-center();
+  .clickable();
+  width: 100%;
+  height: 100%;
+  background-color: @primary;
+  border-radius: 40px;
+  font-size: 30px;
+  color: white;
+  transition: 0.2s;
+  font-weight: bolder;
+  user-select: none;
+
+  &:hover {
+    background-color: @primary * 1.15;
+  }
+}

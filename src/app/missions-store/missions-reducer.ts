@@ -58,14 +58,18 @@ export const missionsReducer = createReducer(
     ),
   })),
 
-  on(Actions.toggleMissionChildrenVisibility, (state, { missionId }) => ({
-    ...state,
-    visibleMissionChildren: new Set(
+  on(Actions.toggleMissionChildrenVisibility, (state, { missionId }) => {
+    const newVisibleMissionChildren = new Set(
       state.visibleMissionChildren.has(missionId)
         ? [...state.visibleMissionChildren].filter((id) => id !== missionId)
         : [...state.visibleMissionChildren, missionId]
-    ),
-  }))
+    );
+
+    return {
+      ...state,
+      visibleMissionChildren: newVisibleMissionChildren,
+    };
+  })
 );
 
 export const updateMission = (

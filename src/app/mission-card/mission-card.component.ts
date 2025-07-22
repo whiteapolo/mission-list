@@ -19,12 +19,13 @@ import { MatDialog } from '@angular/material/dialog';
 })
 export class MissionCardComponent implements OnInit {
   @Input() mission!: Mission;
-  missions$: Observable<Mission[]> = EMPTY;
   isChildrenVisible$: Observable<boolean> = EMPTY;
+  children$: Observable<Mission[]> = EMPTY;
 
   constructor(private store: Store<MissionsState>, public dialog: MatDialog) {}
+
   ngOnInit(): void {
-    this.missions$ = this.store.select(selectMissions);
+    this.children$ = this.store.select(selectMissionChildren(this.mission.id));
     this.isChildrenVisible$ = this.store.select(
       selectMissionChildrenVisibility(this.mission.id)
     );
@@ -34,10 +35,6 @@ export class MissionCardComponent implements OnInit {
     this.store.dispatch(
       Actions.toggleMissionChildrenVisibility({ missionId: this.mission.id })
     );
-  }
-
-  getMissionChildren(): Observable<Mission[]> {
-    return this.store.select(selectMissionChildren(this.mission.id));
   }
 
   deleteMission(): void {

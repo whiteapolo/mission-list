@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Mission, MissionStatusFilter } from './types';
 import { MatDialog } from '@angular/material/dialog';
-import { Observable } from 'rxjs';
+import { EMPTY, Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { selectMissions } from './missions-store/selectors';
 import { MissionsState } from './missions-store/reducer';
@@ -17,7 +17,7 @@ import { FormControl } from '@angular/forms';
 })
 export class AppComponent implements OnInit {
   MissionStatusFilterEnum = MissionStatusFilter;
-  missions$: Observable<Mission[]>;
+  missions$: Observable<Mission[]> = EMPTY;
   searchQueryControl = new FormControl('');
   statusFilterControl = new FormControl(MissionStatusFilter.NO_FILTER);
 
@@ -25,12 +25,11 @@ export class AppComponent implements OnInit {
     private store: Store<MissionsState>,
     public dialog: MatDialog,
     private iconService: IconService
-  ) {
-    this.missions$ = this.store.select(selectMissions);
-  }
+  ) {}
 
   ngOnInit(): void {
     this.store.dispatch(loadMissions());
+    this.missions$ = this.store.select(selectMissions);
   }
 
   createMission() {

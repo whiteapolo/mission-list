@@ -8,7 +8,7 @@ import {
   ValidationErrors,
   Validators,
 } from '@angular/forms';
-import { Observable } from 'rxjs';
+import { EMPTY, Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { MissionsState } from '../missions-store/reducer';
 import {
@@ -30,7 +30,7 @@ interface MissionModalData {
 })
 export class MissionModalComponent implements OnInit {
   missionStatusTypes = Object.values(MissionStatus);
-  missions$: Observable<Mission[]>;
+  missions$: Observable<Mission[]> = EMPTY;
   mission: Mission = EMPTY_MISSION;
 
   isSubmitted = false;
@@ -42,15 +42,16 @@ export class MissionModalComponent implements OnInit {
   });
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: MissionModalData,
+    @Inject(MAT_DIALOG_DATA) public data: MissionModalData | undefined,
     private store: Store<MissionsState>,
     public dialogRef: MatDialogRef<MissionModalComponent>
-  ) {
-    this.missions$ = this.store.select(selectMissions);
-  }
+  ) {}
 
   ngOnInit(): void {
+    this.missions$ = this.store.select(selectMissions);
+
     this.mission = {
+      ...this.mission,
       ...this.data?.mission,
     };
 
@@ -84,7 +85,7 @@ export class MissionModalComponent implements OnInit {
       parentId: this.missionForm.value.parent.id || undefined,
     };
 
-    if (this.data.isEditMission) {
+    if (this.data?.isEditMission) {
       this.store.dispatch(Actions.updateMission({ newMission: mission }));
     } else {
       this.store.dispatch(Actions.addMission({ mission }));

@@ -2,9 +2,7 @@
   <div
     class="toggle-mission-children-button"
     (click)="toggleChildrenVisibility()"
-    [ngClass]="
-      !(this.getMissionChildren() | async)?.length ? 'visibility-none' : ''
-    "
+    [ngClass]="!(children$ | async)?.length ? 'visibility-none' : ''"
   >
     <div
       [ngClass]="(isChildrenVisible$ | async) ? 'arrow-up' : 'arrow-down'"
@@ -31,7 +29,7 @@
 <ng-container *ngIf="isChildrenVisible$ | async">
   <div
     class="mission-children-container"
-    *ngFor="let child of this.getMissionChildren() | async"
+    *ngFor="let child of children$ | async"
   >
     <mission-card [mission]="child"></mission-card>
   </div>

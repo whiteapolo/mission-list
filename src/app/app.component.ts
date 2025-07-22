@@ -1,11 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Mission, MissionStatusFilter } from './types';
-import { EMPTY, Observable } from 'rxjs';
+import { MissionStatusFilter } from './types';
 import { Store } from '@ngrx/store';
-import { selectMissions } from './missions-store/missions-selectors';
 import { MissionsState } from './missions-store/missions-reducer';
 import { loadMissions } from './missions-store/missions-actions';
-import { IconService } from './icon.service';
 import { FormControl } from '@angular/forms';
 
 @Component({
@@ -18,10 +15,7 @@ export class AppComponent implements OnInit {
   searchQueryControl = new FormControl('');
   statusFilterControl = new FormControl(MissionStatusFilter.NO_FILTER);
 
-  constructor(
-    private store: Store<MissionsState>,
-    private iconService: IconService
-  ) {}
+  constructor(private store: Store<MissionsState>) {}
 
   ngOnInit(): void {
     this.store.dispatch(loadMissions());

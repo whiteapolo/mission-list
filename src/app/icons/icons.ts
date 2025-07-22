@@ -1,4 +1,4 @@
-import { Icon } from './types';
+import { Icon } from '../types';
 
 export const editIcon: Icon = {
   name: 'edit',

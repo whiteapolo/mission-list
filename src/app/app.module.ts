@@ -9,12 +9,11 @@ import { StoreModule } from '@ngrx/store';
 import { missionsReducer } from './missions-store/missions-reducer';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { IconService } from './icon.service';
 import { StatusFilterModule } from './status-filter/status-filter.module';
 import { SearchBarModule } from './search-bar/search-bar.module';
 import { MissionPoolModule } from './mission-pool/mission-pool.module';
-import { CreateMissionComponent } from './create-mission/create-mission.component';
 import { CreateMissionModule } from './create-mission/create-mission.module';
+import { IconsModule } from './icons/icons.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -25,11 +24,11 @@ import { CreateMissionModule } from './create-mission/create-mission.module';
     CreateMissionModule,
     BrowserAnimationsModule,
     FormsModule,
+    IconsModule,
     StoreModule.forRoot({ app: missionsReducer }),
     EffectsModule.forRoot([MissionsEffects]),
     StoreDevtoolsModule.instrument({}),
   ],
   bootstrap: [AppComponent],
-  providers: [IconService],
 })
 export class AppModule {}

@@ -1,14 +1,14 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Mission } from '../types';
 import { EMPTY, Observable } from 'rxjs';
-import { MissionsState } from '../missions-store/reducer';
+import { MissionsState } from '../missions-store/missions-reducer';
 import { Store } from '@ngrx/store';
 import {
   selectMissionChildren,
   selectMissionChildrenVisibility,
   selectMissions,
-} from '../missions-store/selectors';
-import * as Actions from '../missions-store/actions';
+} from '../missions-store/missions-selectors';
+import * as Actions from '../missions-store/missions-actions';
 import { MissionModalComponent } from '../mission-modal/mission-modal.component';
 import { MatDialog } from '@angular/material/dialog';
 

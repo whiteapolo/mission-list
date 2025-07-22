@@ -5,9 +5,9 @@ import { Mission } from '../types';
 import { map, switchMap, tap, withLatestFrom } from 'rxjs/operators';
 import { Observable, throwError, of } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { MissionsState } from './reducer';
-import { selectMissions } from './selectors';
-import * as Action from './actions';
+import { MissionsState } from './missions-reducer';
+import { selectMissions } from './missions-selectors';
+import * as Action from './missions-actions';
 
 @Injectable()
 export class MissionsEffects {

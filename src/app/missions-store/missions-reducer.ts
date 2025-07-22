@@ -2,7 +2,7 @@ import { createReducer, on } from '@ngrx/store';
 import { Mission, MissionStatusFilter } from '../types';
 import { v4 as idv4 } from 'uuid';
 import { deleteMission, updateMission } from './mission-utils';
-import * as Actions from './actions';
+import * as Actions from './missions-actions';
 
 export interface MissionsState {
   missions: Mission[];
